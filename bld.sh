@@ -10,6 +10,9 @@ fi
 # Display cmake version
 cmake --version
 
-cmake -B build -G"Xcode" --log-level=STATUS -DIS_DEBUG=ON
+# Set macOS deployment target for compatibility with macOS 10
+export MACOSX_DEPLOYMENT_TARGET=10.15
+
+cmake -B build -G"Xcode" --log-level=STATUS -DIS_DEBUG=ON -DCMAKE_OSX_DEPLOYMENT_TARGET=10.15
 
 cmake --build build
