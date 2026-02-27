@@ -20,6 +20,8 @@ using namespace CocosDenshion;
 
 USING_NS_CC;
 
+#define APP_TITLE "my-flappy-bird (" VERSION_STRING ")"
+
 static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
@@ -62,9 +64,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || \
     (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
         glview = GLViewImpl::createWithRect(
-            "my-tennis-balls", cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+            APP_TITLE, cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
 #else
-        glview = GLViewImpl::create("my-tennis-balls");
+        glview = GLViewImpl::create(APP_TITLE);
 #endif
         director->setOpenGLView(glview);
     }

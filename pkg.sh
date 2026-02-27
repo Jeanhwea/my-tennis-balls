@@ -57,7 +57,7 @@ fi
 xattr -cr ${RLE_APP}
 
 # Sign the application with ad-hoc signature
-codesign --force --deep --sign io.github.jeanhwea.${APP_PKG} ${RLE_APP}
+codesign --force --deep --sign - ${RLE_APP}
 if [ $? -ne 0 ]; then
     echo "codesign failed"
     exit 1
