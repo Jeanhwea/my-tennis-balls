@@ -46,8 +46,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Release application with Xcode
-cmake --build ${OUT_DIR} --config Release \
-      -DCMAKE_OSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET
+cmake --build ${OUT_DIR} --config Release
 if [ $? -ne 0 ]; then
     echo "cmake build failed"
     exit 1
