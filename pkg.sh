@@ -38,16 +38,16 @@ cmake --version
 export MACOSX_DEPLOYMENT_TARGET=10.15
 
 # Build application
-cmake -DCMAKE_OSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET \
-      -B ${OUT_DIR} -G"Xcode" --log-level=STATUS
+cmake -B ${OUT_DIR} -G"Xcode" --log-level=STATUS \
+      -DCMAKE_OSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET
 if [ $? -ne 0 ]; then
     echo "cmake configuration failed"
     exit 1
 fi
 
 # Release application with Xcode
-cmake -DCMAKE_OSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET \
-      --build ${OUT_DIR} --config Release
+cmake --build ${OUT_DIR} --config Release \
+      -DCMAKE_OSX_DEPLOYMENT_TARGET=$MACOSX_DEPLOYMENT_TARGET
 if [ $? -ne 0 ]; then
     echo "cmake build failed"
     exit 1
