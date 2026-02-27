@@ -9,6 +9,7 @@ OS_ARCH=$(uname -m)
 DMG_DIR=${OUT_DIR}/dmg
 
 APP_PKG=my-tennis-balls
+RLE_APP=${OUT_DIR}/bin/${APP_PKG}/Release/${APP_PKG}.app
 DMG_VOL=${APP_PKG}-${OS_NAME}-${OS_ARCH}-${GIT_TAG}
 DMG_IMG=${OUT_DIR}/${APP_PKG}-${OS_NAME}-${OS_ARCH}-${GIT_TAG}.dmg
 
@@ -52,8 +53,18 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# Remove quarantine attribute if present
+xattr -cr ${RLE_APP}
+
+# Sign the application with ad-hoc signature
+codesign --force --deep --sign - ${RLE_APP}
+if [ $? -ne 0 ]; then
+    echo "codesign failed"
+    exit 1
+fi
+
 mkdir -p ${DMG_DIR}
-mv ${OUT_DIR}/bin/${APP_PKG}/Release/${APP_PKG}.app ${DMG_DIR}
+mv ${RLE_APP} ${DMG_DIR}
 ln -s /Applications ${DMG_DIR}/Applications
 hdiutil create -volname ${DMG_VOL} -srcfolder ${DMG_DIR} -ov -format UDZO ${DMG_IMG}
 mkdir -p ${DST_DIR}
