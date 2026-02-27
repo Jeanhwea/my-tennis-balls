@@ -1,0 +1,26 @@
+# -*- mode: yaml; -*-
+#
+# 选项设置参考 https://tqfx.org/clang-format/BasedOnStyle/
+#
+#
+BasedOnStyle: Google
+ColumnLimit: 108
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+AccessModifierOffset: -4
+DerivePointerAlignment: True
+PointerAlignment: Left
+# AllowShortBlocksOnASingleLine: Never
+AllowShortFunctionsOnASingleLine: Inline
+# SortIncludes: false
+IncludeBlocks: Regroup
+SeparateDefinitionBlocks: Always
+BreakBeforeBraces: Linux
+StatementMacros:
+  - Q_OBJECT
+  - USING_NS_CC
+  - USING_NS_CC_EXT
+  - USING_NS_CC_EXTRA
+  - CREATE_FUNC
+  - CC_FORMAT_PRINTF

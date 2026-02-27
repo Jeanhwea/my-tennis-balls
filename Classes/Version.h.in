@@ -1,0 +1,10 @@
+#ifndef _VERSION_H_
+#define _VERSION_H_
+
+#define VERSION_MAJOR @my-tennis-balls_VERSION_MAJOR@
+#define VERSION_MINOR @my-tennis-balls_VERSION_MINOR@
+#define VERSION_PATCH @my-tennis-balls_VERSION_PATCH@
+
+#define VERSION_STRING "v@my-tennis-balls_VERSION@"
+
+#endif // _VERSION_H_
