@@ -71,5 +71,7 @@ Classes/Version.h
 
 # build folders
 build/
+dist/
+output/
 cmake-*
 build-*
