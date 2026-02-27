@@ -9,90 +9,87 @@ Scene *HelloWorld::createScene()
     return HelloWorld::create();
 }
 
-// Print useful error message instead of segfaulting when files are not there.
-static void problemLoading(const char *filename)
-{
-    printf("Error while loading: %s\n", filename);
-    printf(
-        "Depending on how you compiled you might have to add 'Resources/' in front of filenames in "
-        "HelloWorldScene.cpp\n");
-}
-
-// on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
-    //////////////////////////////
-    // 1. super init first
-    if (!Scene::init()) {
+    if (!Scene::initWithPhysics()) {
         return false;
     }
 
-    auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    this->setName("HelloWorldScene");
+    this->getPhysicsWorld()->setGravity(Vec2(0, -98));
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
+#if IS_DEBUG
+    this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+#else
+    this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
+#endif
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create("CloseNormal.png", "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+    _visibleSize = Director::getInstance()->getVisibleSize();
+    _ballCounter = 0;
 
-    if (closeItem == nullptr || closeItem->getContentSize().width <= 0 ||
-        closeItem->getContentSize().height <= 0) {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    } else {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
-        float y = origin.y + closeItem->getContentSize().height / 2;
-        closeItem->setPosition(Vec2(x, y));
-    }
+    auto contactListener = EventListenerPhysicsContact::create();
+    contactListener->onContactBegin = CC_CALLBACK_1(HelloWorld::onContactBegin, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
-
-    auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    if (label == nullptr) {
-        problemLoading("'fonts/Marker Felt.ttf'");
-    } else {
-        // position the label on the center of the screen
-        label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                                origin.y + visibleSize.height - label->getContentSize().height));
-
-        // add the label as a child to this layer
-        this->addChild(label, 1);
-    }
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-    if (sprite == nullptr) {
-        problemLoading("'HelloWorld.png'");
-    } else {
-        // position the sprite on the center of the screen
-        sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
-
-        // add the sprite as a child to this layer
-        this->addChild(sprite, 0);
-    }
     return true;
 }
 
-void HelloWorld::menuCloseCallback(Ref *pSender)
+void HelloWorld::onEnter()
 {
-    // Close the cocos2d-x game scene and quit the application
-    Director::getInstance()->end();
+    Scene::onEnter();
+    addEdgeBox();
+    // addBall(Vec2(_visibleSize.width / 2, _visibleSize.height / 2));
 
-    /* To navigate back to native iOS screen(if present) without quitting the application  ,do not use
-     * Director::getInstance()->end() as given above,instead trigger a custom event created in
-     * RootViewController.mm as below */
+    auto eventListener = EventListenerTouchOneByOne::create();
+    eventListener->setSwallowTouches(true);
+    eventListener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener, this);
+}
 
-    // EventCustom customEndEvent("game_scene_close_event");
-    // _eventDispatcher->dispatchEvent(&customEndEvent);
+void HelloWorld::addEdgeBox()
+{
+    auto edgeNode = Node::create();
+    edgeNode->setName("edgeBox");
+    edgeNode->setPosition(Vec2(_visibleSize.width / 2, _visibleSize.height / 2));
+    auto body = PhysicsBody::createEdgeBox(_visibleSize, PhysicsMaterial(1.0, 1.0, 0.0), 1);
+    body->setCategoryBitmask(PHYSICS_CATEGORY_EDGE);
+    body->setCollisionBitmask(PHYSICS_CATEGORY_ALL);
+    body->setContactTestBitmask(PHYSICS_CATEGORY_ALL);
+    edgeNode->setPhysicsBody(body);
+    this->addChild(edgeNode);
+}
+
+void HelloWorld::addBall(Vec2 position)
+{
+    auto ball = Sprite::create("ball.png");
+    ball->setScale(0.1);
+    ball->setPosition(position);
+    std::string ballName = StringUtils::format("ball%02d", ++_ballCounter);
+    ball->setName(ballName);
+    float radius = ball->getContentSize().width / 2 - 18;
+    auto body = PhysicsBody::createCircle(radius, PhysicsMaterial(0.1, 0.85, 0.0));
+    body->setCategoryBitmask(PHYSICS_CATEGORY_BALL);
+    body->setCollisionBitmask(PHYSICS_CATEGORY_ALL);
+    body->setContactTestBitmask(PHYSICS_CATEGORY_ALL);
+    ball->setPhysicsBody(body);
+    this->addChild(ball);
+}
+
+bool HelloWorld::onTouchBegan(Touch *touch, Event *event)
+{
+    auto target = event->getCurrentTarget();
+    auto pos = touch->getLocation();
+    CCLOG("点击目标: %s, 位置: (%.2f, %.2f)", target->getName().c_str(), pos.x, pos.y);
+
+    auto location = touch->getLocation();
+    addBall(location);
+    return true;
+}
+
+bool HelloWorld::onContactBegin(PhysicsContact &contact)
+{
+    auto nodeA = contact.getShapeA()->getBody()->getNode();
+    auto nodeB = contact.getShapeB()->getBody()->getNode();
+    CCLOG("碰撞检测： %s === %s", nodeA->getName().c_str(), nodeB->getName().c_str());
+    return true;
 }
