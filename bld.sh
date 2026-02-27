@@ -10,6 +10,6 @@ fi
 # Display cmake version
 cmake --version
 
-cmake -B build -G"Xcode" --log-level=STATUS
+cmake -B build -G"Xcode" --log-level=STATUS -DIS_DEBUG=ON
 
 cmake --build build

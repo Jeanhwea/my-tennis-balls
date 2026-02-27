@@ -13,6 +13,6 @@ rem Display cmake version
 cmake --version
 echo.
 
-cmake -B build -G"Visual Studio 17 2022" -A win32 --log-level=STATUS
+cmake -B build -G"Visual Studio 17 2022" -A win32 --log-level=STATUS -DIS_DEBUG=ON
 
 cmake --build build
