@@ -20,7 +20,7 @@ using namespace CocosDenshion;
 
 USING_NS_CC;
 
-#define APP_TITLE "my-flappy-bird (" VERSION_STRING ")"
+#define APP_TITLE "my-tennis-balls (" VERSION_STRING ")"
 
 static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
