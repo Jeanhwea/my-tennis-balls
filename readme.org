@@ -2,6 +2,8 @@
 #+STARTUP: overview num indent
 #+OPTIONS: ^:nil
 
+* 项目截图
+[[file:images/game-snapshot.jpg]]
 
 * 快速开始
 ** 项目介绍
