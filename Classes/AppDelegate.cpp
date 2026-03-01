@@ -64,7 +64,9 @@ bool AppDelegate::applicationDidFinishLaunching()
     if (!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || \
     (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect(APP_TITLE, cocos2d::Rect(0, 0, 1024, 768), 1.0f, true);
+        glview = GLViewImpl::createWithRect(
+            APP_TITLE, cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height), 1.0f,
+            true);
 #else
         glview = GLViewImpl::create(APP_TITLE);
 #endif
@@ -121,7 +123,7 @@ bool AppDelegate::applicationDidFinishLaunching()
             auto glviewImpl = dynamic_cast<GLViewImpl*>(glview);
             if (glviewImpl) {
                 if (glviewImpl->isFullscreen()) {
-                    glviewImpl->setWindowed(1024, 768);
+                    glviewImpl->setWindowed(designResolutionSize.width, designResolutionSize.height);
                 } else {
                     glviewImpl->setFullscreen();
                 }
@@ -138,22 +140,20 @@ bool AppDelegate::applicationDidFinishLaunching()
             auto frameSize = glview->getFrameSize();
 
             // Reapply design resolution
-            glview->setDesignResolutionSize(480, 320, ResolutionPolicy::NO_BORDER);
-
-            // Update content scale factor
-            static Size smallResolutionSize = Size(480, 320);
-            static Size mediumResolutionSize = Size(1024, 768);
-            static Size largeResolutionSize = Size(2048, 1536);
-
+            glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
+                                            ResolutionPolicy::NO_BORDER);
             if (frameSize.height > mediumResolutionSize.height) {
                 director->setContentScaleFactor(
-                    MIN(largeResolutionSize.height / 320, largeResolutionSize.width / 480));
+                    MIN(largeResolutionSize.height / designResolutionSize.height,
+                        largeResolutionSize.width / designResolutionSize.width));
             } else if (frameSize.height > smallResolutionSize.height) {
                 director->setContentScaleFactor(
-                    MIN(mediumResolutionSize.height / 320, mediumResolutionSize.width / 480));
+                    MIN(mediumResolutionSize.height / designResolutionSize.height,
+                        mediumResolutionSize.width / designResolutionSize.width));
             } else {
                 director->setContentScaleFactor(
-                    MIN(smallResolutionSize.height / 320, smallResolutionSize.width / 480));
+                    MIN(smallResolutionSize.height / designResolutionSize.height,
+                        smallResolutionSize.width / designResolutionSize.width));
             }
         });
     director->getEventDispatcher()->addEventListenerWithFixedPriority(resizeListener, 1);
