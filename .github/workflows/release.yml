@@ -12,16 +12,40 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Inno Setup
+        run: |
+          choco install innosetup -y
+
+      - name: Get Git Tag
+        id: get_tag
+        shell: cmd
+        run: |
+          git describe --tags --always --dirty="+dev" > git_tag.tmp
+          set /p GIT_TAG=<git_tag.tmp
+          echo GIT_TAG=%GIT_TAG%>> %GITHUB_ENV%
+          del git_tag.tmp
 
       - name: Build Windows package
         shell: cmd
         run: pkg.bat
 
+      - name: Build Windows Installer
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path output
+          Expand-Archive -Path (Get-ChildItem dist/*.zip).FullName -DestinationPath output -Force
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4
         with:
           name: windows-dist
-          path: dist/*.zip
+          path: |
+            dist/*.zip
+            dist/*.exe
 
   build-macos:
     runs-on: macos-15-intel
