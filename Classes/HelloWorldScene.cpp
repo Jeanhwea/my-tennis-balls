@@ -59,6 +59,21 @@ void HelloWorld::addEdgeBox()
     this->addChild(edgeNode);
 }
 
+void HelloWorld::removeEdgeBox()
+{
+    auto edgeNode = this->getChildByName("edgeBox");
+    if (edgeNode) {
+        this->removeChild(edgeNode);
+    }
+}
+
+void HelloWorld::updateVisibleSize()
+{
+    _visibleSize = Director::getInstance()->getVisibleSize();
+    removeEdgeBox();
+    addEdgeBox();
+}
+
 void HelloWorld::addBall(Vec2 position)
 {
     auto ball = Sprite::create("ball.png");
@@ -66,7 +81,9 @@ void HelloWorld::addBall(Vec2 position)
     ball->setPosition(position);
     std::string ballName = StringUtils::format("ball%02d", ++_ballCounter);
     ball->setName(ballName);
-    float radius = ball->getContentSize().width / 2 - 18;
+    // 计算缩放后的实际半径
+    float scaledWidth = ball->getContentSize().width * ball->getScale();
+    float radius = scaledWidth / 2;
     auto body = PhysicsBody::createCircle(radius, PhysicsMaterial(0.1, 0.85, 0.0));
     body->setCategoryBitmask(PHYSICS_CATEGORY_BALL);
     body->setCollisionBitmask(PHYSICS_CATEGORY_ALL);

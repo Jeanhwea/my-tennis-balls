@@ -134,7 +134,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // Add window resize event
     auto resizeListener =
-        EventListenerCustom::create(GLViewImpl::EVENT_WINDOW_RESIZED, [](EventCustom* event) {
+        EventListenerCustom::create(GLViewImpl::EVENT_WINDOW_RESIZED, [scene](EventCustom* event) {
             auto director = Director::getInstance();
             auto glview = director->getOpenGLView();
             auto frameSize = glview->getFrameSize();
@@ -154,6 +154,12 @@ bool AppDelegate::applicationDidFinishLaunching()
                 director->setContentScaleFactor(
                     MIN(smallResolutionSize.height / designResolutionSize.height,
                         smallResolutionSize.width / designResolutionSize.width));
+            }
+
+            // Update scene's edge box
+            auto helloWorldScene = dynamic_cast<HelloWorld*>(scene);
+            if (helloWorldScene) {
+                helloWorldScene->updateVisibleSize();
             }
         });
     director->getEventDispatcher()->addEventListenerWithFixedPriority(resizeListener, 1);

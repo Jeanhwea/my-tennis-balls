@@ -22,7 +22,9 @@ public:
     CREATE_FUNC(HelloWorld);
 
     void addEdgeBox();
+    void removeEdgeBox();
     void addBall(cocos2d::Vec2 position);
+    void updateVisibleSize();
 
     bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
     bool onContactBegin(cocos2d::PhysicsContact &contact);
