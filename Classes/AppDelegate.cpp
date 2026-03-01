@@ -2,6 +2,7 @@
 
 #include "HelloWorldScene.h"
 #include "Version.h"
+#include "platform/desktop/CCGLViewImpl-desktop.h"
 
 // #define USE_AUDIO_ENGINE 1
 // #define USE_SIMPLE_AUDIO_ENGINE 1
@@ -22,7 +23,7 @@ USING_NS_CC;
 
 #define APP_TITLE "my-tennis-balls (" VERSION_STRING ")"
 
-static cocos2d::Size designResolutionSize = cocos2d::Size(480, 320);
+static cocos2d::Size designResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size smallResolutionSize = cocos2d::Size(480, 320);
 static cocos2d::Size mediumResolutionSize = cocos2d::Size(1024, 768);
 static cocos2d::Size largeResolutionSize = cocos2d::Size(2048, 1536);
@@ -63,8 +64,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     if (!glview) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WIN32) || (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) || \
     (CC_TARGET_PLATFORM == CC_PLATFORM_LINUX)
-        glview = GLViewImpl::createWithRect(
-            APP_TITLE, cocos2d::Rect(0, 0, designResolutionSize.width, designResolutionSize.height));
+        glview = GLViewImpl::createWithRect(APP_TITLE, cocos2d::Rect(0, 0, 1024, 768), 1.0f, true);
 #else
         glview = GLViewImpl::create(APP_TITLE);
 #endif
@@ -113,6 +113,47 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // run
     director->runWithScene(scene);
+
+    // Add window resize listener
+    auto listener = EventListenerKeyboard::create();
+    listener->onKeyPressed = [glview](EventKeyboard::KeyCode keyCode, Event* event) {
+        if (keyCode == EventKeyboard::KeyCode::KEY_F11) {
+            if (glview->isFullscreen()) {
+                glview->setWindowed(1024, 768);
+            } else {
+                glview->setFullscreen();
+            }
+        }
+    };
+    director->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, scene);
+
+    // Add window resize event
+    auto resizeListener =
+        EventListenerCustom::create(GLViewImpl::EVENT_WINDOW_RESIZED, [](EventCustom* event) {
+            auto director = Director::getInstance();
+            auto glview = director->getOpenGLView();
+            auto frameSize = glview->getFrameSize();
+
+            // Reapply design resolution
+            glview->setDesignResolutionSize(480, 320, ResolutionPolicy::NO_BORDER);
+
+            // Update content scale factor
+            static Size smallResolutionSize = Size(480, 320);
+            static Size mediumResolutionSize = Size(1024, 768);
+            static Size largeResolutionSize = Size(2048, 1536);
+
+            if (frameSize.height > mediumResolutionSize.height) {
+                director->setContentScaleFactor(
+                    MIN(largeResolutionSize.height / 320, largeResolutionSize.width / 480));
+            } else if (frameSize.height > smallResolutionSize.height) {
+                director->setContentScaleFactor(
+                    MIN(mediumResolutionSize.height / 320, mediumResolutionSize.width / 480));
+            } else {
+                director->setContentScaleFactor(
+                    MIN(smallResolutionSize.height / 320, smallResolutionSize.width / 480));
+            }
+        });
+    director->getEventDispatcher()->addEventListenerWithFixedPriority(resizeListener, 1);
 
     return true;
 }
