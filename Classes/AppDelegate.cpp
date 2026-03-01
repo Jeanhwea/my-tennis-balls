@@ -118,10 +118,13 @@ bool AppDelegate::applicationDidFinishLaunching()
     auto listener = EventListenerKeyboard::create();
     listener->onKeyPressed = [glview](EventKeyboard::KeyCode keyCode, Event* event) {
         if (keyCode == EventKeyboard::KeyCode::KEY_F11) {
-            if (glview->isFullscreen()) {
-                glview->setWindowed(1024, 768);
-            } else {
-                glview->setFullscreen();
+            auto glviewImpl = dynamic_cast<GLViewImpl*>(glview);
+            if (glviewImpl) {
+                if (glviewImpl->isFullscreen()) {
+                    glviewImpl->setWindowed(1024, 768);
+                } else {
+                    glviewImpl->setFullscreen();
+                }
             }
         }
     };
