@@ -33,9 +33,11 @@ jobs:
         run: pkg.bat
 
       - name: Build Windows Installer
-        shell: cmd
+        shell: pwsh
         run: |
-          "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
+          New-Item -ItemType Directory -Force -Path output
+          Expand-Archive -Path (Get-ChildItem dist/*.zip).FullName -DestinationPath output -Force
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" installer.iss
 
       - name: Upload Windows artifacts
         uses: actions/upload-artifact@v4

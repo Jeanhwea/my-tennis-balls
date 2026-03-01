@@ -44,6 +44,6 @@ powershell -Command "Compress-Archive -Path '%OUT_DIR%\bin\%APP_PKG%\Release\*' 
 echo Created zip package: %ZIP_NAME%
 
 :: Clean up temporary directory
-@REM rmdir /s /q "%OUT_DIR%" 2>nul
+rmdir /s /q "%OUT_DIR%" 2>nul
 
 echo Packaging completed successfully!
