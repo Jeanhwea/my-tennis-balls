@@ -63,7 +63,12 @@ void HelloWorld::removeEdgeBox()
 {
     auto edgeNode = this->getChildByName("edgeBox");
     if (edgeNode) {
-        this->removeChild(edgeNode);
+        // 先移除物理体
+        auto body = edgeNode->getPhysicsBody();
+        if (body) {
+            body->removeFromWorld();
+        }
+        edgeNode->removeFromParentAndCleanup(true);
     }
 }
 
@@ -72,6 +77,7 @@ void HelloWorld::updateVisibleSize()
     _visibleSize = Director::getInstance()->getVisibleSize();
     removeEdgeBox();
     addEdgeBox();
+    CCLOG("EdgeBox updated: visibleSize = (%.2f, %.2f)", _visibleSize.width, _visibleSize.height);
 }
 
 void HelloWorld::addBall(Vec2 position)

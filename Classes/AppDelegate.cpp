@@ -133,34 +133,25 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, scene);
 
     // Add window resize event
-    auto resizeListener =
-        EventListenerCustom::create(GLViewImpl::EVENT_WINDOW_RESIZED, [scene](EventCustom* event) {
-            auto director = Director::getInstance();
+    auto resizeListener = EventListenerCustom::create(
+        GLViewImpl::EVENT_WINDOW_RESIZED, [scene, director](EventCustom* event) {
             auto glview = director->getOpenGLView();
             auto frameSize = glview->getFrameSize();
+            CCLOG("Window resized: frameSize = (%.2f, %.2f)", frameSize.width, frameSize.height);
 
             // Reapply design resolution
             glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
                                             ResolutionPolicy::NO_BORDER);
-            if (frameSize.height > mediumResolutionSize.height) {
-                director->setContentScaleFactor(
-                    MIN(largeResolutionSize.height / designResolutionSize.height,
-                        largeResolutionSize.width / designResolutionSize.width));
-            } else if (frameSize.height > smallResolutionSize.height) {
-                director->setContentScaleFactor(
-                    MIN(mediumResolutionSize.height / designResolutionSize.height,
-                        mediumResolutionSize.width / designResolutionSize.width));
-            } else {
-                director->setContentScaleFactor(
-                    MIN(smallResolutionSize.height / designResolutionSize.height,
-                        smallResolutionSize.width / designResolutionSize.width));
-            }
 
-            // Update scene's edge box
-            auto helloWorldScene = dynamic_cast<HelloWorld*>(scene);
-            if (helloWorldScene) {
-                helloWorldScene->updateVisibleSize();
-            }
+            // 延迟一帧更新边界框，确保 director 完成更新
+            director->getScheduler()->schedule(
+                [scene](float dt) {
+                    auto helloWorldScene = dynamic_cast<HelloWorld*>(scene);
+                    if (helloWorldScene) {
+                        helloWorldScene->updateVisibleSize();
+                    }
+                },
+                scene, 0, 0, 0, false, "update_edgebox");
         });
     director->getEventDispatcher()->addEventListenerWithFixedPriority(resizeListener, 1);
 
