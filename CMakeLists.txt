@@ -120,6 +120,11 @@ else()
 endif()
 
 target_link_libraries(${APP_NAME} cocos2d)
+
+# Link against iconv library on macOS
+if(APPLE)
+  target_link_libraries(${APP_NAME} iconv)
+endif()
 target_include_directories(${APP_NAME}
   PRIVATE Classes
   PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
