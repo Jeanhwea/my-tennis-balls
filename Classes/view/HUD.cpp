@@ -30,14 +30,14 @@ bool HUD::initWithSize(const Size &visibleSize)
     addChild(_ballCountLabel);
 
     _comboLabel = Label::createWithSystemFont("", "Arial", COMBO_SZ);
-    _comboLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - MARGIN - 10));
+    _comboLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 60));
     _comboLabel->setTextColor(Color4B::YELLOW);
     _comboLabel->setVisible(false);
     addChild(_comboLabel);
 
     _targetLabel = Label::createWithSystemFont("Targets: 0", "Arial", FONT_SZ);
-    _targetLabel->setAnchorPoint(Vec2(0.5f, 1));
-    _targetLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - MARGIN));
+    _targetLabel->setAnchorPoint(Vec2(0, 1));
+    _targetLabel->setPosition(Vec2(MARGIN, visibleSize.height - MARGIN - 30));
     _targetLabel->setTextColor(Color4B(255, 200, 80, 255));
     addChild(_targetLabel);
 
