@@ -26,8 +26,8 @@ constexpr float EDGE_RESTITUTION = 0.9f;
 constexpr float EDGE_FRICTION = 0.2f;
 
 // Launch tuning
-constexpr float LAUNCH_FORCE_SCALE = 3.0f;
-constexpr float MAX_LAUNCH_SPEED = 2000.0f;
+constexpr float LAUNCH_FORCE_SCALE = 2.5f;
+constexpr float MAX_LAUNCH_SPEED = 1500.0f;
 constexpr float MIN_DRAG_DISTANCE = 20.0f;
 
 // Gameplay

@@ -38,16 +38,26 @@ void GameController::update(float dt)
 {
     _model.tick(dt);
 
-    // Check for targets that fell off screen (below y=0 or off sides)
+    // Check for targets/balls that fell off screen
     if (!_transitioning) {
-        std::vector<Node *> fallen;
+        std::vector<Node *> fallenTargets;
+        std::vector<Node *> lostBalls;
         for (auto child : _scene->getChildren()) {
-            if (child->getTag() == TAG_TARGET && child->getPositionY() < -50.0f) {
-                fallen.push_back(child);
+            float y = child->getPositionY();
+            float x = child->getPositionX();
+            bool outOfBounds = y < -50.0f || y > _visibleSize.height + 200.0f || x < -200.0f ||
+                               x > _visibleSize.width + 200.0f;
+            if (child->getTag() == TAG_TARGET && y < -50.0f) {
+                fallenTargets.push_back(child);
+            } else if (child->getTag() == TAG_BALL && outOfBounds) {
+                lostBalls.push_back(child);
             }
         }
-        for (auto target : fallen) {
+        for (auto target : fallenTargets) {
             removeTarget(target);
+        }
+        for (auto ball : lostBalls) {
+            removeBall(ball);
         }
     }
 }
