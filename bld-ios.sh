@@ -2,12 +2,12 @@
 set -euo pipefail
 
 BUILD_DIR="build-ios"
-TOOLCHAIN="cocos2d/cmake/ios.toolchain.cmake"
 
 # Parse arguments
 BUILD_TYPE="Debug"
 CMAKE_DEBUG_FLAG="-DIS_DEBUG=ON"
-IOS_PLATFORM="OS"
+SDK="iphoneos"
+ARCHS="arm64"
 
 case "${1:-}" in
     release)
@@ -15,7 +15,8 @@ case "${1:-}" in
         CMAKE_DEBUG_FLAG="-DIS_DEBUG=OFF"
         ;;
     simulator)
-        IOS_PLATFORM="SIMULATOR64"
+        SDK="iphonesimulator"
+        ARCHS="x86_64;arm64"
         ;;
     clean)
         echo "[*] Cleaning iOS build directory..."
@@ -27,8 +28,14 @@ esac
 
 # Allow second arg to override platform (e.g. `bld-ios.sh release simulator`)
 case "${2:-}" in
-    simulator)  IOS_PLATFORM="SIMULATOR64" ;;
-    device)     IOS_PLATFORM="OS" ;;
+    simulator)
+        SDK="iphonesimulator"
+        ARCHS="x86_64;arm64"
+        ;;
+    device)
+        SDK="iphoneos"
+        ARCHS="arm64"
+        ;;
 esac
 
 # Prerequisites
@@ -51,15 +58,17 @@ echo "[*] CMake version:"
 cmake --version
 echo
 
-# Configure
-echo "[*] Configuring iOS ($BUILD_TYPE, platform=$IOS_PLATFORM)..."
+# Configure — use CMake's built-in iOS support (3.14+)
+echo "[*] Configuring iOS ($BUILD_TYPE, sdk=$SDK, archs=$ARCHS)..."
 cmake -B "$BUILD_DIR" -GXcode \
-    -DCMAKE_TOOLCHAIN_FILE="$TOOLCHAIN" \
-    -DIOS_PLATFORM="$IOS_PLATFORM" \
+    -DCMAKE_SYSTEM_NAME=iOS \
+    -DCMAKE_OSX_SYSROOT="$SDK" \
+    -DCMAKE_OSX_ARCHITECTURES="$ARCHS" \
+    -DCMAKE_OSX_DEPLOYMENT_TARGET="12.0" \
     "$CMAKE_DEBUG_FLAG"
 
 # Build
 echo "[*] Building..."
 cmake --build "$BUILD_DIR" --config "$BUILD_TYPE" --parallel
 
-echo "[*] Build succeeded (iOS $BUILD_TYPE, platform=$IOS_PLATFORM)."
+echo "[*] Build succeeded (iOS $BUILD_TYPE, sdk=$SDK)."
