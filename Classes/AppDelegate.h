@@ -3,11 +3,7 @@
 
 #include "cocos2d.h"
 
-/**
- * @brief    cocos2d 应用程序。
- *
- * 此处使用私有继承，对 Director 隐藏部分接口。
- */
+/// cocos2d 应用程序入口，私有继承以对 Director 隐藏部分接口。
 class AppDelegate : private cocos2d::Application
 {
 public:

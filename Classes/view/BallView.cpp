@@ -22,11 +22,9 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     ball->setPhysicsBody(body);
     parent->addChild(ball, 5);
 
-    // 入场动画
     ball->setScale(0);
     ball->runAction(EaseBackOut::create(ScaleTo::create(0.25f, BALL_SCALE)));
 
-    // 光环
     auto ring = DrawNode::create();
     ring->drawCircle(Vec2::ZERO, radius * 2.5f, 0, 24, false, Color4F(0.5f, 0.8f, 1.0f, 0.6f));
     ring->drawCircle(Vec2::ZERO, radius * 1.8f, 0, 16, false, Color4F(1.0f, 1.0f, 1.0f, 0.3f));

@@ -17,7 +17,7 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
     draw->drawSolidRect(Vec2(trayX - halfW + 3, trayY - halfH - 3),
                         Vec2(trayX + halfW + 3, trayY + halfH - 3), Color4F(0.0f, 0.0f, 0.0f, 0.25f));
 
-    // 主体渐变
+    // 主体
     constexpr int tStrips = 3;
     for (int i = 0; i < tStrips; ++i) {
         float t0 = static_cast<float>(i) / tStrips;
@@ -28,11 +28,11 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
                             Color4F(bright - 0.05f, bright, bright + 0.08f, 0.95f));
     }
 
-    // 顶部高光
+    // 高光
     draw->drawSolidRect(Vec2(trayX - halfW + 1, trayY + halfH - 2), Vec2(trayX + halfW - 1, trayY + halfH),
                         Color4F(0.75f, 0.80f, 0.92f, 0.85f));
 
-    // 底部暗线
+    // 暗线
     draw->drawLine(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX + halfW, trayY - halfH),
                    Color4F(0.22f, 0.24f, 0.30f, 0.9f));
 

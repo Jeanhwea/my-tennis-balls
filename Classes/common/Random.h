@@ -3,6 +3,8 @@
 
 #include <random>
 
+/// @file Random.h
+/// 基于 mt19937 的随机数工具。
 namespace common
 {
 

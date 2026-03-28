@@ -3,13 +3,13 @@
 
 #include "cocos2d.h"
 
-/// 平视显示界面 - 分数、连击、球数、提示。
+/// 平视显示界面：分数、连击、球数、关卡提示。
 class HUD : public cocos2d::Node
 {
 public:
     static HUD *create(const cocos2d::Size &visibleSize);
 
-    /// 设置返回按钮回调
+    /// 返回按钮回调。
     void setOnBack(std::function<void()> cb) { _onBack = std::move(cb); }
 
     void updateScore(int score);

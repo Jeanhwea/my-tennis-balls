@@ -22,7 +22,7 @@ constexpr float FLOAT_SCORE_DUR = 0.8f;
 
 void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
 {
-    // 粒子爆发
+    // 粒子
     for (int i = 0; i < PARTICLE_COUNT; ++i) {
         auto dot = DrawNode::create();
         float size = randomFloat(PARTICLE_SIZE * 0.5f, PARTICLE_SIZE * 1.2f);
@@ -42,7 +42,7 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
             RemoveSelf::create(), nullptr));
     }
 
-    // 双层冲击环
+    // 冲击环
     auto ring1 = DrawNode::create();
     ring1->drawCircle(Vec2::ZERO, 8.0f, 0, 24, false, Color4F(1.0f, 0.9f, 0.4f, 0.7f));
     ring1->setPosition(position);
@@ -60,7 +60,7 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
                          Spawn::create(ScaleTo::create(0.2f, 2.5f), FadeOut::create(0.2f), nullptr),
                          RemoveSelf::create(), nullptr));
 
-    // 中心闪光
+    // 闪光
     auto flash = DrawNode::create();
     flash->drawSolidCircle(Vec2::ZERO, 12.0f, 0, 12, Color4F(1.0f, 0.95f, 0.7f, 0.5f));
     flash->setPosition(position);
@@ -69,7 +69,7 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
         Sequence::create(Spawn::create(ScaleTo::create(0.12f, 0.1f), FadeOut::create(0.12f), nullptr),
                          RemoveSelf::create(), nullptr));
 
-    // 微震动
+    // 微震
     if (parent->getNumberOfRunningActions() < 3) {
         parent->runAction(
             Sequence::create(MoveBy::create(0.02f, Vec2(randomFloat(-2, 2), randomFloat(-2, 2))),

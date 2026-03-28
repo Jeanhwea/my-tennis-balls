@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 #include "controller/GameController.h"
 
-/// 游戏场景 - 支持指定起始关卡
+/// 游戏场景，支持指定起始关卡。
 class GameScene : public cocos2d::Scene
 {
 public:

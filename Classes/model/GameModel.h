@@ -4,7 +4,7 @@
 #include "LevelData.h"
 #include "ScoreManager.h"
 
-/// 核心游戏状态 - 纯数据，无渲染。
+/// 核心游戏状态，纯数据无渲染。
 class GameModel
 {
 public:

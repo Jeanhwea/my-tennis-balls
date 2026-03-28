@@ -41,13 +41,11 @@ void AimLineView::draw(const Vec2 &dragStart, const Vec2 &delta)
         _drawNode->drawSolidCircle(p, std::max(radius, 1.0f), 0, 8, dotColor);
     }
 
-    // 箭头
     Vec2 tip = dragStart + launchDir * (distance * 0.5f);
     Color4F tipColor(1.0f, 0.9f - powerRatio * 0.4f, 0.3f, 0.95f);
     _drawNode->drawSolidCircle(tip, 6.0f, 0, 12, tipColor);
     _drawNode->drawSolidCircle(tip, 3.0f, 0, 8, Color4F(1, 1, 1, 0.9f));
 
-    // 力度环
     Color4F ringColor(1.0f, 1.0f - powerRatio, 0.2f, 0.6f);
     _drawNode->drawCircle(dragStart, 12.0f, 0, 24, false, ringColor);
     _drawNode->drawSolidCircle(dragStart, 4.0f, 0, 8, Color4F(1, 1, 1, 0.7f));

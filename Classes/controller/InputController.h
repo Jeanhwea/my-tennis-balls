@@ -33,7 +33,7 @@ public:
 private:
     bool _isDragging = false;
     cocos2d::Vec2 _dragStart;
-    float _launchZoneMinX = 0.0f;  // 默认无约束
+    float _launchZoneMinX = 0.0f;
 
     OnLaunchCallback _onLaunch;
     OnDragCallback _onDrag;

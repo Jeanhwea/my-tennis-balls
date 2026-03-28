@@ -32,7 +32,7 @@ void ArenaView::addEdgeWalls(Node *parent, const Size &visibleSize)
     edgeNode->setPhysicsBody(body);
     parent->addChild(edgeNode);
 
-    // 墙壁微光边框
+    // 墙壁微光
     auto wallDraw = DrawNode::create();
     Color4F wallColor(0.2f, 0.4f, 0.7f, 0.4f);
     wallDraw->drawLine(Vec2(0, 0), Vec2(0, h), wallColor);
@@ -64,7 +64,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     float h = visibleSize.height;
     float launchLeft = w * (1.0f - LAUNCH_ZONE_RATIO);
 
-    // 背景渐变
+    // 背景
     auto bg = DrawNode::create();
     Color4F bgBot(0.04f, 0.04f, 0.10f, 1.0f);
     Color4F bgTop(0.08f, 0.06f, 0.16f, 1.0f);
@@ -83,7 +83,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     }
     parent->addChild(bg, -10);
 
-    // 网格图案
+    // 网格
     auto grid = DrawNode::create();
     Color4F gridColor(0.15f, 0.18f, 0.28f, 0.15f);
     float gridSpacing = 60.0f;
@@ -95,7 +95,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     }
     parent->addChild(grid, -9);
 
-    // 发射区域渐变 + 分隔线
+    // 发射区域 + 分隔线
     auto zone = DrawNode::create();
 
     int zoneStrips = 8;
@@ -108,7 +108,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
         zone->drawSolidRect(Vec2(x0, 0), Vec2(x1, h), Color4F(0.15f, 0.25f, 0.5f, alpha));
     }
 
-    // 分隔线（带发光）
+    // 分隔线
     for (int i = 3; i >= 0; --i) {
         float offset = static_cast<float>(i) * 2.0f;
         float alpha = 0.1f + 0.15f * (3 - i);
@@ -119,7 +119,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
 
     parent->addChild(zone, -8);
 
-    // 角落装饰
+    // 角落
     auto corners = DrawNode::create();
     Color4F cornerColor(0.3f, 0.5f, 0.9f, 0.35f);
     float cLen = 30.0f;
@@ -165,7 +165,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     label->setTextColor(Color4B(100, 160, 255, 60));
     parent->addChild(label, 0);
 
-    // 准星装饰
+    // 准星
     auto reticle = DrawNode::create();
     float rcx = launchLeft + (w - launchLeft) / 2;
     float rcy = h * 0.3f;

@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 
-/// 关卡选择菜单场景（分页浏览）
+/// 关卡选择菜单场景，支持分页浏览。
 class LevelMenuScene : public cocos2d::Scene
 {
 public:

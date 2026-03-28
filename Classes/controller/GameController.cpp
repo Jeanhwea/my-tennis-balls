@@ -16,7 +16,6 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
     _scene = scene;
     _visibleSize = visibleSize;
 
-    // 静态竞技场
     ArenaView::addEdgeWalls(_scene, _visibleSize);
     ArenaView::addFloorSensor(_scene, _visibleSize);
     ArenaView::drawZones(_scene, _visibleSize);
@@ -37,7 +36,6 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
     setupInput();
     setupPhysics();
 
-    // 加载指定关卡
     loadLevel(startLevel);
 }
 
@@ -49,7 +47,7 @@ void GameController::update(float dt)
     }
 }
 
-// ── 关卡管理 ──────────────────────────────────────────
+// ── 关卡管理 ──
 
 void GameController::loadLevel(int index)
 {
@@ -128,7 +126,7 @@ void GameController::checkFailCondition()
     }
 }
 
-// ── 输入与物理 ────────────────────────────────────────
+// ── 输入与物理 ──
 
 void GameController::setupInput()
 {
@@ -166,7 +164,7 @@ void GameController::refreshHUD()
     _hud->updateTargets(_model.targetsRemaining());
 }
 
-// ── 球管理 ────────────────────────────────────────────
+// ── 球管理 ──
 
 int GameController::countBalls() const
 {
@@ -237,7 +235,7 @@ void GameController::collectOutOfBounds()
     for (auto ball : lostBalls) removeBall(ball);
 }
 
-// ── 物理回调 ──────────────────────────────────────────
+// ── 物理回调 ──
 
 namespace
 {
@@ -296,13 +294,13 @@ bool GameController::onContactBegin(PhysicsContact &contact)
         return handleFloorContact(floor, other, contact);
     }
 
-    // 弹球击中目标球
+    // 弹球 ↔ 目标球
     if ((nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_TARGET) ||
         (nodeA->getTag() == TAG_TARGET && nodeB->getTag() == TAG_BALL)) {
         return handleBallTargetContact(nodeA, nodeB, contact);
     }
 
-    // 弹球互相碰撞
+    // 弹球 ↔ 弹球
     if (nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_BALL) {
         return handleBallBallContact(nodeA, nodeB, contact);
     }

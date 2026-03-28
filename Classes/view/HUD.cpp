@@ -38,7 +38,7 @@ void HUD::createTopBar(const Size &visibleSize)
     float barBot = visibleSize.height - 50;
     float barRight = visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO);
 
-    // 渐变背景
+    // 渐变
     constexpr int strips = 5;
     for (int i = 0; i < strips; ++i) {
         float t0 = static_cast<float>(i) / strips;
@@ -49,7 +49,7 @@ void HUD::createTopBar(const Size &visibleSize)
                               Color4F(0.02f, 0.03f, 0.08f, alpha));
     }
 
-    // 底部高光
+    // 底部高光线
     topBar->drawSolidRect(Vec2(0, barBot), Vec2(barRight, barBot + 1), Color4F(0.3f, 0.5f, 0.9f, 0.35f));
     topBar->drawSolidRect(Vec2(0, barBot + 1), Vec2(barRight, barBot + 2),
                           Color4F(0.2f, 0.35f, 0.7f, 0.15f));
