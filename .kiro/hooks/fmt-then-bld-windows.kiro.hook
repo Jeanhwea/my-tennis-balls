@@ -8,7 +8,7 @@
   },
   "then": {
     "type": "runCommand",
-    "command": "if not defined OS (exit /b 0) && fmt.bat && bld.bat",
+    "command": "cmd /c \"fmt.bat && bld.bat\"",
     "timeout": 300
   }
 }

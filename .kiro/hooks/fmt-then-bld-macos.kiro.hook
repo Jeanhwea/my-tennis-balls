@@ -8,7 +8,7 @@
   },
   "then": {
     "type": "runCommand",
-    "command": "[ \"$(uname)\" != \"Darwin\" ] && exit 0; ./fmt.sh && ./bld.sh",
+    "command": "./fmt.sh && ./bld.sh",
     "timeout": 300
   }
 }
