@@ -159,7 +159,6 @@ void GameController::removeBall(Node *ball)
     BallView::despawn(ball, [this]() {
         _model.setBallCount(countBalls());
         refreshHUD();
-        checkLevelComplete();
     });
 }
 
@@ -168,30 +167,10 @@ void GameController::removeTarget(Node *target)
     BallView::despawn(target, [this]() {
         _model.setTargetsRemaining(countTargets());
         refreshHUD();
-        checkLevelComplete();
+        if (_model.isCleared()) {
+            onLevelCleared();
+        }
     });
-}
-
-void GameController::checkLevelComplete()
-{
-    // Need all targets gone first
-    if (!_model.isCleared()) return;
-
-    // Remove any remaining balls on screen so they don't linger
-    std::vector<Node *> balls;
-    for (auto child : _scene->getChildren()) {
-        if (child->getTag() == TAG_BALL) {
-            balls.push_back(child);
-        }
-    }
-    if (!balls.empty()) {
-        for (auto ball : balls) {
-            removeBall(ball);
-        }
-        return;  // will re-check when last ball despawn completes
-    }
-
-    onLevelCleared();
 }
 
 // ── Physics callbacks ───────────────────────────────────────────
