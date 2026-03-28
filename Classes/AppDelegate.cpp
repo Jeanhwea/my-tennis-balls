@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 
-#include "HelloWorldScene.h"
+#include "GameScene.h"
 #include "Version.h"
 
 // #define USE_AUDIO_ENGINE 1
@@ -112,7 +112,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     CCLOG("Version components: %d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
 
     // create a scene. it's an autorelease object
-    auto scene = HelloWorld::createScene();
+    auto scene = GameScene::createScene();
 
     // run
     director->runWithScene(scene);

@@ -1,5 +1,5 @@
-#ifndef __HELLOWORLD_SCENE_H__
-#define __HELLOWORLD_SCENE_H__
+#ifndef __GAME_SCENE_H__
+#define __GAME_SCENE_H__
 
 #include <memory>
 
@@ -8,7 +8,7 @@
 #include "ScoreManager.h"
 #include "cocos2d.h"
 
-class HelloWorld : public cocos2d::Scene
+class GameScene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene *createScene();
@@ -17,7 +17,7 @@ public:
     void onEnter() override;
     void update(float dt) override;
 
-    CREATE_FUNC(HelloWorld);
+    CREATE_FUNC(GameScene);
 
 private:
     cocos2d::Size _visibleSize;
@@ -46,4 +46,4 @@ private:
     bool onContactBegin(cocos2d::PhysicsContact &contact);
 };
 
-#endif  // __HELLOWORLD_SCENE_H__
+#endif  // __GAME_SCENE_H__

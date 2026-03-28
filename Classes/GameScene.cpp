@@ -1,4 +1,4 @@
-#include "HelloWorldScene.h"
+#include "GameScene.h"
 
 #include <algorithm>
 
@@ -8,18 +8,18 @@
 
 USING_NS_CC;
 
-Scene *HelloWorld::createScene()
+Scene *GameScene::createScene()
 {
-    return HelloWorld::create();
+    return GameScene::create();
 }
 
-bool HelloWorld::init()
+bool GameScene::init()
 {
     if (!Scene::initWithPhysics()) {
         return false;
     }
 
-    setName("HelloWorldScene");
+    setName("GameScene");
     getPhysicsWorld()->setGravity(Vec2(0, GRAVITY_Y));
 
 #if IS_DEBUG
@@ -32,7 +32,7 @@ bool HelloWorld::init()
 
     // Contact listener
     auto contactListener = EventListenerPhysicsContact::create();
-    contactListener->onContactBegin = CC_CALLBACK_1(HelloWorld::onContactBegin, this);
+    contactListener->onContactBegin = CC_CALLBACK_1(GameScene::onContactBegin, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(contactListener, this);
 
     // Aim line
@@ -48,7 +48,7 @@ bool HelloWorld::init()
     return true;
 }
 
-void HelloWorld::onEnter()
+void GameScene::onEnter()
 {
     Scene::onEnter();
 
@@ -61,20 +61,20 @@ void HelloWorld::onEnter()
 
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
-    listener->onTouchBegan = CC_CALLBACK_2(HelloWorld::onTouchBegan, this);
-    listener->onTouchMoved = CC_CALLBACK_2(HelloWorld::onTouchMoved, this);
-    listener->onTouchEnded = CC_CALLBACK_2(HelloWorld::onTouchEnded, this);
+    listener->onTouchBegan = CC_CALLBACK_2(GameScene::onTouchBegan, this);
+    listener->onTouchMoved = CC_CALLBACK_2(GameScene::onTouchMoved, this);
+    listener->onTouchEnded = CC_CALLBACK_2(GameScene::onTouchEnded, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 }
 
-void HelloWorld::update(float dt)
+void GameScene::update(float dt)
 {
     _scoreMgr.tick(dt);
 }
 
 // ── Setup ───────────────────────────────────────────────────────
 
-void HelloWorld::addEdgeWalls()
+void GameScene::addEdgeWalls()
 {
     auto edgeNode = Node::create();
     edgeNode->setName("edgeWalls");
@@ -100,7 +100,7 @@ void HelloWorld::addEdgeWalls()
     addChild(edgeNode);
 }
 
-void HelloWorld::addFloorSensor()
+void GameScene::addFloorSensor()
 {
     auto floor = Node::create();
     floor->setName("floor");
@@ -117,7 +117,7 @@ void HelloWorld::addFloorSensor()
     addChild(floor);
 }
 
-void HelloWorld::refreshHUD()
+void GameScene::refreshHUD()
 {
     if (!_hud) return;
     _hud->updateScore(_scoreMgr.score());
@@ -127,7 +127,7 @@ void HelloWorld::refreshHUD()
 
 // ── Input ───────────────────────────────────────────────────────
 
-bool HelloWorld::onTouchBegan(Touch *touch, Event *event)
+bool GameScene::onTouchBegan(Touch *touch, Event *event)
 {
     _isDragging = true;
     _dragStart = touch->getLocation();
@@ -135,7 +135,7 @@ bool HelloWorld::onTouchBegan(Touch *touch, Event *event)
     return true;
 }
 
-void HelloWorld::onTouchMoved(Touch *touch, Event *event)
+void GameScene::onTouchMoved(Touch *touch, Event *event)
 {
     if (!_isDragging) return;
 
@@ -166,7 +166,7 @@ void HelloWorld::onTouchMoved(Touch *touch, Event *event)
     }
 }
 
-void HelloWorld::onTouchEnded(Touch *touch, Event *event)
+void GameScene::onTouchEnded(Touch *touch, Event *event)
 {
     _aimLine->clear();
     if (!_isDragging) return;
@@ -189,7 +189,7 @@ void HelloWorld::onTouchEnded(Touch *touch, Event *event)
 
 // ── Physics callbacks ───────────────────────────────────────────
 
-bool HelloWorld::onContactBegin(PhysicsContact &contact)
+bool GameScene::onContactBegin(PhysicsContact &contact)
 {
     auto nodeA = contact.getShapeA()->getBody()->getNode();
     auto nodeB = contact.getShapeB()->getBody()->getNode();
