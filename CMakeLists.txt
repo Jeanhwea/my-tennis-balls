@@ -47,22 +47,31 @@ endif()
 # Add cross-platforms source files and header files
 list(APPEND GAME_SOURCE
   Classes/AppDelegate.cpp
-  Classes/BallManager.cpp
-  Classes/HUD.cpp
   Classes/GameScene.cpp
-  Classes/ObstacleManager.cpp
-  Classes/ScoreManager.cpp
-  Classes/VFXHelper.cpp
+  Classes/Model/ScoreManager.cpp
+  Classes/View/AimLineView.cpp
+  Classes/View/ArenaView.cpp
+  Classes/View/BallView.cpp
+  Classes/View/HUD.cpp
+  Classes/View/ObstacleView.cpp
+  Classes/View/VFXHelper.cpp
+  Classes/Controller/InputController.cpp
+  Classes/Controller/GameController.cpp
 )
 list(APPEND GAME_HEADER
   Classes/AppDelegate.h
-  Classes/BallManager.h
   Classes/GameConstants.h
-  Classes/HUD.h
   Classes/GameScene.h
-  Classes/ObstacleManager.h
-  Classes/ScoreManager.h
-  Classes/VFXHelper.h
+  Classes/Model/GameModel.h
+  Classes/Model/ScoreManager.h
+  Classes/View/AimLineView.h
+  Classes/View/ArenaView.h
+  Classes/View/BallView.h
+  Classes/View/HUD.h
+  Classes/View/ObstacleView.h
+  Classes/View/VFXHelper.h
+  Classes/Controller/InputController.h
+  Classes/Controller/GameController.h
 )
 
 if(ANDROID)

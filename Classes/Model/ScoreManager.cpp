@@ -1,7 +1,5 @@
 #include "ScoreManager.h"
 
-#include <algorithm>
-
 void ScoreManager::addScore(int basePoints)
 {
     _score += basePoints * std::max(1, _combo);

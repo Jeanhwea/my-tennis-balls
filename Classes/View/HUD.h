@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 
+/// Heads-up display — score, combo, ball count, hint.
 class HUD : public cocos2d::Node
 {
 public:

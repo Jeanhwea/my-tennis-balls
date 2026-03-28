@@ -1,13 +1,10 @@
 #ifndef __GAME_SCENE_H__
 #define __GAME_SCENE_H__
 
-#include <memory>
-
-#include "BallManager.h"
-#include "HUD.h"
-#include "ScoreManager.h"
+#include "Controller/GameController.h"
 #include "cocos2d.h"
 
+/// Thin scene shell — delegates all logic to GameController.
 class GameScene : public cocos2d::Scene
 {
 public:
@@ -20,30 +17,7 @@ public:
     CREATE_FUNC(GameScene);
 
 private:
-    cocos2d::Size _visibleSize;
-
-    // Sub-systems
-    std::unique_ptr<BallManager> _ballMgr;
-    ScoreManager _scoreMgr;
-    HUD *_hud = nullptr;
-
-    // Drag-to-launch state
-    bool _isDragging = false;
-    cocos2d::Vec2 _dragStart;
-    cocos2d::DrawNode *_aimLine = nullptr;
-
-    // Setup
-    void addEdgeWalls();
-    void addFloorSensor();
-    void refreshHUD();
-
-    // Input
-    bool onTouchBegan(cocos2d::Touch *touch, cocos2d::Event *event);
-    void onTouchMoved(cocos2d::Touch *touch, cocos2d::Event *event);
-    void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
-
-    // Physics
-    bool onContactBegin(cocos2d::PhysicsContact &contact);
+    GameController _controller;
 };
 
 #endif  // __GAME_SCENE_H__

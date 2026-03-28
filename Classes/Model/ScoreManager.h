@@ -1,10 +1,12 @@
 #ifndef __SCORE_MANAGER_H__
 #define __SCORE_MANAGER_H__
 
+#include <algorithm>
 #include <functional>
 
-#include "GameConstants.h"
+#include "Classes/GameConstants.h"
 
+/// Pure scoring logic — no rendering dependency.
 class ScoreManager
 {
 public:

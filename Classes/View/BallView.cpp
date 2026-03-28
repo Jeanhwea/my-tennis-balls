@@ -1,14 +1,15 @@
-#include "BallManager.h"
+#include "BallView.h"
 
 #include <cstdlib>
 
-#include "GameConstants.h"
+#include "Classes/GameConstants.h"
 
 USING_NS_CC;
 
-BallManager::BallManager(Node *parent) : _parent(parent) {}
+namespace
+{
 
-Color3B BallManager::randomColor()
+Color3B randomColor()
 {
     static const Color3B palette[] = {
         Color3B(255, 80, 80),  Color3B(80, 200, 255),  Color3B(80, 255, 120),  Color3B(255, 220, 50),
@@ -17,27 +18,16 @@ Color3B BallManager::randomColor()
     return palette[std::rand() % 8];
 }
 
-int BallManager::countBalls() const
-{
-    int count = 0;
-    for (auto child : _parent->getChildren()) {
-        if (child->getTag() == TAG_BALL) {
-            ++count;
-        }
-    }
-    return count;
-}
+}  // namespace
 
-void BallManager::addBall(const Vec2 &position, const Vec2 &velocity)
+Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity, int ballIndex)
 {
-    if (countBalls() >= MAX_BALLS) return;
-
     auto ball = Sprite::create("ball.png");
     ball->setScale(BALL_SCALE);
     ball->setPosition(position);
     ball->setTag(TAG_BALL);
     ball->setColor(randomColor());
-    ball->setName(StringUtils::format("ball%02d", ++_ballCounter));
+    ball->setName(StringUtils::format("ball%02d", ballIndex));
 
     const float radius = ball->getContentSize().width / 2 - BALL_SPRITE_PADDING;
     auto body =
@@ -47,27 +37,25 @@ void BallManager::addBall(const Vec2 &position, const Vec2 &velocity)
     body->setCollisionBitmask(CATEGORY_ALL);
     body->setContactTestBitmask(CATEGORY_ALL);
     ball->setPhysicsBody(body);
-    _parent->addChild(ball, 5);
+    parent->addChild(ball, 5);
 
     // Spawn animation
     ball->setScale(0);
     ball->runAction(EaseBackOut::create(ScaleTo::create(0.25f, BALL_SCALE)));
 
-    notifyCountChange();
+    return ball;
 }
 
-void BallManager::removeBall(Node *ball)
+void BallView::despawn(Node *ball, const std::function<void()> &onComplete)
 {
     if (!ball) return;
     ball->getPhysicsBody()->setEnabled(false);
-    ball->runAction(Sequence::create(
-        Spawn::create(ScaleTo::create(0.2f, 0), FadeOut::create(0.2f), nullptr), RemoveSelf::create(),
-        CallFunc::create([this]() { notifyCountChange(); }), nullptr));
-}
 
-void BallManager::notifyCountChange()
-{
-    if (_onCountChange) {
-        _onCountChange(countBalls());
+    Vector<FiniteTimeAction *> seq;
+    seq.pushBack(Spawn::create(ScaleTo::create(0.2f, 0), FadeOut::create(0.2f), nullptr));
+    seq.pushBack(RemoveSelf::create());
+    if (onComplete) {
+        seq.pushBack(CallFunc::create(onComplete));
     }
+    ball->runAction(Sequence::create(seq));
 }

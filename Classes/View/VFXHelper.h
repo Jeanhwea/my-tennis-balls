@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 
+/// Stateless visual-effect utilities.
 namespace VFXHelper
 {
 

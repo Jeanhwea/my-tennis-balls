@@ -55,3 +55,5 @@ cmake --build build
 - `cocos2d/` 目录是引擎源码，不要修改其中的文件
 - `IS_DEBUG` 宏通过 CMake 传入，控制调试绘制和 FPS 显示
 - 物理碰撞使用 bitmask 分类（BALL=0x01, EDGE=0x02）
+- 新增源文件需更新 `CMakeLists.txt` 的 `GAME_SOURCE` 和 `GAME_HEADER`
+- 完成后运行 `fmt.bat` / `fmt.sh` 格式化，再运行 `bld.bat` / `bld.sh` 构建

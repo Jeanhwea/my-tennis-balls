@@ -1,8 +1,8 @@
-#include "ObstacleManager.h"
+#include "ObstacleView.h"
 
 #include <cstdlib>
 
-#include "GameConstants.h"
+#include "Classes/GameConstants.h"
 
 USING_NS_CC;
 
@@ -50,7 +50,7 @@ void spawnOne(Node *parent, const Vec2 &position, bool isCircle)
 
 }  // namespace
 
-void ObstacleManager::spawnObstacles(Node *parent, const Size &visibleSize, int count)
+void ObstacleView::spawnObstacles(Node *parent, const Size &visibleSize, int count)
 {
     float marginX = visibleSize.width * 0.1f;
     float marginBottom = visibleSize.height * 0.1f;
