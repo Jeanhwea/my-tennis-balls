@@ -73,6 +73,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install NDK 21
+        run: sdkmanager --install "ndk;21.4.7075529"
+
       - name: Install SDKMAN
         run: |
           curl -s "https://get.sdkman.io?rcupdate=false" | bash
@@ -83,11 +89,6 @@ jobs:
           sdk env install
           echo "JAVA_HOME=$(sdk home java $(grep java .sdkmanrc | cut -d= -f2))" >> "$GITHUB_ENV"
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: Install NDK 21
-        run: sdkmanager --install "ndk;21.4.7075529"
 
       - name: Use official Gradle distribution URL
         run: |
