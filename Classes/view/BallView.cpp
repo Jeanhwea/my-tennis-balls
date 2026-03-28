@@ -44,13 +44,13 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     parent->addChild(trail, 4);
 
     // 每帧跟随球位置
-    trail->runAction(RepeatForever::create(
-        Sequence::create(DelayTime::create(0.0f), CallFunc::create([trail, ball]() {
-                             if (ball && ball->getParent()) {
-                                 trail->setPosition(ball->getPosition());
-                             }
-                         }),
-                         nullptr)));
+    trail->runAction(
+        RepeatForever::create(Sequence::create(DelayTime::create(0.0f), CallFunc::create([trail, ball]() {
+                                                   if (ball && ball->getParent()) {
+                                                       trail->setPosition(ball->getPosition());
+                                                   }
+                                               }),
+                                               nullptr)));
 
     return ball;
 }

@@ -70,11 +70,10 @@ void AmbientParticles::spawnDot()
     float dy = randomFloat(DRIFT_SPEED * 0.5f, DRIFT_SPEED * 1.5f) * life;
 
     dot->setOpacity(0);
-    dot->runAction(Sequence::create(
-        FadeIn::create(life * 0.3f),
-        Spawn::create(MoveBy::create(life, Vec2(dx, dy)),
-                      Sequence::create(DelayTime::create(life * 0.6f), FadeOut::create(life * 0.4f),
-                                       nullptr),
-                      nullptr),
-        RemoveSelf::create(), nullptr));
+    dot->runAction(Sequence::create(FadeIn::create(life * 0.3f),
+                                    Spawn::create(MoveBy::create(life, Vec2(dx, dy)),
+                                                  Sequence::create(DelayTime::create(life * 0.6f),
+                                                                   FadeOut::create(life * 0.4f), nullptr),
+                                                  nullptr),
+                                    RemoveSelf::create(), nullptr));
 }

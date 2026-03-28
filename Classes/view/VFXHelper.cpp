@@ -56,10 +56,10 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
     ring2->drawCircle(Vec2::ZERO, 5.0f, 0, 16, false, Color4F(1.0f, 1.0f, 0.8f, 0.4f));
     ring2->setPosition(position);
     parent->addChild(ring2, 14);
-    ring2->runAction(Sequence::create(
-        DelayTime::create(0.05f),
-        Spawn::create(ScaleTo::create(0.2f, 2.5f), FadeOut::create(0.2f), nullptr), RemoveSelf::create(),
-        nullptr));
+    ring2->runAction(
+        Sequence::create(DelayTime::create(0.05f),
+                         Spawn::create(ScaleTo::create(0.2f, 2.5f), FadeOut::create(0.2f), nullptr),
+                         RemoveSelf::create(), nullptr));
 
     // 中心闪光
     auto flash = DrawNode::create();
@@ -72,10 +72,10 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
 
     // 微震动（screen shake）
     if (parent->getNumberOfRunningActions() < 3) {
-        parent->runAction(Sequence::create(
-            MoveBy::create(0.02f, Vec2(randomFloat(-2, 2), randomFloat(-2, 2))),
-            MoveBy::create(0.02f, Vec2(randomFloat(-1, 1), randomFloat(-1, 1))), MoveTo::create(0.03f, Vec2::ZERO),
-            nullptr));
+        parent->runAction(
+            Sequence::create(MoveBy::create(0.02f, Vec2(randomFloat(-2, 2), randomFloat(-2, 2))),
+                             MoveBy::create(0.02f, Vec2(randomFloat(-1, 1), randomFloat(-1, 1))),
+                             MoveTo::create(0.03f, Vec2::ZERO), nullptr));
     }
 }
 

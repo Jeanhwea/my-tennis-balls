@@ -38,8 +38,7 @@ void spawnOne(Node *parent, const Vec2 &position, bool isCircle)
     if (isCircle) {
         float radius = randomFloat(OBSTACLE_MIN_SIZE / 2, OBSTACLE_MAX_SIZE / 2);
         // 外发光层
-        obstacle->drawSolidCircle(Vec2::ZERO, radius + 4, 0, 32,
-                                  Color4F(color.r, color.g, color.b, 0.12f));
+        obstacle->drawSolidCircle(Vec2::ZERO, radius + 4, 0, 32, Color4F(color.r, color.g, color.b, 0.12f));
         // 主体
         obstacle->drawSolidCircle(Vec2::ZERO, radius, 0, 32, color);
         // 内高光（偏上）

@@ -143,11 +143,11 @@ void LevelMenuScene::createLevelButtons(const Size &size)
             float delay = 0.05f * idx;
             child->setScale(0);
             child->setOpacity(0);
-            child->runAction(Sequence::create(
-                DelayTime::create(delay),
-                Spawn::create(EaseBackOut::create(ScaleTo::create(0.3f, 1.0f)), FadeIn::create(0.2f),
-                              nullptr),
-                nullptr));
+            child->runAction(
+                Sequence::create(DelayTime::create(delay),
+                                 Spawn::create(EaseBackOut::create(ScaleTo::create(0.3f, 1.0f)),
+                                               FadeIn::create(0.2f), nullptr),
+                                 nullptr));
             ++idx;
         }
     }
