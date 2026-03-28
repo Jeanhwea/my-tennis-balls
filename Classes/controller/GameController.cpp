@@ -115,7 +115,7 @@ void GameController::setupInput()
     _input.setOnLaunch([this](const InputController::LaunchCommand &cmd) {
         if (_transitioning) return;
         const auto &level = _model.currentLevel();
-        if (countBalls() >= level.maxBalls) return;
+        if (_ballCounter >= level.maxBalls) return;
         spawnBall(cmd.position, cmd.velocity);
         _hud->hideHint();
     });
@@ -136,7 +136,7 @@ void GameController::refreshHUD()
     const auto &level = _model.currentLevel();
     _hud->updateScore(_model.scoreManager().score());
     _hud->updateCombo(_model.scoreManager().combo());
-    _hud->updateBallCount(countBalls(), level.maxBalls);
+    _hud->updateBallCount(_ballCounter, level.maxBalls);
     _hud->updateTargets(_model.targetsRemaining());
 }
 
