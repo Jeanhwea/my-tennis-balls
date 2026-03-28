@@ -24,10 +24,10 @@ USING_NS_CC;
 
 namespace
 {
-const cocos2d::Size designResolutionSize(1200, 720);
-const cocos2d::Size smallResolutionSize(480, 320);
-const cocos2d::Size mediumResolutionSize(1024, 768);
-const cocos2d::Size largeResolutionSize(2048, 1536);
+const cocos2d::Size designResolutionSize(960, 540);    // 16:9 HD 基准
+const cocos2d::Size smallResolutionSize(960, 540);     // qHD (mdpi/hdpi)
+const cocos2d::Size mediumResolutionSize(1920, 1080);  // FHD (xhdpi)
+const cocos2d::Size largeResolutionSize(2560, 1440);   // QHD (xxhdpi/xxxhdpi)
 }  // namespace
 
 AppDelegate::AppDelegate() {}
