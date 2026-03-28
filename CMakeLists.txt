@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(APP_NAME my-tennis-balls)
 
 project(${APP_NAME}
-  VERSION 0.7.2
+  VERSION 0.7.3
   LANGUAGES CXX
 )
 
