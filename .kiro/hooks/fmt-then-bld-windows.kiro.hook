@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Format & Build (Windows)",
+  "description": "Agent 完成后自动运行 fmt 格式化代码，再运行 bld 构建项目。仅 Windows 执行。",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "if not defined OS (exit /b 0) && fmt.bat && bld.bat",
+    "timeout": 300
+  }
+}

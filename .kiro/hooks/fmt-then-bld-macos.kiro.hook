@@ -1,0 +1,14 @@
+{
+  "enabled": true,
+  "name": "Format & Build (macOS)",
+  "description": "Agent 完成后自动运行 fmt 格式化代码，再运行 bld 构建项目。仅 macOS 执行。",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "[ \"$(uname)\" != \"Darwin\" ] && exit 0; ./fmt.sh && ./bld.sh",
+    "timeout": 300
+  }
+}
