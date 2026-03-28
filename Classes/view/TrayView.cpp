@@ -67,7 +67,7 @@ void TrayView::create(Node *parent, const Size &visibleSize, int targetCount)
         auto body = PhysicsBody::createCircle(
             radius, PhysicsMaterial(TARGET_DENSITY, TARGET_RESTITUTION, TARGET_FRICTION));
         body->setCategoryBitmask(CATEGORY_TARGET);
-        body->setCollisionBitmask(CATEGORY_TRAY | CATEGORY_BALL | CATEGORY_TARGET | CATEGORY_EDGE);
+        body->setCollisionBitmask(CATEGORY_TRAY | CATEGORY_BALL | CATEGORY_TARGET);
         body->setContactTestBitmask(CATEGORY_ALL);
         target->setPhysicsBody(body);
         parent->addChild(target, 5);

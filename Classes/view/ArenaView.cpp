@@ -16,15 +16,22 @@ void ArenaView::addEdgeWalls(Node *parent, const Size &visibleSize)
     float w = visibleSize.width;
     float h = visibleSize.height;
 
+    // Left wall
     body->addShape(PhysicsShapeEdgeSegment::create(
         Vec2(0, 0), Vec2(0, h), PhysicsMaterial(1.0f, EDGE_RESTITUTION, EDGE_FRICTION), 1));
+    // Right wall
     body->addShape(PhysicsShapeEdgeSegment::create(
         Vec2(w, 0), Vec2(w, h), PhysicsMaterial(1.0f, EDGE_RESTITUTION, EDGE_FRICTION), 1));
+    // Top wall
     body->addShape(PhysicsShapeEdgeSegment::create(
         Vec2(0, h), Vec2(w, h), PhysicsMaterial(1.0f, EDGE_RESTITUTION, EDGE_FRICTION), 1));
+    // Bottom wall — blocks projectile balls but not targets
+    body->addShape(PhysicsShapeEdgeSegment::create(
+        Vec2(0, 0), Vec2(w, 0), PhysicsMaterial(1.0f, EDGE_RESTITUTION, EDGE_FRICTION), 1));
 
     body->setCategoryBitmask(CATEGORY_EDGE);
-    body->setCollisionBitmask(CATEGORY_ALL);
+    // Collide with balls and tray, but NOT targets (so targets can fall through)
+    body->setCollisionBitmask(CATEGORY_BALL | CATEGORY_TRAY);
     body->setContactTestBitmask(CATEGORY_ALL);
     edgeNode->setPhysicsBody(body);
     parent->addChild(edgeNode);
