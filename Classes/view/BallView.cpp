@@ -28,11 +28,12 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
 
     // 生成光环
     auto ring = DrawNode::create();
-    ring->drawCircle(Vec2::ZERO, radius * 2.5f, 0, 24, false, Color4F(1, 1, 1, 0.6f));
+    ring->drawCircle(Vec2::ZERO, radius * 2.5f, 0, 24, false, Color4F(0.5f, 0.8f, 1.0f, 0.6f));
+    ring->drawCircle(Vec2::ZERO, radius * 1.8f, 0, 16, false, Color4F(1.0f, 1.0f, 1.0f, 0.3f));
     ring->setPosition(position);
     parent->addChild(ring, 4);
     ring->runAction(
-        Sequence::create(Spawn::create(ScaleTo::create(0.3f, 2.0f), FadeOut::create(0.3f), nullptr),
+        Sequence::create(Spawn::create(ScaleTo::create(0.35f, 2.5f), FadeOut::create(0.35f), nullptr),
                          RemoveSelf::create(), nullptr));
 
     return ball;

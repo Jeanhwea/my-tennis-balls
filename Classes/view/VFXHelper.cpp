@@ -9,10 +9,10 @@ using common::randomFloat;
 namespace
 {
 
-constexpr int PARTICLE_COUNT = 8;
-constexpr float PARTICLE_SIZE = 4.0f;
-constexpr float PARTICLE_SPEED = 120.0f;
-constexpr float PARTICLE_LIFE = 0.4f;
+constexpr int PARTICLE_COUNT = 12;
+constexpr float PARTICLE_SIZE = 4.5f;
+constexpr float PARTICLE_SPEED = 150.0f;
+constexpr float PARTICLE_LIFE = 0.45f;
 
 constexpr float FLOAT_SCORE_FONT = 28.0f;
 constexpr float FLOAT_SCORE_RISE = 60.0f;
@@ -22,6 +22,7 @@ constexpr float FLOAT_SCORE_DUR = 0.8f;
 
 void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
 {
+    // 粒子爆发
     for (int i = 0; i < PARTICLE_COUNT; ++i) {
         auto dot = DrawNode::create();
         Color4F c(randomFloat(0.7f, 1.0f), randomFloat(0.7f, 1.0f), randomFloat(0.2f, 0.6f), 1.0f);
@@ -38,6 +39,15 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
                           FadeOut::create(PARTICLE_LIFE), ScaleTo::create(PARTICLE_LIFE, 0.1f), nullptr),
             RemoveSelf::create(), nullptr));
     }
+
+    // 冲击环
+    auto ring = DrawNode::create();
+    ring->drawCircle(Vec2::ZERO, 8.0f, 0, 20, false, Color4F(1.0f, 0.9f, 0.4f, 0.7f));
+    ring->setPosition(position);
+    parent->addChild(ring, 14);
+    ring->runAction(
+        Sequence::create(Spawn::create(ScaleTo::create(0.25f, 3.0f), FadeOut::create(0.25f), nullptr),
+                         RemoveSelf::create(), nullptr));
 }
 
 void VFXHelper::showFloatingScore(Node *parent, const Vec2 &position, int points)

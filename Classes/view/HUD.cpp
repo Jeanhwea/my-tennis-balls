@@ -34,9 +34,25 @@ bool HUD::initWithSize(const Size &visibleSize)
 void HUD::createTopBar(const Size &visibleSize)
 {
     auto topBar = DrawNode::create();
-    topBar->drawSolidRect(Vec2(0, visibleSize.height - 50),
-                          Vec2(visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO), visibleSize.height),
-                          Color4F(0.0f, 0.0f, 0.0f, 0.35f));
+    float barTop = visibleSize.height;
+    float barBot = visibleSize.height - 50;
+    float barRight = visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO);
+
+    // 渐变半透明背景
+    constexpr int strips = 5;
+    for (int i = 0; i < strips; ++i) {
+        float t0 = static_cast<float>(i) / strips;
+        float t1 = static_cast<float>(i + 1) / strips;
+        float alpha = 0.45f - 0.15f * (t0 + t1) / 2;
+        topBar->drawSolidRect(Vec2(0, barBot + (barTop - barBot) * t0),
+                              Vec2(barRight, barBot + (barTop - barBot) * t1),
+                              Color4F(0.02f, 0.03f, 0.08f, alpha));
+    }
+
+    // 底部高光线
+    topBar->drawSolidRect(Vec2(0, barBot), Vec2(barRight, barBot + 1), Color4F(0.3f, 0.5f, 0.9f, 0.35f));
+    topBar->drawSolidRect(Vec2(0, barBot + 1), Vec2(barRight, barBot + 2),
+                          Color4F(0.2f, 0.35f, 0.7f, 0.15f));
     addChild(topBar, -1);
 }
 
@@ -110,26 +126,44 @@ void HUD::createBackButton(const Size &visibleSize)
     float y = visibleSize.height - MARGIN - BTN_H / 2;
 
     auto bg = DrawNode::create();
-    bg->drawSolidRect(Vec2(-BTN_W / 2, -BTN_H / 2), Vec2(BTN_W / 2, BTN_H / 2),
-                      Color4F(0.15f, 0.2f, 0.35f, 0.85f));
-    bg->drawRect(Vec2(-BTN_W / 2, -BTN_H / 2), Vec2(BTN_W / 2, BTN_H / 2), Color4F(0.4f, 0.6f, 1.0f, 0.5f));
+    // 渐变填充
+    constexpr int strips = 3;
+    for (int i = 0; i < strips; ++i) {
+        float t0 = static_cast<float>(i) / strips;
+        float t1 = static_cast<float>(i + 1) / strips;
+        float bright = 0.12f + 0.06f * (t0 + t1) / 2;
+        bg->drawSolidRect(Vec2(-BTN_W / 2, -BTN_H / 2 + BTN_H * t0),
+                          Vec2(BTN_W / 2, -BTN_H / 2 + BTN_H * t1),
+                          Color4F(bright, bright + 0.04f, bright + 0.18f, 0.9f));
+    }
+    // 顶部高光
+    bg->drawSolidRect(Vec2(-BTN_W / 2, BTN_H / 2 - 1), Vec2(BTN_W / 2, BTN_H / 2),
+                      Color4F(0.4f, 0.6f, 1.0f, 0.3f));
+    bg->drawRect(Vec2(-BTN_W / 2, -BTN_H / 2), Vec2(BTN_W / 2, BTN_H / 2), Color4F(0.3f, 0.5f, 0.9f, 0.5f));
     bg->setPosition(Vec2(x, y));
     addChild(bg, 1);
 
-    auto label = Label::createWithTTF("< BACK", FONT_UI, 16);
+    auto label = Label::createWithTTF("\xe2\x97\x80 BACK", FONT_UI, 14);
     label->setPosition(Vec2(x, y));
-    label->setTextColor(Color4B(180, 210, 255, 220));
+    label->setTextColor(Color4B(180, 210, 255, 230));
+    label->enableShadow(Color4B(0, 0, 0, 80), Size(1, -1));
     addChild(label, 2);
 
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
-    listener->onTouchBegan = [x, y](Touch *touch, Event *) {
+    listener->onTouchBegan = [x, y, bg](Touch *touch, Event *) {
         Rect rect(x - BTN_W / 2, y - BTN_H / 2, BTN_W, BTN_H);
-        return rect.containsPoint(touch->getLocation());
+        if (rect.containsPoint(touch->getLocation())) {
+            bg->setScale(0.93f);
+            return true;
+        }
+        return false;
     };
-    listener->onTouchEnded = [this](Touch *, Event *) {
+    listener->onTouchEnded = [this, bg](Touch *, Event *) {
+        bg->setScale(1.0f);
         if (_onBack) _onBack();
     };
+    listener->onTouchCancelled = [bg](Touch *, Event *) { bg->setScale(1.0f); };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, bg);
 }
 

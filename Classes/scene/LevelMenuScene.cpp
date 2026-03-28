@@ -31,18 +31,73 @@ void LevelMenuScene::onEnter()
 
 void LevelMenuScene::drawBackground(const Size &size)
 {
+    // 渐变背景（深蓝到深紫）
     auto bg = DrawNode::create();
-    bg->drawSolidRect(Vec2::ZERO, Vec2(size.width, size.height), Color4F(0.05f, 0.05f, 0.12f, 1.0f));
-    addChild(bg, -1);
+    constexpr int strips = 24;
+    Color4F bot(0.02f, 0.02f, 0.08f, 1.0f);
+    Color4F top(0.06f, 0.04f, 0.14f, 1.0f);
+    for (int i = 0; i < strips; ++i) {
+        float t0 = static_cast<float>(i) / strips;
+        float t1 = static_cast<float>(i + 1) / strips;
+        Color4F c((bot.r + (top.r - bot.r) * (t0 + t1) / 2), (bot.g + (top.g - bot.g) * (t0 + t1) / 2),
+                  (bot.b + (top.b - bot.b) * (t0 + t1) / 2), 1.0f);
+        bg->drawSolidRect(Vec2(0, size.height * t0), Vec2(size.width, size.height * t1), c);
+    }
+    addChild(bg, -2);
+
+    // 装饰网格
+    auto grid = DrawNode::create();
+    Color4F gridColor(0.12f, 0.15f, 0.25f, 0.08f);
+    constexpr float spacing = 80.0f;
+    for (float x = 0; x <= size.width; x += spacing)
+        grid->drawLine(Vec2(x, 0), Vec2(x, size.height), gridColor);
+    for (float y = 0; y <= size.height; y += spacing)
+        grid->drawLine(Vec2(0, y), Vec2(size.width, y), gridColor);
+    addChild(grid, -1);
+
+    // 角落装饰
+    auto corners = DrawNode::create();
+    Color4F cColor(0.25f, 0.45f, 0.85f, 0.25f);
+    constexpr float cLen = 40.0f;
+    constexpr float cThick = 2.0f;
+    constexpr float pad = 8.0f;
+    float w = size.width;
+    float h = size.height;
+    // 四角 L 形
+    corners->drawSolidRect(Vec2(pad, h - pad - cThick), Vec2(pad + cLen, h - pad), cColor);
+    corners->drawSolidRect(Vec2(pad, h - pad - cLen), Vec2(pad + cThick, h - pad), cColor);
+    corners->drawSolidRect(Vec2(w - pad - cLen, h - pad - cThick), Vec2(w - pad, h - pad), cColor);
+    corners->drawSolidRect(Vec2(w - pad - cThick, h - pad - cLen), Vec2(w - pad, h - pad), cColor);
+    corners->drawSolidRect(Vec2(pad, pad), Vec2(pad + cLen, pad + cThick), cColor);
+    corners->drawSolidRect(Vec2(pad, pad), Vec2(pad + cThick, pad + cLen), cColor);
+    corners->drawSolidRect(Vec2(w - pad - cLen, pad), Vec2(w - pad, pad + cThick), cColor);
+    corners->drawSolidRect(Vec2(w - pad - cThick, pad), Vec2(w - pad, pad + cLen), cColor);
+    addChild(corners, 0);
 }
 
 void LevelMenuScene::drawTitle(const Size &size)
 {
-    auto title = Label::createWithTTF("SELECT LEVEL", FONT_TITLE, 42);
-    title->setPosition(Vec2(size.width / 2, size.height - 60));
+    auto title = Label::createWithTTF("SELECT LEVEL", FONT_TITLE, 44);
+    title->setPosition(Vec2(size.width / 2, size.height - 50));
     title->setTextColor(Color4B(180, 220, 255, 255));
-    title->enableShadow(Color4B(0, 40, 100, 150), Size(2, -2));
+    title->enableShadow(Color4B(0, 40, 120, 180), Size(2, -2));
     addChild(title, 1);
+
+    // 标题下方装饰线
+    auto line = DrawNode::create();
+    float lineW = 200.0f;
+    float lineY = size.height - 78;
+    float cx = size.width / 2;
+    for (int i = 0; i < 3; ++i) {
+        float offset = static_cast<float>(i);
+        float alpha = 0.4f - 0.12f * offset;
+        line->drawLine(Vec2(cx - lineW / 2, lineY - offset), Vec2(cx + lineW / 2, lineY - offset),
+                       Color4F(0.3f, 0.55f, 1.0f, alpha));
+    }
+    // 两端光点
+    line->drawSolidCircle(Vec2(cx - lineW / 2, lineY), 3.0f, 0, 8, Color4F(0.4f, 0.65f, 1.0f, 0.5f));
+    line->drawSolidCircle(Vec2(cx + lineW / 2, lineY), 3.0f, 0, 8, Color4F(0.4f, 0.65f, 1.0f, 0.5f));
+    addChild(line, 1);
 }
 
 Vec2 LevelMenuScene::calcGridOrigin(const Size &size, int count, int cols, float btnW, float btnH,
@@ -79,31 +134,55 @@ void LevelMenuScene::createLevelButtons(const Size &size)
 void LevelMenuScene::createOneButton(int levelIdx, int levelId, const std::string &name, float x, float y,
                                      float btnW, float btnH)
 {
-    // 按钮背景
     auto bg = DrawNode::create();
-    bg->drawSolidRect(Vec2(-btnW / 2, -btnH / 2), Vec2(btnW / 2, btnH / 2),
-                      Color4F(0.12f, 0.15f, 0.25f, 0.9f));
-    bg->drawRect(Vec2(-btnW / 2, -btnH / 2), Vec2(btnW / 2, btnH / 2), Color4F(0.3f, 0.5f, 0.9f, 0.6f));
+
+    // 按钮主体渐变（从下到上微亮）
+    constexpr int bStrips = 4;
+    for (int i = 0; i < bStrips; ++i) {
+        float t0 = static_cast<float>(i) / bStrips;
+        float t1 = static_cast<float>(i + 1) / bStrips;
+        float bright = 0.10f + 0.06f * (t0 + t1) / 2;
+        bg->drawSolidRect(Vec2(-btnW / 2, -btnH / 2 + btnH * t0), Vec2(btnW / 2, -btnH / 2 + btnH * t1),
+                          Color4F(bright, bright + 0.03f, bright + 0.12f, 0.92f));
+    }
+
+    // 顶部高光线
+    bg->drawSolidRect(Vec2(-btnW / 2, btnH / 2 - 2), Vec2(btnW / 2, btnH / 2),
+                      Color4F(0.35f, 0.55f, 0.95f, 0.4f));
+    // 边框
+    bg->drawRect(Vec2(-btnW / 2, -btnH / 2), Vec2(btnW / 2, btnH / 2), Color4F(0.25f, 0.45f, 0.85f, 0.55f));
     bg->setPosition(Vec2(x, y));
     addChild(bg, 1);
 
-    // 关卡标题
-    auto label = Label::createWithTTF(StringUtils::format("%d - %s", levelId, name.c_str()), FONT_UI, 18);
-    label->setPosition(Vec2(x, y));
-    label->setTextColor(Color4B(200, 220, 255, 255));
-    addChild(label, 2);
+    // 关卡编号（大字）
+    auto numLabel = Label::createWithTTF(StringUtils::format("%d", levelId), FONT_TITLE, 28);
+    numLabel->setPosition(Vec2(x, y + 10));
+    numLabel->setTextColor(Color4B(200, 230, 255, 255));
+    numLabel->enableShadow(Color4B(0, 30, 80, 120), Size(1, -1));
+    addChild(numLabel, 2);
+
+    // 关卡名称（小字）
+    auto nameLabel = Label::createWithTTF(name, FONT_UI, 14);
+    nameLabel->setPosition(Vec2(x, y - 16));
+    nameLabel->setTextColor(Color4B(150, 180, 220, 200));
+    addChild(nameLabel, 2);
 
     // 触摸监听
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
-    listener->onTouchBegan = [x, y, btnW, btnH](Touch *touch, Event *) {
-        auto pos = touch->getLocation();
+    listener->onTouchBegan = [x, y, btnW, btnH, bg](Touch *touch, Event *) {
         Rect rect(x - btnW / 2, y - btnH / 2, btnW, btnH);
-        return rect.containsPoint(pos);
+        if (rect.containsPoint(touch->getLocation())) {
+            bg->setScale(0.95f);
+            return true;
+        }
+        return false;
     };
-    listener->onTouchEnded = [this, levelIdx](Touch *, Event *) {
+    listener->onTouchEnded = [this, levelIdx, bg](Touch *, Event *) {
+        bg->setScale(1.0f);
         auto scene = GameScene::createSceneWithLevel(levelIdx);
         Director::getInstance()->replaceScene(TransitionFade::create(0.4f, scene, Color3B(10, 10, 30)));
     };
+    listener->onTouchCancelled = [bg](Touch *, Event *) { bg->setScale(1.0f); };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, bg);
 }

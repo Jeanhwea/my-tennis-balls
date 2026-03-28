@@ -13,33 +13,57 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
     float halfW = trayW / 2;
     float halfH = TRAY_THICKNESS / 2;
 
-    // 阴影
-    draw->drawSolidRect(Vec2(trayX - halfW + 2, trayY - halfH - 2),
-                        Vec2(trayX + halfW + 2, trayY + halfH - 2), Color4F(0.0f, 0.0f, 0.0f, 0.3f));
-    // 主体
-    draw->drawSolidRect(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX + halfW, trayY + halfH),
-                        Color4F(0.45f, 0.48f, 0.55f, 0.95f));
+    // 阴影（更柔和）
+    draw->drawSolidRect(Vec2(trayX - halfW + 3, trayY - halfH - 3),
+                        Vec2(trayX + halfW + 3, trayY + halfH - 3), Color4F(0.0f, 0.0f, 0.0f, 0.25f));
+
+    // 主体渐变（从下到上变亮）
+    constexpr int tStrips = 3;
+    for (int i = 0; i < tStrips; ++i) {
+        float t0 = static_cast<float>(i) / tStrips;
+        float t1 = static_cast<float>(i + 1) / tStrips;
+        float bright = 0.38f + 0.18f * (t0 + t1) / 2;
+        draw->drawSolidRect(Vec2(trayX - halfW, trayY - halfH + TRAY_THICKNESS * t0),
+                            Vec2(trayX + halfW, trayY - halfH + TRAY_THICKNESS * t1),
+                            Color4F(bright - 0.05f, bright, bright + 0.08f, 0.95f));
+    }
+
     // 顶部高光
-    draw->drawSolidRect(Vec2(trayX - halfW, trayY + halfH - 2), Vec2(trayX + halfW, trayY + halfH),
-                        Color4F(0.7f, 0.75f, 0.85f, 0.9f));
-    // 底部边线
+    draw->drawSolidRect(Vec2(trayX - halfW + 1, trayY + halfH - 2), Vec2(trayX + halfW - 1, trayY + halfH),
+                        Color4F(0.75f, 0.80f, 0.92f, 0.85f));
+
+    // 底部暗线
     draw->drawLine(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX + halfW, trayY - halfH),
-                   Color4F(0.3f, 0.32f, 0.38f, 0.8f));
-    // 左右端盖
-    draw->drawLine(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX - halfW, trayY + halfH),
-                   Color4F(0.55f, 0.58f, 0.65f, 0.6f));
-    draw->drawLine(Vec2(trayX + halfW, trayY - halfH), Vec2(trayX + halfW, trayY + halfH),
-                   Color4F(0.35f, 0.38f, 0.42f, 0.6f));
+                   Color4F(0.22f, 0.24f, 0.30f, 0.9f));
+
+    // 左右端盖（圆角感）
+    draw->drawSolidCircle(Vec2(trayX - halfW, trayY), halfH, 0, 8, Color4F(0.50f, 0.54f, 0.62f, 0.7f));
+    draw->drawSolidCircle(Vec2(trayX + halfW, trayY), halfH, 0, 8, Color4F(0.38f, 0.40f, 0.48f, 0.7f));
+
+    // 支架（两端小三角）
+    constexpr float bracketH = 12.0f;
+    constexpr float bracketW = 6.0f;
+    Color4F bracketColor(0.30f, 0.35f, 0.50f, 0.6f);
+    // 左支架
+    Vec2 lb[3] = {Vec2(trayX - halfW + 2, trayY - halfH), Vec2(trayX - halfW + 2, trayY - halfH - bracketH),
+                  Vec2(trayX - halfW + 2 + bracketW, trayY - halfH)};
+    draw->drawSolidPoly(lb, 3, bracketColor);
+    // 右支架
+    Vec2 rb[3] = {Vec2(trayX + halfW - 2, trayY - halfH), Vec2(trayX + halfW - 2, trayY - halfH - bracketH),
+                  Vec2(trayX + halfW - 2 - bracketW, trayY - halfH)};
+    draw->drawSolidPoly(rb, 3, bracketColor);
+
     draw->setTag(TAG_TRAY);
     parent->addChild(draw, 2);
 
-    // 托盘下方的微光
+    // 托盘下方柔光
     auto glow = DrawNode::create();
-    for (int g = 4; g >= 0; --g) {
-        float gy = static_cast<float>(g) * 3.0f;
-        float alpha = 0.03f * (5 - g);
-        glow->drawSolidRect(Vec2(trayX - halfW + 4, trayY - halfH - gy - 3),
-                            Vec2(trayX + halfW - 4, trayY - halfH - gy), Color4F(0.3f, 0.5f, 0.9f, alpha));
+    for (int g = 5; g >= 0; --g) {
+        float gy = static_cast<float>(g) * 2.5f;
+        float alpha = 0.025f * (6 - g);
+        glow->drawSolidRect(Vec2(trayX - halfW + 6, trayY - halfH - gy - 2.5f),
+                            Vec2(trayX + halfW - 6, trayY - halfH - gy),
+                            Color4F(0.25f, 0.45f, 0.85f, alpha));
     }
     glow->setTag(TAG_TRAY);
     parent->addChild(glow, 1);
