@@ -1,0 +1,25 @@
+{
+  "id": 27,
+  "name": "Crystal",
+  "maxBalls": 30,
+  "trays": [
+    {
+      "x": 0.2,
+      "y": 0.15,
+      "width": 0.14,
+      "targets": 2
+    },
+    {
+      "x": 0.2,
+      "y": 0.5,
+      "width": 0.18,
+      "targets": 3
+    },
+    {
+      "x": 0.2,
+      "y": 0.85,
+      "width": 0.14,
+      "targets": 2
+    }
+  ]
+}

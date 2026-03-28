@@ -1,0 +1,31 @@
+{
+  "id": 28,
+  "name": "Lattice",
+  "maxBalls": 28,
+  "trays": [
+    {
+      "x": 0.08,
+      "y": 0.18,
+      "width": 0.12,
+      "targets": 1
+    },
+    {
+      "x": 0.5,
+      "y": 0.18,
+      "width": 0.12,
+      "targets": 1
+    },
+    {
+      "x": 0.08,
+      "y": 0.8,
+      "width": 0.12,
+      "targets": 1
+    },
+    {
+      "x": 0.5,
+      "y": 0.8,
+      "width": 0.12,
+      "targets": 1
+    }
+  ]
+}

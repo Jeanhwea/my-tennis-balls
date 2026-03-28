@@ -1,0 +1,25 @@
+{
+  "id": 17,
+  "name": "Vortex",
+  "maxBalls": 26,
+  "trays": [
+    {
+      "x": 0.2,
+      "y": 0.15,
+      "width": 0.4,
+      "targets": 3
+    },
+    {
+      "x": 0.2,
+      "y": 0.5,
+      "width": 0.24,
+      "targets": 1
+    },
+    {
+      "x": 0.2,
+      "y": 0.85,
+      "width": 0.08,
+      "targets": 1
+    }
+  ]
+}

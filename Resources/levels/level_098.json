@@ -1,0 +1,49 @@
+{
+  "id": 98,
+  "name": "Serpentine",
+  "maxBalls": 56,
+  "trays": [
+    {
+      "x": 0.12,
+      "y": 0.18,
+      "width": 0.1,
+      "targets": 3
+    },
+    {
+      "x": 0.35,
+      "y": 0.29,
+      "width": 0.1,
+      "targets": 3
+    },
+    {
+      "x": 0.12,
+      "y": 0.4,
+      "width": 0.1,
+      "targets": 3
+    },
+    {
+      "x": 0.35,
+      "y": 0.51,
+      "width": 0.1,
+      "targets": 3
+    },
+    {
+      "x": 0.12,
+      "y": 0.61,
+      "width": 0.1,
+      "targets": 3
+    },
+    {
+      "x": 0.35,
+      "y": 0.72,
+      "width": 0.1,
+      "targets": 3
+    },
+    {
+      "x": 0.12,
+      "y": 0.83,
+      "width": 0.1,
+      "targets": 3
+    }
+  ]
+}

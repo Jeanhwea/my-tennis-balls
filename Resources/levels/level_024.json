@@ -1,0 +1,19 @@
+{
+  "id": 24,
+  "name": "Parallel",
+  "maxBalls": 25,
+  "trays": [
+    {
+      "x": 0.08,
+      "y": 0.2,
+      "width": 0.18,
+      "targets": 2
+    },
+    {
+      "x": 0.5,
+      "y": 0.2,
+      "width": 0.18,
+      "targets": 2
+    }
+  ]
+}

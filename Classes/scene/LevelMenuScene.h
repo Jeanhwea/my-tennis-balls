@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 
-/// 关卡选择菜单场景
+/// 关卡选择菜单场景（分页浏览）
 class LevelMenuScene : public cocos2d::Scene
 {
 public:
@@ -15,18 +15,28 @@ public:
     CREATE_FUNC(LevelMenuScene);
 
 private:
+    static constexpr int COLS = 4;
+    static constexpr int ROWS = 4;
+    static constexpr int PER_PAGE = COLS * ROWS;
+
     void drawBackground(const cocos2d::Size &size);
     void drawTitle(const cocos2d::Size &size);
     void createLevelButtons(const cocos2d::Size &size);
+    void showPage(int page);
 
-    /// 计算网格布局的起始坐标。
-    cocos2d::Vec2 calcGridOrigin(const cocos2d::Size &size, int count, int cols, float btnW, float btnH,
-                                 float gapX, float gapY) const;
+    void createOneButton(cocos2d::Node *parent, int levelIdx, int levelId, const std::string &name, float x,
+                         float y, float btnW, float btnH);
 
-    void createOneButton(int levelIdx, int levelId, const std::string &name, float x, float y, float btnW,
-                         float btnH);
-
+    void createNavButtons(const cocos2d::Size &size);
+    void updateNavButtons();
     void createQuitButton(const cocos2d::Size &size);
+
+    cocos2d::Node *_pageContainer = nullptr;
+    cocos2d::Label *_pageLabel = nullptr;
+    cocos2d::Node *_prevBtn = nullptr;
+    cocos2d::Node *_nextBtn = nullptr;
+    int _currentPage = 0;
+    int _totalPages = 1;
 };
 
 #endif  // __LEVEL_MENU_SCENE_H__

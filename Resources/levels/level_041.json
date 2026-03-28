@@ -1,0 +1,31 @@
+{
+  "id": 41,
+  "name": "Spiral",
+  "maxBalls": 37,
+  "trays": [
+    {
+      "x": 0.2,
+      "y": 0.15,
+      "width": 0.4,
+      "targets": 4
+    },
+    {
+      "x": 0.2,
+      "y": 0.38,
+      "width": 0.29,
+      "targets": 2
+    },
+    {
+      "x": 0.2,
+      "y": 0.62,
+      "width": 0.19,
+      "targets": 1
+    },
+    {
+      "x": 0.2,
+      "y": 0.85,
+      "width": 0.08,
+      "targets": 1
+    }
+  ]
+}
