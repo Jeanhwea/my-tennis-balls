@@ -53,7 +53,7 @@ for /f "tokens=*" %%g in ('git describe --tags --always --dirty^="+dev" 2^>nul')
 if not defined GIT_DESC set "GIT_DESC=unknown"
 set "DIST_DIR=dist"
 if not exist "%DIST_DIR%" mkdir "%DIST_DIR%"
-set "APK_SRC=%PROJ_DIR%\app\build\outputs\apk\%BUILD_TYPE%\app-%BUILD_TYPE%.apk"
+set "APK_SRC=%PROJ_DIR%\app\build\outputs\apk\%BUILD_TYPE%\%APP_NAME%-%BUILD_TYPE%.apk"
 set "APK_DEST=%DIST_DIR%\%APP_NAME%-%GIT_DESC%-%BUILD_TYPE%.apk"
 if exist "!APK_SRC!" (
     copy /y "!APK_SRC!" "!APK_DEST!" >nul
