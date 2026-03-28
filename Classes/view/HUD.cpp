@@ -41,6 +41,12 @@ bool HUD::initWithSize(const Size &visibleSize)
     _targetLabel->setTextColor(Color4B(255, 200, 80, 255));
     addChild(_targetLabel);
 
+    _levelLabel = Label::createWithSystemFont("Level 1", "Arial", FONT_SZ);
+    _levelLabel->setAnchorPoint(Vec2(0.5f, 1));
+    _levelLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - MARGIN));
+    _levelLabel->setTextColor(Color4B(180, 220, 255, 255));
+    addChild(_levelLabel);
+
     _hintLabel = Label::createWithSystemFont("Drag in LAUNCH zone to shoot!", "Arial", HINT_SZ);
     _hintLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - MARGIN * 3));
     _hintLabel->setTextColor(Color4B(255, 255, 255, 160));
@@ -95,4 +101,24 @@ void HUD::showCleared()
     cleared->runAction(Sequence::create(EaseBackOut::create(ScaleTo::create(0.4f, 1.2f)),
                                         DelayTime::create(1.5f), FadeOut::create(0.5f),
                                         RemoveSelf::create(), nullptr));
+}
+
+void HUD::updateLevel(int levelId, const std::string &name)
+{
+    _levelLabel->setString(StringUtils::format("Level %d - %s", levelId, name.c_str()));
+}
+
+void HUD::showLevelIntro(int levelId, const std::string &name)
+{
+    auto intro = Label::createWithSystemFont(StringUtils::format("Level %d\n%s", levelId, name.c_str()),
+                                             "Arial", 40);
+    intro->setPosition(getParent()->getContentSize() / 2);
+    intro->setTextColor(Color4B(180, 220, 255, 255));
+    intro->setAlignment(TextHAlignment::CENTER);
+    intro->setScale(0);
+    getParent()->addChild(intro, 30);
+
+    intro->runAction(Sequence::create(EaseBackOut::create(ScaleTo::create(0.3f, 1.0f)),
+                                      DelayTime::create(1.2f), FadeOut::create(0.4f), RemoveSelf::create(),
+                                      nullptr));
 }

@@ -1,0 +1,10 @@
+{
+  "id": 7,
+  "name": "Fortress",
+  "maxBalls": 25,
+  "trays": [
+    { "x": 0.20, "y": 0.30, "width": 0.30, "targets": 5 },
+    { "x": 0.20, "y": 0.50, "width": 0.24, "targets": 4 },
+    { "x": 0.20, "y": 0.68, "width": 0.18, "targets": 3 }
+  ]
+}

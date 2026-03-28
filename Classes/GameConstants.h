@@ -34,9 +34,7 @@ constexpr float MIN_DRAG_DISTANCE = 20.0f;
 constexpr float COMBO_TIMEOUT = 2.0f;
 constexpr int SCORE_PER_HIT = 10;
 constexpr int SCORE_TARGET_FALL = 50;
-constexpr int MAX_BALLS = 20;
 constexpr float FLOOR_HEIGHT = 10.0f;
-constexpr int TARGET_COUNT = 5;
 
 // Zone layout
 constexpr float LAUNCH_ZONE_RATIO = 0.20f;  // right 20%

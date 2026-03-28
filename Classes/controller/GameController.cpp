@@ -15,31 +15,78 @@ void GameController::init(Scene *scene, const Size &visibleSize)
     _scene = scene;
     _visibleSize = visibleSize;
 
-    // Arena
+    // Static arena (persists across levels)
     ArenaView::addEdgeWalls(_scene, _visibleSize);
     ArenaView::addFloorSensor(_scene, _visibleSize);
     ArenaView::drawZones(_scene, _visibleSize);
-
-    // Tray with target balls
-    TrayView::create(_scene, _visibleSize, TARGET_COUNT);
-    _model.setTargetsRemaining(TARGET_COUNT);
 
     _aimLine.init(_scene);
 
     _hud = HUD::create(_visibleSize);
     _scene->addChild(_hud, 20);
 
-    // Model → View binding
     _model.scoreManager().setOnChange([this]() { refreshHUD(); });
 
     setupInput();
     setupPhysics();
-    refreshHUD();
+
+    // Load first level
+    loadLevel(0);
 }
 
 void GameController::update(float dt)
 {
     _model.tick(dt);
+}
+
+// ── Level management ────────────────────────────────────────────
+
+void GameController::loadLevel(int index)
+{
+    _transitioning = false;
+    _model.setLevelIndex(index);
+    _ballCounter = 0;
+
+    clearLevelNodes();
+
+    const auto &level = _model.currentLevel();
+    int totalTargets = TrayView::createFromLevel(_scene, _visibleSize, level);
+    _model.setTargetsRemaining(totalTargets);
+
+    _hud->updateLevel(level.id, level.name);
+    _hud->showLevelIntro(level.id, level.name);
+    refreshHUD();
+}
+
+void GameController::clearLevelNodes()
+{
+    // Remove all balls, targets, and trays from previous level
+    std::vector<Node *> toRemove;
+    for (auto child : _scene->getChildren()) {
+        int tag = child->getTag();
+        if (tag == TAG_BALL || tag == TAG_TARGET || tag == TAG_TRAY) {
+            toRemove.push_back(child);
+        }
+    }
+    for (auto node : toRemove) {
+        node->removeFromParent();
+    }
+}
+
+void GameController::onLevelCleared()
+{
+    if (_transitioning) return;
+    _transitioning = true;
+
+    _hud->showCleared();
+
+    if (_model.hasNextLevel()) {
+        int nextIdx = _model.levelIndex() + 1;
+        // Delay before loading next level
+        _scene->runAction(Sequence::create(
+            DelayTime::create(2.5f), CallFunc::create([this, nextIdx]() { loadLevel(nextIdx); }), nullptr));
+    }
+    // If no next level, game stays on "ALL CLEAR!" — player wins
 }
 
 // ── Wiring ──────────────────────────────────────────────────────
@@ -53,6 +100,9 @@ void GameController::setupInput()
     _input.setOnDragEnd([this]() { _aimLine.clear(); });
 
     _input.setOnLaunch([this](const InputController::LaunchCommand &cmd) {
+        if (_transitioning) return;
+        const auto &level = _model.currentLevel();
+        if (countBalls() >= level.maxBalls) return;
         spawnBall(cmd.position, cmd.velocity);
         _hud->hideHint();
     });
@@ -70,9 +120,10 @@ void GameController::setupPhysics()
 void GameController::refreshHUD()
 {
     if (!_hud) return;
+    const auto &level = _model.currentLevel();
     _hud->updateScore(_model.scoreManager().score());
     _hud->updateCombo(_model.scoreManager().combo());
-    _hud->updateBallCount(countBalls(), MAX_BALLS);
+    _hud->updateBallCount(countBalls(), level.maxBalls);
     _hud->updateTargets(_model.targetsRemaining());
 }
 
@@ -98,8 +149,6 @@ int GameController::countTargets() const
 
 void GameController::spawnBall(const Vec2 &position, const Vec2 &velocity)
 {
-    if (countBalls() >= MAX_BALLS) return;
-
     BallView::spawn(_scene, position, velocity, ++_ballCounter);
     _model.setBallCount(countBalls());
     refreshHUD();
@@ -119,7 +168,7 @@ void GameController::removeTarget(Node *target)
         _model.setTargetsRemaining(countTargets());
         refreshHUD();
         if (_model.isCleared()) {
-            _hud->showCleared();
+            onLevelCleared();
         }
     });
 }
@@ -134,7 +183,7 @@ bool GameController::onContactBegin(PhysicsContact &contact)
 
     auto &score = _model.scoreManager();
 
-    // Ball or target fell through floor — remove it
+    // Floor sensor
     bool aFloor = nodeA->getTag() == TAG_FLOOR;
     bool bFloor = nodeB->getTag() == TAG_FLOOR;
     if (aFloor || bFloor) {
@@ -153,7 +202,7 @@ bool GameController::onContactBegin(PhysicsContact &contact)
         return false;
     }
 
-    // Ball hits target — apply force (physics handles it), score for the hit
+    // Ball hits target
     if ((nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_TARGET) ||
         (nodeA->getTag() == TAG_TARGET && nodeB->getTag() == TAG_BALL)) {
         auto target = (nodeA->getTag() == TAG_TARGET) ? nodeA : nodeB;
@@ -167,7 +216,7 @@ bool GameController::onContactBegin(PhysicsContact &contact)
         return true;
     }
 
-    // Ball hits ball — small score
+    // Ball hits ball
     if (nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_BALL) {
         auto cp = contact.getContactData()->points[0];
         int points = SCORE_PER_HIT / 2 * std::max(1, score.combo());

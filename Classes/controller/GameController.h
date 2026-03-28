@@ -7,7 +7,7 @@
 #include "view/AimLineView.h"
 #include "view/HUD.h"
 
-/// Orchestrates Model ↔ View communication and handles physics events.
+/// Orchestrates Model ↔ View communication, level progression, and physics.
 class GameController
 {
 public:
@@ -24,6 +24,12 @@ private:
     HUD *_hud = nullptr;
 
     int _ballCounter = 0;
+    bool _transitioning = false;
+
+    // Level management
+    void loadLevel(int index);
+    void clearLevelNodes();
+    void onLevelCleared();
 
     // Wiring
     void setupInput();
