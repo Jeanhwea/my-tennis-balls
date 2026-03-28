@@ -37,6 +37,19 @@ void GameController::init(Scene *scene, const Size &visibleSize)
 void GameController::update(float dt)
 {
     _model.tick(dt);
+
+    // Check for targets that fell off screen (below y=0 or off sides)
+    if (!_transitioning) {
+        std::vector<Node *> fallen;
+        for (auto child : _scene->getChildren()) {
+            if (child->getTag() == TAG_TARGET && child->getPositionY() < -50.0f) {
+                fallen.push_back(child);
+            }
+        }
+        for (auto target : fallen) {
+            removeTarget(target);
+        }
+    }
 }
 
 // ── Level management ────────────────────────────────────────────

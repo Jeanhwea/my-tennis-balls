@@ -42,10 +42,9 @@ void ArenaView::addFloorSensor(Node *parent, const Size &visibleSize)
     auto floor = Node::create();
     floor->setName("floor");
     floor->setTag(TAG_FLOOR);
-    floor->setPosition(Vec2(visibleSize.width / 2, -FLOOR_HEIGHT));
+    floor->setPosition(Vec2(visibleSize.width / 2, -200.0f));
 
-    auto body =
-        PhysicsBody::createBox(Size(visibleSize.width + 100, FLOOR_HEIGHT * 2), PhysicsMaterial(0, 0, 0));
+    auto body = PhysicsBody::createBox(Size(visibleSize.width + 200, 400.0f), PhysicsMaterial(0, 0, 0));
     body->setDynamic(false);
     body->setCategoryBitmask(CATEGORY_FLOOR);
     body->setCollisionBitmask(0);
