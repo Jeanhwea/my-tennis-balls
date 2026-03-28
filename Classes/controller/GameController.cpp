@@ -235,7 +235,6 @@ bool GameController::onContactBegin(PhysicsContact &contact)
         score.addScore(SCORE_PER_HIT);
         VFXHelper::showFloatingScore(_scene, Vec2(cp.x, cp.y), points);
         VFXHelper::spawnHitParticle(_scene, Vec2(cp.x, cp.y));
-        VFXHelper::flashNode(target);
         return true;
     }
 

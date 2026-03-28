@@ -84,7 +84,6 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
         target->setScale(TARGET_SCALE);
         target->setPosition(Vec2(bx, ballY));
         target->setTag(TAG_TARGET);
-        target->setColor(targetColor(targetIndex));
         target->setName(StringUtils::format("target%02d", targetIndex));
         ++targetIndex;
 

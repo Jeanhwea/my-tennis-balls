@@ -25,7 +25,6 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     ball->setScale(BALL_SCALE);
     ball->setPosition(position);
     ball->setTag(TAG_BALL);
-    ball->setColor(randomColor());
     ball->setName(StringUtils::format("ball%02d", ballIndex));
 
     const float radius = ball->getContentSize().width / 2 - BALL_SPRITE_PADDING;
