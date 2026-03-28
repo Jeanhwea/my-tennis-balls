@@ -65,10 +65,12 @@ cmake -B "$BUILD_DIR" -GXcode \
     -DCMAKE_OSX_SYSROOT="$SDK" \
     -DCMAKE_OSX_ARCHITECTURES="$ARCHS" \
     -DCMAKE_OSX_DEPLOYMENT_TARGET="12.0" \
+    -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED="NO" \
     "$CMAKE_DEBUG_FLAG"
 
 # Build
 echo "[*] Building..."
-cmake --build "$BUILD_DIR" --config "$BUILD_TYPE" --parallel
+cmake --build "$BUILD_DIR" --config "$BUILD_TYPE" --parallel -- \
+    IPHONEOS_DEPLOYMENT_TARGET=12.0
 
 echo "[*] Build succeeded (iOS $BUILD_TYPE, sdk=$SDK)."
