@@ -90,10 +90,10 @@ jobs:
           echo "JAVA_HOME=$(sdk home java $(grep java .sdkmanrc | cut -d= -f2))" >> "$GITHUB_ENV"
 
 
-      - name: Use official Gradle distribution URL
-        run: |
-          sed -i 's|https\\://mirrors.cloud.tencent.com/gradle/|https\\://services.gradle.org/distributions/|' \
-            proj.android/gradle/wrapper/gradle-wrapper.properties
+      # - name: Use official Gradle distribution URL
+      #   run: |
+      #     sed -i 's|https\\://mirrors.cloud.tencent.com/gradle/|https\\://services.gradle.org/distributions/|' \
+      #       proj.android/gradle/wrapper/gradle-wrapper.properties
 
       - name: Make gradlew executable
         run: chmod +x proj.android/gradlew
