@@ -112,10 +112,13 @@ bool AppDelegate::applicationDidFinishLaunching()
     CCLOG("Version components: %d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
 
     // 创建关卡菜单场景
+    CCLOG("[AppDelegate] creating LevelMenuScene");
     auto scene = LevelMenuScene::createScene();
+    CCLOG("[AppDelegate] running scene");
 
     // 运行
     director->runWithScene(scene);
+    CCLOG("[AppDelegate] scene started");
 
     return true;
 }

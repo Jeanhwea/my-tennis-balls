@@ -13,16 +13,22 @@ USING_NS_CC;
 
 void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 {
+    CCLOG("[GameController] init begin, startLevel=%d", startLevel);
     _scene = scene;
     _visibleSize = visibleSize;
 
     // 静态竞技场（跨关卡持续存在）
+    CCLOG("[GameController] addEdgeWalls");
     ArenaView::addEdgeWalls(_scene, _visibleSize);
+    CCLOG("[GameController] addFloorSensor");
     ArenaView::addFloorSensor(_scene, _visibleSize);
+    CCLOG("[GameController] drawZones");
     ArenaView::drawZones(_scene, _visibleSize);
 
+    CCLOG("[GameController] aimLine init");
     _aimLine.init(_scene);
 
+    CCLOG("[GameController] HUD create");
     _hud = HUD::create(_visibleSize);
     _scene->addChild(_hud, 20);
 
@@ -33,11 +39,15 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
         Director::getInstance()->replaceScene(TransitionFade::create(0.4f, menuScene, Color3B(10, 10, 30)));
     });
 
+    CCLOG("[GameController] setupInput");
     setupInput();
+    CCLOG("[GameController] setupPhysics");
     setupPhysics();
 
     // 加载指定关卡
+    CCLOG("[GameController] loadLevel(%d)", startLevel);
     loadLevel(startLevel);
+    CCLOG("[GameController] init done");
 }
 
 void GameController::update(float dt)
@@ -52,6 +62,12 @@ void GameController::update(float dt)
 
 void GameController::loadLevel(int index)
 {
+    CCLOG("[GameController] loadLevel: index=%d, totalLevels=%d", index,
+          static_cast<int>(getAllLevels().size()));
+    if (index < 0 || index >= static_cast<int>(getAllLevels().size())) {
+        CCLOG("[GameController] ERROR: level index %d out of range!", index);
+        return;
+    }
     _transitioning = false;
     _model.setLevelIndex(index);
     _ballCounter = 0;

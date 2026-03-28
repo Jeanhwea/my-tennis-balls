@@ -32,24 +32,7 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     ring->drawCircle(Vec2::ZERO, radius * 1.8f, 0, 16, false, Color4F(1.0f, 1.0f, 1.0f, 0.3f));
     ring->setPosition(position);
     parent->addChild(ring, 4);
-    ring->runAction(
-        Sequence::create(Spawn::create(ScaleTo::create(0.35f, 2.5f), FadeOut::create(0.35f), nullptr),
-                         RemoveSelf::create(), nullptr));
-
-    // 运动拖尾
-    auto trail = MotionStreak::create(0.3f, 3.0f, radius * 1.5f, Color3B(100, 180, 255), "ball.png");
-    trail->setName("trail_" + ball->getName());
-    trail->setTag(TAG_BALL);
-    parent->addChild(trail, 4);
-
-    // 每帧跟随球位置
-    trail->runAction(
-        RepeatForever::create(Sequence::create(DelayTime::create(0.0f), CallFunc::create([trail, ball]() {
-                                                   if (ball && ball->getParent()) {
-                                                       trail->setPosition(ball->getPosition());
-                                                   }
-                                               }),
-                                               nullptr)));
+    ring->runAction(Sequence::create(ScaleTo::create(0.35f, 2.5f), RemoveSelf::create(), nullptr));
 
     return ball;
 }
@@ -60,7 +43,7 @@ void BallView::despawn(Node *ball, const std::function<void()> &onComplete)
     ball->getPhysicsBody()->setEnabled(false);
 
     Vector<FiniteTimeAction *> seq;
-    seq.pushBack(Spawn::create(ScaleTo::create(0.2f, 0), FadeOut::create(0.2f), nullptr));
+    seq.pushBack(ScaleTo::create(0.2f, 0));
     seq.pushBack(RemoveSelf::create());
     if (onComplete) {
         seq.pushBack(CallFunc::create(onComplete));

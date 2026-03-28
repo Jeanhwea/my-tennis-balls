@@ -76,9 +76,11 @@ void LevelMenuScene::drawBackground(const Size &size)
     addChild(corners, 0);
 
     // 浮动光点粒子
+    CCLOG("[LevelMenuScene] drawBackground: ambient particles");
     auto ambient = AmbientParticles::create(size);
     addChild(ambient, 0);
     ambient->start();
+    CCLOG("[LevelMenuScene] drawBackground: done");
 }
 
 void LevelMenuScene::drawTitle(const Size &size)

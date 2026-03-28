@@ -18,18 +18,14 @@ Scene *GameScene::createSceneWithLevel(int levelIndex)
 
 bool GameScene::init()
 {
+    CCLOG("[GameScene] init begin");
     if (!Scene::initWithPhysics()) {
         return false;
     }
 
     setName("GameScene");
     getPhysicsWorld()->setGravity(Vec2(0, GRAVITY_Y));
-
-#if IS_DEBUG
-    getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
-#else
     getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
-#endif
 
     scheduleUpdate();
     return true;
@@ -37,13 +33,16 @@ bool GameScene::init()
 
 void GameScene::onEnter()
 {
+    CCLOG("[GameScene] onEnter begin");
     Scene::onEnter();
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     _controller.init(this, visibleSize, _startLevel);
+    CCLOG("[GameScene] onEnter done");
 }
 
 void GameScene::update(float dt)
 {
+    CCLOG("[GameScene] update dt=%.4f", dt);
     _controller.update(dt);
 }
