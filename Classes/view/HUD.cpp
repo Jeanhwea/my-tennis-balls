@@ -229,6 +229,32 @@ void HUD::showCleared()
         DelayTime::create(1.2f), FadeOut::create(0.5f), RemoveSelf::create(), nullptr));
 }
 
+void HUD::showFailed()
+{
+    auto parentSize = getParent()->getContentSize();
+    float cx = parentSize.width * 0.35f;
+    float cy = parentSize.height / 2;
+
+    auto flash = DrawNode::create();
+    flash->drawSolidCircle(Vec2(cx, cy), 120.0f, 0, 24, Color4F(1.0f, 0.2f, 0.2f, 0.15f));
+    flash->setScale(0);
+    getParent()->addChild(flash, 29);
+    flash->runAction(Sequence::create(
+        Spawn::create(EaseOut::create(ScaleTo::create(0.5f, 3.0f), 2), FadeOut::create(0.6f), nullptr),
+        RemoveSelf::create(), nullptr));
+
+    auto failed = Label::createWithTTF("NO BALLS LEFT!", FONT_TITLE, 48);
+    failed->setPosition(Vec2(cx, cy));
+    failed->setTextColor(Color4B(255, 80, 60, 255));
+    failed->enableShadow(Color4B(150, 30, 0, 150), Size(2, -2));
+    failed->setScale(0);
+    getParent()->addChild(failed, 30);
+
+    failed->runAction(Sequence::create(
+        EaseBackOut::create(ScaleTo::create(0.4f, 1.2f)), EaseInOut::create(ScaleTo::create(0.3f, 1.0f), 2),
+        DelayTime::create(1.2f), FadeOut::create(0.5f), RemoveSelf::create(), nullptr));
+}
+
 void HUD::updateLevel(int levelId, const std::string &name)
 {
     _levelLabel->setString(StringUtils::format("Level %d - %s", levelId, name.c_str()));

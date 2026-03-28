@@ -30,6 +30,8 @@ private:
     void loadLevel(int index);
     void clearLevelNodes();
     void onLevelCleared();
+    void onLevelFailed();
+    void checkFailCondition();
 
     // 连接
     void setupInput();

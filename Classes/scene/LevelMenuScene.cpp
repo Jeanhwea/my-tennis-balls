@@ -242,7 +242,7 @@ void LevelMenuScene::createNavButtons(const Size &size)
     prevBg->drawCircle(Vec2::ZERO, arrowSize, 0, 16, false, Color4F(0.25f, 0.45f, 0.85f, 0.6f));
     _prevBtn->addChild(prevBg, 0);
 
-    auto prevLabel = Label::createWithTTF("<", FONT_TITLE, 32);
+    auto prevLabel = Label::createWithTTF("L", FONT_TITLE, 32);
     prevLabel->setTextColor(Color4B(180, 220, 255, 255));
     _prevBtn->addChild(prevLabel, 1);
 
@@ -274,7 +274,7 @@ void LevelMenuScene::createNavButtons(const Size &size)
     nextBg->drawCircle(Vec2::ZERO, arrowSize, 0, 16, false, Color4F(0.25f, 0.45f, 0.85f, 0.6f));
     _nextBtn->addChild(nextBg, 0);
 
-    auto nextLabel = Label::createWithTTF(">", FONT_TITLE, 32);
+    auto nextLabel = Label::createWithTTF("R", FONT_TITLE, 32);
     nextLabel->setTextColor(Color4B(180, 220, 255, 255));
     _nextBtn->addChild(nextLabel, 1);
 

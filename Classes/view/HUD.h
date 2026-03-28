@@ -19,6 +19,7 @@ public:
     void updateLevel(int levelId, const std::string &name);
     void hideHint();
     void showCleared();
+    void showFailed();
     void showLevelIntro(int levelId, const std::string &name);
 
 private:

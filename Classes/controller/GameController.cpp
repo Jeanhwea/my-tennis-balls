@@ -92,17 +92,37 @@ void GameController::onLevelCleared()
 
     if (_model.hasNextLevel()) {
         int nextIdx = _model.levelIndex() + 1;
-        // 加载下一关前延迟
         _scene->runAction(Sequence::create(
             DelayTime::create(2.5f), CallFunc::create([this, nextIdx]() { loadLevel(nextIdx); }), nullptr));
     } else {
-        // 全部通关，返回关卡菜单
         _scene->runAction(Sequence::create(DelayTime::create(3.0f), CallFunc::create([]() {
                                                auto menuScene = LevelMenuScene::createScene();
                                                Director::getInstance()->replaceScene(TransitionFade::create(
                                                    0.5f, menuScene, Color3B(10, 10, 30)));
                                            }),
                                            nullptr));
+    }
+}
+
+void GameController::onLevelFailed()
+{
+    if (_transitioning) return;
+    _transitioning = true;
+
+    _hud->showFailed();
+
+    int curIdx = _model.levelIndex();
+    _scene->runAction(Sequence::create(DelayTime::create(2.5f),
+                                       CallFunc::create([this, curIdx]() { loadLevel(curIdx); }), nullptr));
+}
+
+void GameController::checkFailCondition()
+{
+    if (_transitioning) return;
+    if (_model.isCleared()) return;
+    const auto &level = _model.currentLevel();
+    if (_ballCounter >= level.maxBalls && countBalls() == 0) {
+        onLevelFailed();
     }
 }
 
@@ -176,6 +196,7 @@ void GameController::removeBall(Node *ball)
     BallView::despawn(ball, [this]() {
         _model.setBallCount(countBalls());
         refreshHUD();
+        checkFailCondition();
     });
 }
 
