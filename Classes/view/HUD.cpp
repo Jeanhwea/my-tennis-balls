@@ -143,7 +143,7 @@ void HUD::createBackButton(const Size &visibleSize)
     bg->setPosition(Vec2(x, y));
     addChild(bg, 1);
 
-    auto label = Label::createWithTTF("\xe2\x97\x80 BACK", FONT_UI, 14);
+    auto label = Label::createWithTTF("Menu", FONT_UI, 14);
     label->setPosition(Vec2(x, y));
     label->setTextColor(Color4B(180, 210, 255, 230));
     label->enableShadow(Color4B(0, 0, 0, 80), Size(1, -1));
