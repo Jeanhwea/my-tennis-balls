@@ -25,6 +25,8 @@ private:
 
     void createOneButton(int levelIdx, int levelId, const std::string &name, float x, float y, float btnW,
                          float btnH);
+
+    void createQuitButton(const cocos2d::Size &size);
 };
 
 #endif  // __LEVEL_MENU_SCENE_H__

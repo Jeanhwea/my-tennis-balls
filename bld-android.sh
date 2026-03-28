@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ── Configuration ────────────────────────────────────────────────
 PROJ_DIR="proj.android"
 
-# ── Parse arguments ──────────────────────────────────────────────
+# Parse arguments
 BUILD_TYPE="debug"
 
 case "${1:-}" in
@@ -21,19 +20,19 @@ case "${1:-}" in
         ;;
 esac
 
-# ── Prerequisite check ──────────────────────────────────────────
+# Prerequisites
 if [[ -z "${ANDROID_SDK_ROOT:-}" && -z "${ANDROID_HOME:-}" ]]; then
     echo "[ERROR] ANDROID_SDK_ROOT or ANDROID_HOME not set. Please configure the Android SDK."
     exit 1
 fi
 
-# ── Copy resources to assets ────────────────────────────────────
+# Sync resources to assets
 echo "[*] Syncing Resources to assets..."
 ASSETS_DIR="$PROJ_DIR/app/assets"
 rm -rf "$ASSETS_DIR"
 cp -r Resources "$ASSETS_DIR"
 
-# ── Build ────────────────────────────────────────────────────────
+# Build
 echo "[*] Building Android APK ($BUILD_TYPE)..."
 pushd "$PROJ_DIR" > /dev/null
 ./gradlew "assemble${BUILD_TYPE}" --parallel

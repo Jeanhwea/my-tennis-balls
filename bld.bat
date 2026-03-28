@@ -1,12 +1,11 @@
 @echo off
 setlocal enabledelayedexpansion
 
-rem ── Configuration ──────────────────────────────────────────────
 set "BUILD_DIR=build"
 set "GENERATOR=Visual Studio 17 2022"
 set "ARCH=win32"
 
-rem ── Parse arguments ────────────────────────────────────────────
+rem Parse arguments
 set "BUILD_TYPE=Debug"
 set "CMAKE_DEBUG_FLAG=-DIS_DEBUG=ON"
 
@@ -21,7 +20,7 @@ if /i "%~1"=="clean" (
     exit /b 0
 )
 
-rem ── Prerequisite check ─────────────────────────────────────────
+rem Prerequisites
 where cmake >nul 2>nul
 if %errorlevel% neq 0 (
     echo [ERROR] cmake not found. Please install CMake and add it to PATH.
@@ -32,7 +31,7 @@ echo [*] CMake version:
 cmake --version
 echo.
 
-rem ── Configure ──────────────────────────────────────────────────
+rem Configure
 echo [*] Configuring (%BUILD_TYPE%)...
 cmake -B "%BUILD_DIR%" -G"%GENERATOR%" -A %ARCH% --log-level=STATUS %CMAKE_DEBUG_FLAG%
 if %errorlevel% neq 0 (
@@ -40,7 +39,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-rem ── Build ──────────────────────────────────────────────────────
+rem Build
 echo [*] Building...
 cmake --build "%BUILD_DIR%" --config %BUILD_TYPE% --parallel
 if %errorlevel% neq 0 (

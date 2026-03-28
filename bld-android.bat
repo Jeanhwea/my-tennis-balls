@@ -1,10 +1,9 @@
 @echo off
 setlocal enabledelayedexpansion
 
-rem ── Configuration ──────────────────────────────────────────────
 set "PROJ_DIR=proj.android"
 
-rem ── Parse arguments ────────────────────────────────────────────
+rem Parse arguments
 set "BUILD_TYPE=debug"
 
 if /i "%~1"=="release" (
@@ -19,7 +18,7 @@ if /i "%~1"=="clean" (
     exit /b 0
 )
 
-rem ── Prerequisite check ─────────────────────────────────────────
+rem Prerequisites
 if not defined ANDROID_SDK_ROOT (
     if not defined ANDROID_HOME (
         echo [ERROR] ANDROID_SDK_ROOT or ANDROID_HOME not set. Please configure the Android SDK.
@@ -27,7 +26,7 @@ if not defined ANDROID_SDK_ROOT (
     )
 )
 
-rem ── Copy resources to assets ───────────────────────────────────
+rem Sync resources to assets
 echo [*] Syncing Resources to assets...
 if exist "%PROJ_DIR%\app\assets" rmdir /s /q "%PROJ_DIR%\app\assets"
 xcopy /s /e /i /q "Resources" "%PROJ_DIR%\app\assets" >nul
@@ -36,7 +35,7 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-rem ── Build ──────────────────────────────────────────────────────
+rem Build
 echo [*] Building Android APK (%BUILD_TYPE%)...
 pushd "%PROJ_DIR%"
 call gradlew.bat assemble%BUILD_TYPE% --parallel

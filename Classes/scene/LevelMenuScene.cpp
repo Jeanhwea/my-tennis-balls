@@ -28,6 +28,7 @@ void LevelMenuScene::onEnter()
     drawBackground(size);
     drawTitle(size);
     createLevelButtons(size);
+    createQuitButton(size);
 }
 
 void LevelMenuScene::drawBackground(const Size &size)
@@ -64,6 +65,7 @@ void LevelMenuScene::drawBackground(const Size &size)
     constexpr float pad = 8.0f;
     float w = size.width;
     float h = size.height;
+
     // 四角 L 形
     corners->drawSolidRect(Vec2(pad, h - pad - cThick), Vec2(pad + cLen, h - pad), cColor);
     corners->drawSolidRect(Vec2(pad, h - pad - cLen), Vec2(pad + cThick, h - pad), cColor);
@@ -218,5 +220,48 @@ void LevelMenuScene::createOneButton(int levelIdx, int levelId, const std::strin
         container->setScale(1.0f);
         glow->runAction(ScaleTo::create(0.1f, 1.0f));
     };
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, container);
+}
+
+void LevelMenuScene::createQuitButton(const Size &size)
+{
+    constexpr float btnW = 160.0f;
+    constexpr float btnH = 50.0f;
+    float x = size.width / 2;
+    float y = 40.0f;
+
+    auto container = Node::create();
+    container->setPosition(Vec2(x, y));
+    container->setTag(999);  // 入场动画复用
+    addChild(container, 1);
+
+    // 按钮背景
+    auto bg = DrawNode::create();
+    bg->drawSolidRect(Vec2(-btnW / 2, -btnH / 2), Vec2(btnW / 2, btnH / 2),
+                      Color4F(0.35f, 0.08f, 0.08f, 0.85f));
+    bg->drawRect(Vec2(-btnW / 2, -btnH / 2), Vec2(btnW / 2, btnH / 2), Color4F(0.75f, 0.25f, 0.25f, 0.6f));
+    container->addChild(bg, 0);
+
+    // 标签
+    auto label = Label::createWithTTF("QUIT", FONT_TITLE, 24);
+    label->setTextColor(Color4B(255, 180, 180, 255));
+    container->addChild(label, 1);
+
+    // 触摸
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->setSwallowTouches(true);
+    listener->onTouchBegan = [x, y, btnW, btnH, container](Touch *touch, Event *) {
+        Rect rect(x - btnW / 2, y - btnH / 2, btnW, btnH);
+        if (rect.containsPoint(touch->getLocation())) {
+            container->setScale(0.93f);
+            return true;
+        }
+        return false;
+    };
+    listener->onTouchEnded = [container](Touch *, Event *) {
+        container->setScale(1.0f);
+        Director::getInstance()->end();
+    };
+    listener->onTouchCancelled = [container](Touch *, Event *) { container->setScale(1.0f); };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, container);
 }

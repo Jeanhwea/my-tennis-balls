@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ── Configuration ────────────────────────────────────────────────
 BUILD_DIR="build"
 
-# ── Parse arguments ──────────────────────────────────────────────
+# Parse arguments
 BUILD_TYPE="Debug"
 CMAKE_DEBUG_FLAG="-DIS_DEBUG=ON"
 
@@ -21,7 +20,7 @@ case "${1:-}" in
         ;;
 esac
 
-# ── Prerequisite check ──────────────────────────────────────────
+# Prerequisites
 if ! command -v cmake &>/dev/null; then
     echo "[ERROR] cmake not found. Please install CMake first."
     exit 1
@@ -31,7 +30,7 @@ echo "[*] CMake version:"
 cmake --version
 echo
 
-# ── Detect platform & generator ─────────────────────────────────
+# Detect platform and generator
 PLATFORM_FLAGS=()
 
 case "$(uname -s)" in
@@ -49,12 +48,12 @@ case "$(uname -s)" in
         ;;
 esac
 
-# ── Configure ────────────────────────────────────────────────────
+# Configure
 echo "[*] Configuring ($BUILD_TYPE, $GENERATOR)..."
 cmake -B "$BUILD_DIR" -G"$GENERATOR" --log-level=STATUS \
     "$CMAKE_DEBUG_FLAG" "${PLATFORM_FLAGS[@]}"
 
-# ── Build ────────────────────────────────────────────────────────
+# Build
 echo "[*] Building..."
 cmake --build "$BUILD_DIR" --config "$BUILD_TYPE" --parallel
 
