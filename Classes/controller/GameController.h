@@ -42,6 +42,7 @@ private:
     void removeTarget(cocos2d::Node *target);
     int countBalls() const;
     int countTargets() const;
+    void checkLevelComplete();
 
     // Physics
     bool onContactBegin(cocos2d::PhysicsContact &contact);
