@@ -1,6 +1,6 @@
 #include "LevelMenuScene.h"
 
-#include "GameConstants.h"
+#include "common/GameConstants.h"
 #include "GameScene.h"
 #include "model/LevelData.h"
 

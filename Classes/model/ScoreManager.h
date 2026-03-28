@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <functional>
 
-#include "GameConstants.h"
+#include "common/GameConstants.h"
 
 /// 纯计分逻辑 - 无渲染依赖。
 class ScoreManager

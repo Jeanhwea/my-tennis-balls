@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "GameConstants.h"
+#include "common/GameConstants.h"
 #include "LevelMenuScene.h"
 #include "view/ArenaView.h"
 #include "view/BallView.h"

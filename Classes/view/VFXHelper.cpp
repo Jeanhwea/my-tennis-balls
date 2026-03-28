@@ -1,6 +1,6 @@
 #include "VFXHelper.h"
 
-#include "GameConstants.h"
+#include "common/GameConstants.h"
 #include "common/Random.h"
 
 USING_NS_CC;
