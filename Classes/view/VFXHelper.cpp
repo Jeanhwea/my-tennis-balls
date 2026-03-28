@@ -1,8 +1,10 @@
 #include "VFXHelper.h"
 
-#include <cstdlib>
+#include "GameConstants.h"
+#include "utils/Random.h"
 
 USING_NS_CC;
+using utils::randomFloat;
 
 namespace
 {
@@ -15,11 +17,6 @@ constexpr float PARTICLE_LIFE = 0.4f;
 constexpr float FLOAT_SCORE_FONT = 28.0f;
 constexpr float FLOAT_SCORE_RISE = 60.0f;
 constexpr float FLOAT_SCORE_DUR = 0.8f;
-
-float randomFloat(float min, float max)
-{
-    return min + static_cast<float>(std::rand()) / RAND_MAX * (max - min);
-}
 
 }  // namespace
 
@@ -45,7 +42,7 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
 
 void VFXHelper::showFloatingScore(Node *parent, const Vec2 &position, int points)
 {
-    auto label = Label::createWithSystemFont(StringUtils::format("+%d", points), "Arial", FLOAT_SCORE_FONT);
+    auto label = Label::createWithTTF(StringUtils::format("+%d", points), FONT_TITLE, FLOAT_SCORE_FONT);
     label->setPosition(position);
     label->setTextColor(Color4B(255, 240, 100, 255));
     label->enableShadow(Color4B(200, 150, 0, 80), Size(1, -1));

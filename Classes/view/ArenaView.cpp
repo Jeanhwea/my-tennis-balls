@@ -121,7 +121,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     parent->addChild(zone, -8);
 
     // Launch zone label
-    auto label = Label::createWithSystemFont("LAUNCH", "Arial", 14);
+    auto label = Label::createWithTTF("LAUNCH", FONT_UI, 14);
     label->setRotation(-90);
     label->setPosition(Vec2(launchLeft + (w - launchLeft) / 2, h / 2));
     label->setTextColor(Color4B(100, 160, 255, 60));

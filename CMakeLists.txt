@@ -75,6 +75,7 @@ list(APPEND GAME_HEADER
   Classes/view/VFXHelper.h
   Classes/controller/InputController.h
   Classes/controller/GameController.h
+  Classes/utils/Random.h
 )
 
 if(ANDROID)

@@ -1,6 +1,10 @@
 #ifndef __GAME_CONSTANTS_H__
 #define __GAME_CONSTANTS_H__
 
+// Fonts
+constexpr const char *FONT_UI = "fonts/arial.ttf";
+constexpr const char *FONT_TITLE = "fonts/Marker Felt.ttf";
+
 // Node tags
 constexpr int TAG_BALL = 100;
 constexpr int TAG_TARGET = 200;

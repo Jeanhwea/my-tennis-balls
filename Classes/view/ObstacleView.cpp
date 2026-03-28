@@ -1,18 +1,13 @@
 #include "ObstacleView.h"
 
-#include <cstdlib>
-
 #include "GameConstants.h"
+#include "utils/Random.h"
 
 USING_NS_CC;
+using utils::randomFloat;
 
 namespace
 {
-
-float randomFloat(float min, float max)
-{
-    return min + static_cast<float>(std::rand()) / RAND_MAX * (max - min);
-}
 
 void spawnOne(Node *parent, const Vec2 &position, bool isCircle)
 {
