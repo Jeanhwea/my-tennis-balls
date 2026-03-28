@@ -2,6 +2,7 @@
 setlocal enabledelayedexpansion
 
 set "PROJ_DIR=proj.android"
+set "APP_NAME=my-tennis-balls"
 
 rem Parse arguments
 set "BUILD_TYPE=debug"
@@ -45,6 +46,20 @@ popd
 if %RESULT% neq 0 (
     echo [ERROR] Android build failed.
     exit /b 1
+)
+
+rem Copy APK to dist with git describe version
+for /f "tokens=*" %%g in ('git describe --tags --always --dirty^="+dev" 2^>nul') do set "GIT_DESC=%%g"
+if not defined GIT_DESC set "GIT_DESC=unknown"
+set "DIST_DIR=dist"
+if not exist "%DIST_DIR%" mkdir "%DIST_DIR%"
+set "APK_SRC=%PROJ_DIR%\app\build\outputs\apk\%BUILD_TYPE%\app-%BUILD_TYPE%.apk"
+set "APK_DEST=%DIST_DIR%\%APP_NAME%-%GIT_DESC%-%BUILD_TYPE%.apk"
+if exist "!APK_SRC!" (
+    copy /y "!APK_SRC!" "!APK_DEST!" >nul
+    echo [*] APK copied to !APK_DEST!
+) else (
+    echo [WARN] APK not found at !APK_SRC!
 )
 
 echo [*] Build succeeded (%BUILD_TYPE%).
