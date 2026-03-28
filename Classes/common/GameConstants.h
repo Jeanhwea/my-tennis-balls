@@ -21,7 +21,7 @@ constexpr int CATEGORY_ALL = 0xFFFFFFFF;
 
 // 物理参数调优
 constexpr float GRAVITY_Y = -980.0f;
-constexpr float BALL_SCALE = 0.1f;
+constexpr float BALL_SCALE = 0.15f;
 constexpr float BALL_SPRITE_PADDING = 18.0f;
 constexpr float BALL_DENSITY = 1.0f;
 constexpr float BALL_RESTITUTION = 0.8f;
@@ -30,7 +30,7 @@ constexpr float EDGE_RESTITUTION = 0.9f;
 constexpr float EDGE_FRICTION = 0.2f;
 
 // 发射参数调优
-constexpr float LAUNCH_FORCE_SCALE = 2.5f;
+constexpr float LAUNCH_FORCE_SCALE = 3.5f;
 constexpr float MAX_LAUNCH_SPEED = 1500.0f;
 constexpr float MIN_DRAG_DISTANCE = 20.0f;
 
@@ -50,7 +50,7 @@ constexpr float TRAY_WIDTH_RATIO = 0.22f;  // 托盘宽度（宽度比例）
 constexpr float TRAY_THICKNESS = 8.0f;
 
 // 托盘上的目标球
-constexpr float TARGET_SCALE = 0.08f;
+constexpr float TARGET_SCALE = 0.12f;
 constexpr float TARGET_DENSITY = 0.8f;
 constexpr float TARGET_RESTITUTION = 0.5f;
 constexpr float TARGET_FRICTION = 0.6f;
