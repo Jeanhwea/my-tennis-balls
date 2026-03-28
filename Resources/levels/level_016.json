@@ -1,0 +1,17 @@
+{
+  "id": 16,
+  "name": "Chaos Grid",
+  "maxBalls": 35,
+  "trays": [
+    { "x": 0.08, "y": 0.18, "width": 0.10, "targets": 2 },
+    { "x": 0.25, "y": 0.18, "width": 0.10, "targets": 2 },
+    { "x": 0.42, "y": 0.18, "width": 0.10, "targets": 2 },
+    { "x": 0.16, "y": 0.38, "width": 0.10, "targets": 2 },
+    { "x": 0.34, "y": 0.38, "width": 0.10, "targets": 2 },
+    { "x": 0.08, "y": 0.58, "width": 0.10, "targets": 2 },
+    { "x": 0.25, "y": 0.58, "width": 0.10, "targets": 2 },
+    { "x": 0.42, "y": 0.58, "width": 0.10, "targets": 2 },
+    { "x": 0.16, "y": 0.78, "width": 0.10, "targets": 2 },
+    { "x": 0.34, "y": 0.78, "width": 0.10, "targets": 2 }
+  ]
+}
