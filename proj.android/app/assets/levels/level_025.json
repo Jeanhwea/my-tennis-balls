@@ -1,0 +1,19 @@
+{
+  "id": 25,
+  "name": "Summit",
+  "maxBalls": 25,
+  "trays": [
+    {
+      "x": 0.2,
+      "y": 0.18,
+      "width": 0.34,
+      "targets": 3
+    },
+    {
+      "x": 0.2,
+      "y": 0.83,
+      "width": 0.1,
+      "targets": 1
+    }
+  ]
+}

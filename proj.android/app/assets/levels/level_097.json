@@ -1,0 +1,37 @@
+{
+  "id": 97,
+  "name": "Obelisk",
+  "maxBalls": 54,
+  "trays": [
+    {
+      "x": 0.2,
+      "y": 0.18,
+      "width": 0.3,
+      "targets": 5
+    },
+    {
+      "x": 0.2,
+      "y": 0.34,
+      "width": 0.25,
+      "targets": 4
+    },
+    {
+      "x": 0.2,
+      "y": 0.51,
+      "width": 0.2,
+      "targets": 2
+    },
+    {
+      "x": 0.2,
+      "y": 0.67,
+      "width": 0.14,
+      "targets": 1
+    },
+    {
+      "x": 0.2,
+      "y": 0.83,
+      "width": 0.09,
+      "targets": 1
+    }
+  ]
+}
