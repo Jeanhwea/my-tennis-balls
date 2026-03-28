@@ -3,6 +3,7 @@ set -euo pipefail
 
 PROJ_DIR="proj.android"
 APP_NAME="my-tennis-balls"
+GIT_DESC=$(git describe --tags --always --dirty="+dev" 2>/dev/null || echo "unknown")
 
 # Parse arguments
 BUILD_TYPE="debug"
@@ -39,8 +40,7 @@ pushd "$PROJ_DIR" > /dev/null
 ./gradlew "assemble${BUILD_TYPE}" --parallel
 popd > /dev/null
 
-# Copy APK to dist with git describe version
-GIT_DESC=$(git describe --tags --always --dirty="+dev" 2>/dev/null || echo "unknown")
+# Copy APK to dist
 DIST_DIR="dist"
 mkdir -p "$DIST_DIR"
 APK_SRC="$PROJ_DIR/app/build/outputs/apk/$BUILD_TYPE/${APP_NAME}-${BUILD_TYPE}.apk"

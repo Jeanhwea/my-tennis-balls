@@ -3,6 +3,8 @@ setlocal enabledelayedexpansion
 
 set "PROJ_DIR=proj.android"
 set "APP_NAME=my-tennis-balls"
+for /f "tokens=*" %%g in ('git describe --tags --always --dirty^="+dev" 2^>nul') do set "GIT_DESC=%%g"
+if not defined GIT_DESC set "GIT_DESC=unknown"
 
 rem Parse arguments
 set "BUILD_TYPE=debug"
@@ -48,9 +50,7 @@ if %RESULT% neq 0 (
     exit /b 1
 )
 
-rem Copy APK to dist with git describe version
-for /f "tokens=*" %%g in ('git describe --tags --always --dirty^="+dev" 2^>nul') do set "GIT_DESC=%%g"
-if not defined GIT_DESC set "GIT_DESC=unknown"
+rem Copy APK to dist
 set "DIST_DIR=dist"
 if not exist "%DIST_DIR%" mkdir "%DIST_DIR%"
 set "APK_SRC=%PROJ_DIR%\app\build\outputs\apk\%BUILD_TYPE%\%APP_NAME%-%BUILD_TYPE%.apk"
