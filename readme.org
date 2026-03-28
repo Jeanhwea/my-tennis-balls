@@ -3,7 +3,7 @@
 #+OPTIONS: ^:nil
 
 * 项目截图
-[[file:images/game-snapshot.jpeg]]
+[[file:images/game-playing.gif]]
 
 * 快速开始
 ** 项目介绍
