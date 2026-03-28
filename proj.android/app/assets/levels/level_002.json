@@ -1,0 +1,9 @@
+{
+  "id": 2,
+  "name": "Double Shelf",
+  "maxBalls": 15,
+  "trays": [
+    { "x": 0.15, "y": 0.30, "width": 0.20, "targets": 3 },
+    { "x": 0.35, "y": 0.55, "width": 0.20, "targets": 3 }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": 6,
+  "name": "Scattered",
+  "maxBalls": 20,
+  "trays": [
+    { "x": 0.10, "y": 0.25, "width": 0.12, "targets": 2 },
+    { "x": 0.30, "y": 0.40, "width": 0.12, "targets": 2 },
+    { "x": 0.12, "y": 0.55, "width": 0.12, "targets": 2 },
+    { "x": 0.32, "y": 0.70, "width": 0.12, "targets": 2 }
+  ]
+}

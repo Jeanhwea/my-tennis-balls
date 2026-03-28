@@ -1,0 +1,14 @@
+{
+  "id": 15,
+  "name": "Skyscraper",
+  "maxBalls": 35,
+  "trays": [
+    { "x": 0.20, "y": 0.15, "width": 0.20, "targets": 3 },
+    { "x": 0.20, "y": 0.26, "width": 0.18, "targets": 3 },
+    { "x": 0.20, "y": 0.37, "width": 0.16, "targets": 3 },
+    { "x": 0.20, "y": 0.48, "width": 0.14, "targets": 2 },
+    { "x": 0.20, "y": 0.59, "width": 0.12, "targets": 2 },
+    { "x": 0.20, "y": 0.70, "width": 0.10, "targets": 2 },
+    { "x": 0.20, "y": 0.80, "width": 0.08, "targets": 1 }
+  ]
+}

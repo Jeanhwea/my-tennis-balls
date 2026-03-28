@@ -1,0 +1,11 @@
+{
+  "id": 13,
+  "name": "Funnel",
+  "maxBalls": 30,
+  "trays": [
+    { "x": 0.20, "y": 0.20, "width": 0.40, "targets": 6 },
+    { "x": 0.20, "y": 0.40, "width": 0.28, "targets": 4 },
+    { "x": 0.20, "y": 0.60, "width": 0.16, "targets": 3 },
+    { "x": 0.20, "y": 0.80, "width": 0.08, "targets": 2 }
+  ]
+}

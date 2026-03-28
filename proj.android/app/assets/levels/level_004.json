@@ -1,0 +1,9 @@
+{
+  "id": 4,
+  "name": "High & Low",
+  "maxBalls": 18,
+  "trays": [
+    { "x": 0.25, "y": 0.70, "width": 0.12, "targets": 3 },
+    { "x": 0.20, "y": 0.30, "width": 0.28, "targets": 4 }
+  ]
+}

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(APP_NAME my-tennis-balls)
 
 project(${APP_NAME}
-  VERSION 0.6.3
+  VERSION 0.7.5
   LANGUAGES CXX
 )
 
@@ -47,11 +47,39 @@ endif()
 # Add cross-platforms source files and header files
 list(APPEND GAME_SOURCE
   Classes/AppDelegate.cpp
-  Classes/HelloWorldScene.cpp
+  Classes/scene/GameScene.cpp
+  Classes/scene/LevelMenuScene.cpp
+  Classes/model/GameModel.cpp
+  Classes/model/LevelData.cpp
+  Classes/model/ScoreManager.cpp
+  Classes/view/AimLineView.cpp
+  Classes/view/ArenaView.cpp
+  Classes/view/BallView.cpp
+  Classes/view/HUD.cpp
+  Classes/view/TrayView.cpp
+  Classes/view/VFXHelper.cpp
+  Classes/view/AmbientParticles.cpp
+  Classes/controller/InputController.cpp
+  Classes/controller/GameController.cpp
 )
 list(APPEND GAME_HEADER
   Classes/AppDelegate.h
-  Classes/HelloWorldScene.h
+  Classes/common/GameConstants.h
+  Classes/scene/GameScene.h
+  Classes/scene/LevelMenuScene.h
+  Classes/model/GameModel.h
+  Classes/model/LevelData.h
+  Classes/model/ScoreManager.h
+  Classes/view/AimLineView.h
+  Classes/view/ArenaView.h
+  Classes/view/BallView.h
+  Classes/view/HUD.h
+  Classes/view/TrayView.h
+  Classes/view/VFXHelper.h
+  Classes/view/AmbientParticles.h
+  Classes/controller/InputController.h
+  Classes/controller/GameController.h
+  Classes/common/Random.h
 )
 
 if(ANDROID)

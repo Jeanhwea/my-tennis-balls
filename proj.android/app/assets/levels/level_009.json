@@ -1,0 +1,13 @@
+{
+  "id": 9,
+  "name": "Twin Towers",
+  "maxBalls": 25,
+  "trays": [
+    { "x": 0.12, "y": 0.25, "width": 0.10, "targets": 2 },
+    { "x": 0.12, "y": 0.45, "width": 0.10, "targets": 2 },
+    { "x": 0.12, "y": 0.65, "width": 0.10, "targets": 2 },
+    { "x": 0.35, "y": 0.25, "width": 0.10, "targets": 2 },
+    { "x": 0.35, "y": 0.45, "width": 0.10, "targets": 2 },
+    { "x": 0.35, "y": 0.65, "width": 0.10, "targets": 2 }
+  ]
+}

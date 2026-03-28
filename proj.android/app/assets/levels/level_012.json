@@ -1,0 +1,14 @@
+{
+  "id": 12,
+  "name": "Grand Finale",
+  "maxBalls": 30,
+  "trays": [
+    { "x": 0.20, "y": 0.18, "width": 0.35, "targets": 5 },
+    { "x": 0.10, "y": 0.35, "width": 0.12, "targets": 2 },
+    { "x": 0.32, "y": 0.35, "width": 0.12, "targets": 2 },
+    { "x": 0.20, "y": 0.52, "width": 0.25, "targets": 4 },
+    { "x": 0.15, "y": 0.65, "width": 0.10, "targets": 2 },
+    { "x": 0.30, "y": 0.65, "width": 0.10, "targets": 2 },
+    { "x": 0.20, "y": 0.78, "width": 0.15, "targets": 3 }
+  ]
+}
