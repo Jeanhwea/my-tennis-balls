@@ -33,6 +33,7 @@ Temporary Items
 Classes/Version.h
 
 # build folders
+.cxx/
 build/
 dist/
 output/
