@@ -18,6 +18,7 @@ void GameController::init(Scene *scene, const Size &visibleSize)
     // Views
     ArenaView::addEdgeWalls(_scene, _visibleSize);
     ArenaView::addFloorSensor(_scene, _visibleSize);
+    ArenaView::drawZones(_scene, _visibleSize);
     ObstacleView::spawnObstacles(_scene, _visibleSize, OBSTACLE_COUNT);
 
     _aimLine.init(_scene);
@@ -42,6 +43,8 @@ void GameController::update(float dt)
 
 void GameController::setupInput()
 {
+    _input.setLaunchZoneMinX(_visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO));
+
     _input.setOnDrag([this](const Vec2 &start, const Vec2 &delta) { _aimLine.draw(start, delta); });
 
     _input.setOnDragEnd([this]() { _aimLine.clear(); });

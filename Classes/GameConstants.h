@@ -39,4 +39,14 @@ constexpr int OBSTACLE_COUNT = 6;
 constexpr float OBSTACLE_MIN_SIZE = 40.0f;
 constexpr float OBSTACLE_MAX_SIZE = 100.0f;
 
+// Zone layout (ratios of screen dimensions)
+constexpr float LAUNCH_ZONE_RATIO = 0.20f;     // right 20% of screen width
+constexpr float OBSTACLE_ZONE_LEFT = 0.05f;    // obstacles start at 5% width
+constexpr float OBSTACLE_ZONE_RIGHT = 0.75f;   // obstacles end at 75% width
+constexpr float OBSTACLE_ZONE_BOTTOM = 0.10f;  // obstacles start at 10% height
+constexpr float OBSTACLE_ZONE_TOP = 0.85f;     // obstacles end at 85% height
+
+// Divider line
+constexpr float DIVIDER_THICKNESS = 2.0f;
+
 #endif  // __GAME_CONSTANTS_H__

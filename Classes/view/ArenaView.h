@@ -3,12 +3,13 @@
 
 #include "cocos2d.h"
 
-/// Creates the physical boundary walls and floor sensor.
+/// Creates the physical boundary walls, floor sensor, and zone visuals.
 namespace ArenaView
 {
 
 void addEdgeWalls(cocos2d::Node *parent, const cocos2d::Size &visibleSize);
 void addFloorSensor(cocos2d::Node *parent, const cocos2d::Size &visibleSize);
+void drawZones(cocos2d::Node *parent, const cocos2d::Size &visibleSize);
 
 }  // namespace ArenaView
 

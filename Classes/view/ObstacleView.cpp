@@ -52,13 +52,14 @@ void spawnOne(Node *parent, const Vec2 &position, bool isCircle)
 
 void ObstacleView::spawnObstacles(Node *parent, const Size &visibleSize, int count)
 {
-    float marginX = visibleSize.width * 0.1f;
-    float marginBottom = visibleSize.height * 0.1f;
-    float marginTop = visibleSize.height * 0.75f;
+    float left = visibleSize.width * OBSTACLE_ZONE_LEFT;
+    float right = visibleSize.width * OBSTACLE_ZONE_RIGHT;
+    float bottom = visibleSize.height * OBSTACLE_ZONE_BOTTOM;
+    float top = visibleSize.height * OBSTACLE_ZONE_TOP;
 
     for (int i = 0; i < count; ++i) {
-        float x = randomFloat(marginX, visibleSize.width - marginX);
-        float y = randomFloat(marginBottom, marginTop);
+        float x = randomFloat(left, right);
+        float y = randomFloat(bottom, top);
         spawnOne(parent, Vec2(x, y), i % 2 == 0);
     }
 }

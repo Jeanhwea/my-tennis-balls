@@ -46,3 +46,26 @@ void ArenaView::addFloorSensor(Node *parent, const Size &visibleSize)
     floor->setPhysicsBody(body);
     parent->addChild(floor);
 }
+
+void ArenaView::drawZones(Node *parent, const Size &visibleSize)
+{
+    auto draw = DrawNode::create();
+    float launchLeft = visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO);
+
+    // Launch zone background tint (right strip)
+    draw->drawSolidRect(Vec2(launchLeft, 0), Vec2(visibleSize.width, visibleSize.height),
+                        Color4F(0.15f, 0.25f, 0.4f, 0.3f));
+
+    // Divider line between play area and launch zone
+    draw->drawLine(Vec2(launchLeft, 0), Vec2(launchLeft, visibleSize.height),
+                   Color4F(0.5f, 0.7f, 1.0f, 0.5f));
+
+    // Launch zone label (rotated vertically)
+    auto label = Label::createWithSystemFont("LAUNCH", "Arial", 16);
+    label->setRotation(-90);
+    label->setPosition(Vec2(launchLeft + (visibleSize.width - launchLeft) / 2, visibleSize.height / 2));
+    label->setTextColor(Color4B(130, 180, 255, 100));
+    parent->addChild(label, 0);
+
+    parent->addChild(draw, 0);
+}

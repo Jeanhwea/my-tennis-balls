@@ -24,12 +24,16 @@ public:
 
     void setOnDragEnd(OnDragEndCallback cb) { _onDragEnd = std::move(cb); }
 
+    /// Set the minimum X coordinate for valid launch starts (right-side zone).
+    void setLaunchZoneMinX(float minX) { _launchZoneMinX = minX; }
+
     /// Register touch listener on the given node.
     void init(cocos2d::Node *target);
 
 private:
     bool _isDragging = false;
     cocos2d::Vec2 _dragStart;
+    float _launchZoneMinX = 0.0f;  // no constraint by default
 
     OnLaunchCallback _onLaunch;
     OnDragCallback _onDrag;
