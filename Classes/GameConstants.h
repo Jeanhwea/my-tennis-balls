@@ -42,8 +42,8 @@ constexpr int TARGET_COUNT = 5;
 constexpr float LAUNCH_ZONE_RATIO = 0.20f;  // right 20%
 
 // Tray layout
-constexpr float TRAY_X = 0.15f;           // tray center X (ratio of width)
-constexpr float TRAY_Y = 0.45f;           // tray Y position (ratio of height)
+constexpr float TRAY_X = 0.15f;            // tray center X (ratio of width)
+constexpr float TRAY_Y = 0.45f;            // tray Y position (ratio of height)
 constexpr float TRAY_WIDTH_RATIO = 0.22f;  // tray width (ratio of width)
 constexpr float TRAY_THICKNESS = 8.0f;
 

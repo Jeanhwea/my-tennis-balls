@@ -48,9 +48,7 @@ void GameController::setupInput()
 {
     _input.setLaunchZoneMinX(_visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO));
 
-    _input.setOnDrag([this](const Vec2 &start, const Vec2 &delta) {
-        _aimLine.draw(start, delta);
-    });
+    _input.setOnDrag([this](const Vec2 &start, const Vec2 &delta) { _aimLine.draw(start, delta); });
 
     _input.setOnDragEnd([this]() { _aimLine.clear(); });
 

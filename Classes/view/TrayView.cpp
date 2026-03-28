@@ -4,13 +4,14 @@
 
 USING_NS_CC;
 
-namespace {
+namespace
+{
 
 Color3B targetColor(int index)
 {
     static const Color3B colors[] = {
-        Color3B(255, 60, 60),   Color3B(60, 220, 255),  Color3B(255, 200, 40),
-        Color3B(60, 255, 130),  Color3B(255, 120, 220),
+        Color3B(255, 60, 60),  Color3B(60, 220, 255),  Color3B(255, 200, 40),
+        Color3B(60, 255, 130), Color3B(255, 120, 220),
     };
     return colors[index % 5];
 }
@@ -25,15 +26,12 @@ void TrayView::create(Node *parent, const Size &visibleSize, int targetCount)
 
     // Draw tray shelf visual
     auto trayDraw = DrawNode::create();
-    trayDraw->drawSolidRect(
-        Vec2(trayX - trayW / 2, trayY - TRAY_THICKNESS / 2),
-        Vec2(trayX + trayW / 2, trayY + TRAY_THICKNESS / 2),
-        Color4F(0.6f, 0.6f, 0.7f, 0.9f));
+    trayDraw->drawSolidRect(Vec2(trayX - trayW / 2, trayY - TRAY_THICKNESS / 2),
+                            Vec2(trayX + trayW / 2, trayY + TRAY_THICKNESS / 2),
+                            Color4F(0.6f, 0.6f, 0.7f, 0.9f));
     // Shelf edge highlight
-    trayDraw->drawLine(
-        Vec2(trayX - trayW / 2, trayY + TRAY_THICKNESS / 2),
-        Vec2(trayX + trayW / 2, trayY + TRAY_THICKNESS / 2),
-        Color4F::WHITE);
+    trayDraw->drawLine(Vec2(trayX - trayW / 2, trayY + TRAY_THICKNESS / 2),
+                       Vec2(trayX + trayW / 2, trayY + TRAY_THICKNESS / 2), Color4F::WHITE);
     parent->addChild(trayDraw, 2);
 
     // Tray physics body (static)
@@ -42,9 +40,7 @@ void TrayView::create(Node *parent, const Size &visibleSize, int targetCount)
     trayNode->setTag(TAG_TRAY);
     trayNode->setPosition(Vec2(trayX, trayY));
 
-    auto trayBody = PhysicsBody::createBox(
-        Size(trayW, TRAY_THICKNESS),
-        PhysicsMaterial(1.0f, 0.2f, 0.8f));
+    auto trayBody = PhysicsBody::createBox(Size(trayW, TRAY_THICKNESS), PhysicsMaterial(1.0f, 0.2f, 0.8f));
     trayBody->setDynamic(false);
     trayBody->setCategoryBitmask(CATEGORY_TRAY);
     trayBody->setCollisionBitmask(CATEGORY_TARGET | CATEGORY_BALL);

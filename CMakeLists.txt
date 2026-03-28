@@ -53,7 +53,7 @@ list(APPEND GAME_SOURCE
   Classes/view/ArenaView.cpp
   Classes/view/BallView.cpp
   Classes/view/HUD.cpp
-  Classes/view/ObstacleView.cpp
+  Classes/view/TrayView.cpp
   Classes/view/VFXHelper.cpp
   Classes/controller/InputController.cpp
   Classes/controller/GameController.cpp
@@ -68,7 +68,7 @@ list(APPEND GAME_HEADER
   Classes/view/ArenaView.h
   Classes/view/BallView.h
   Classes/view/HUD.h
-  Classes/view/ObstacleView.h
+  Classes/view/TrayView.h
   Classes/view/VFXHelper.h
   Classes/controller/InputController.h
   Classes/controller/GameController.h

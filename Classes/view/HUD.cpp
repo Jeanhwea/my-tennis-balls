@@ -92,10 +92,7 @@ void HUD::showCleared()
     cleared->setScale(0);
     getParent()->addChild(cleared, 30);
 
-    cleared->runAction(Sequence::create(
-        EaseBackOut::create(ScaleTo::create(0.4f, 1.2f)),
-        DelayTime::create(1.5f),
-        FadeOut::create(0.5f),
-        RemoveSelf::create(),
-        nullptr));
+    cleared->runAction(Sequence::create(EaseBackOut::create(ScaleTo::create(0.4f, 1.2f)),
+                                        DelayTime::create(1.5f), FadeOut::create(0.5f),
+                                        RemoveSelf::create(), nullptr));
 }
