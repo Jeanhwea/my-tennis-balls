@@ -14,10 +14,8 @@ Color4F pickObstacleColor()
 {
     // 蓝紫色调色板
     static const Color4F palette[] = {
-        Color4F(0.25f, 0.45f, 0.75f, 0.85f),
-        Color4F(0.35f, 0.30f, 0.70f, 0.85f),
-        Color4F(0.20f, 0.55f, 0.65f, 0.85f),
-        Color4F(0.40f, 0.35f, 0.60f, 0.85f),
+        Color4F(0.25f, 0.45f, 0.75f, 0.85f), Color4F(0.35f, 0.30f, 0.70f, 0.85f),
+        Color4F(0.20f, 0.55f, 0.65f, 0.85f), Color4F(0.40f, 0.35f, 0.60f, 0.85f),
         Color4F(0.22f, 0.40f, 0.58f, 0.85f),
     };
     int idx = static_cast<int>(randomFloat(0, 4.99f));

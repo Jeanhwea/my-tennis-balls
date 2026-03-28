@@ -240,7 +240,7 @@ void LevelMenuScene::createNavButtons(const Size &size)
     constexpr float margin = 50.0f;
     float cy = 80.0f;
 
-    // 上一页按钮
+    // 上一页
     _prevBtn = Node::create();
     _prevBtn->setPosition(Vec2(margin, cy));
     addChild(_prevBtn, 2);
@@ -272,7 +272,7 @@ void LevelMenuScene::createNavButtons(const Size &size)
     prevListener->onTouchCancelled = [this](Touch *, Event *) { _prevBtn->setScale(1.0f); };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(prevListener, _prevBtn);
 
-    // 下一页按钮
+    // 下一页
     _nextBtn = Node::create();
     _nextBtn->setPosition(Vec2(size.width - margin, cy));
     addChild(_nextBtn, 2);
@@ -304,7 +304,7 @@ void LevelMenuScene::createNavButtons(const Size &size)
     nextListener->onTouchCancelled = [this](Touch *, Event *) { _nextBtn->setScale(1.0f); };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(nextListener, _nextBtn);
 
-    // 页码标签
+    // 页码
     _pageLabel = Label::createWithTTF("1 / 1", FONT_UI, 20);
     _pageLabel->setPosition(Vec2(size.width / 2, cy));
     _pageLabel->setTextColor(Color4B(150, 180, 220, 200));
