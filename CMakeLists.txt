@@ -59,6 +59,7 @@ list(APPEND GAME_SOURCE
   Classes/view/TrayView.cpp
   Classes/view/VFXHelper.cpp
   Classes/view/AmbientParticles.cpp
+  Classes/view/ObstacleView.cpp
   Classes/controller/InputController.cpp
   Classes/controller/GameController.cpp
 )
@@ -77,6 +78,7 @@ list(APPEND GAME_HEADER
   Classes/view/TrayView.h
   Classes/view/VFXHelper.h
   Classes/view/AmbientParticles.h
+  Classes/view/ObstacleView.h
   Classes/controller/InputController.h
   Classes/controller/GameController.h
   Classes/common/Random.h
