@@ -1,0 +1,8 @@
+{
+  "id": 1,
+  "name": "Easy Start",
+  "maxBalls": 15,
+  "trays": [
+    { "x": 0.20, "y": 0.35, "width": 0.25, "targets": 3 }
+  ]
+}

@@ -3,6 +3,7 @@
 #include "GameScene.h"
 #include "common/GameConstants.h"
 #include "model/LevelData.h"
+#include "view/AmbientParticles.h"
 
 USING_NS_CC;
 
@@ -73,6 +74,11 @@ void LevelMenuScene::drawBackground(const Size &size)
     corners->drawSolidRect(Vec2(w - pad - cLen, pad), Vec2(w - pad, pad + cThick), cColor);
     corners->drawSolidRect(Vec2(w - pad - cThick, pad), Vec2(w - pad, pad + cLen), cColor);
     addChild(corners, 0);
+
+    // 浮动光点粒子
+    auto ambient = AmbientParticles::create(size);
+    addChild(ambient, 0);
+    ambient->start();
 }
 
 void LevelMenuScene::drawTitle(const Size &size)
@@ -129,11 +135,38 @@ void LevelMenuScene::createLevelButtons(const Size &size)
         float y = origin.y - row * (btnH + gapY);
         createOneButton(i, levels[i].id, levels[i].name, x, y, btnW, btnH);
     }
+
+    // 按钮交错入场动画
+    int idx = 0;
+    for (auto child : getChildren()) {
+        if (child->getTag() == 999) {
+            float delay = 0.05f * idx;
+            child->setScale(0);
+            child->setOpacity(0);
+            child->runAction(Sequence::create(
+                DelayTime::create(delay),
+                Spawn::create(EaseBackOut::create(ScaleTo::create(0.3f, 1.0f)), FadeIn::create(0.2f),
+                              nullptr),
+                nullptr));
+            ++idx;
+        }
+    }
 }
 
 void LevelMenuScene::createOneButton(int levelIdx, int levelId, const std::string &name, float x, float y,
                                      float btnW, float btnH)
 {
+    // 按钮容器节点（用于入场动画）
+    auto container = Node::create();
+    container->setPosition(Vec2(x, y));
+    container->setTag(999);
+    addChild(container, 1);
+
+    // 按钮背后柔光
+    auto glow = DrawNode::create();
+    glow->drawSolidCircle(Vec2::ZERO, btnW * 0.35f, 0, 16, Color4F(0.2f, 0.4f, 0.8f, 0.06f));
+    container->addChild(glow, -1);
+
     auto bg = DrawNode::create();
 
     // 按钮主体渐变（从下到上微亮）
@@ -151,38 +184,43 @@ void LevelMenuScene::createOneButton(int levelIdx, int levelId, const std::strin
                       Color4F(0.35f, 0.55f, 0.95f, 0.4f));
     // 边框
     bg->drawRect(Vec2(-btnW / 2, -btnH / 2), Vec2(btnW / 2, btnH / 2), Color4F(0.25f, 0.45f, 0.85f, 0.55f));
-    bg->setPosition(Vec2(x, y));
-    addChild(bg, 1);
+    container->addChild(bg, 0);
 
     // 关卡编号（大字）
     auto numLabel = Label::createWithTTF(StringUtils::format("%d", levelId), FONT_TITLE, 28);
-    numLabel->setPosition(Vec2(x, y + 10));
+    numLabel->setPosition(Vec2(0, 10));
     numLabel->setTextColor(Color4B(200, 230, 255, 255));
     numLabel->enableShadow(Color4B(0, 30, 80, 120), Size(1, -1));
-    addChild(numLabel, 2);
+    container->addChild(numLabel, 1);
 
     // 关卡名称（小字）
     auto nameLabel = Label::createWithTTF(name, FONT_UI, 14);
-    nameLabel->setPosition(Vec2(x, y - 16));
+    nameLabel->setPosition(Vec2(0, -16));
     nameLabel->setTextColor(Color4B(150, 180, 220, 200));
-    addChild(nameLabel, 2);
+    container->addChild(nameLabel, 1);
 
     // 触摸监听
     auto listener = EventListenerTouchOneByOne::create();
     listener->setSwallowTouches(true);
-    listener->onTouchBegan = [x, y, btnW, btnH, bg](Touch *touch, Event *) {
+    listener->onTouchBegan = [x, y, btnW, btnH, container, glow](Touch *touch, Event *) {
         Rect rect(x - btnW / 2, y - btnH / 2, btnW, btnH);
         if (rect.containsPoint(touch->getLocation())) {
-            bg->setScale(0.95f);
+            container->setScale(0.95f);
+            // 按下时发光增强
+            glow->runAction(ScaleTo::create(0.1f, 1.5f));
             return true;
         }
         return false;
     };
-    listener->onTouchEnded = [this, levelIdx, bg](Touch *, Event *) {
-        bg->setScale(1.0f);
+    listener->onTouchEnded = [this, levelIdx, container, glow](Touch *, Event *) {
+        container->setScale(1.0f);
+        glow->runAction(ScaleTo::create(0.1f, 1.0f));
         auto scene = GameScene::createSceneWithLevel(levelIdx);
         Director::getInstance()->replaceScene(TransitionFade::create(0.4f, scene, Color3B(10, 10, 30)));
     };
-    listener->onTouchCancelled = [bg](Touch *, Event *) { bg->setScale(1.0f); };
-    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, bg);
+    listener->onTouchCancelled = [container, glow](Touch *, Event *) {
+        container->setScale(1.0f);
+        glow->runAction(ScaleTo::create(0.1f, 1.0f));
+    };
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, container);
 }

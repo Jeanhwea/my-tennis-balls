@@ -1,0 +1,10 @@
+{
+  "id": 5,
+  "name": "Pyramid",
+  "maxBalls": 20,
+  "trays": [
+    { "x": 0.20, "y": 0.25, "width": 0.30, "targets": 4 },
+    { "x": 0.20, "y": 0.48, "width": 0.22, "targets": 3 },
+    { "x": 0.20, "y": 0.70, "width": 0.14, "targets": 2 }
+  ]
+}

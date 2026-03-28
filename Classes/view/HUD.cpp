@@ -204,9 +204,21 @@ void HUD::hideHint()
 
 void HUD::showCleared()
 {
+    auto parentSize = getParent()->getContentSize();
+    float cx = parentSize.width * 0.35f;
+    float cy = parentSize.height / 2;
+
+    // 背景闪光
+    auto flash = DrawNode::create();
+    flash->drawSolidCircle(Vec2(cx, cy), 120.0f, 0, 24, Color4F(0.4f, 0.6f, 1.0f, 0.15f));
+    flash->setScale(0);
+    getParent()->addChild(flash, 29);
+    flash->runAction(Sequence::create(
+        Spawn::create(EaseOut::create(ScaleTo::create(0.5f, 3.0f), 2), FadeOut::create(0.6f), nullptr),
+        RemoveSelf::create(), nullptr));
+
     auto cleared = Label::createWithTTF("ALL CLEAR!", FONT_TITLE, 52);
-    cleared->setPosition(
-        Vec2(getParent()->getContentSize().width * 0.35f, getParent()->getContentSize().height / 2));
+    cleared->setPosition(Vec2(cx, cy));
     cleared->setTextColor(Color4B(255, 230, 50, 255));
     cleared->enableShadow(Color4B(200, 150, 0, 150), Size(2, -2));
     cleared->setScale(0);

@@ -1,0 +1,10 @@
+{
+  "id": 3,
+  "name": "Staircase",
+  "maxBalls": 18,
+  "trays": [
+    { "x": 0.12, "y": 0.25, "width": 0.18, "targets": 2 },
+    { "x": 0.28, "y": 0.45, "width": 0.18, "targets": 3 },
+    { "x": 0.15, "y": 0.65, "width": 0.18, "targets": 2 }
+  ]
+}

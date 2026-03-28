@@ -1,6 +1,7 @@
 #include "ArenaView.h"
 
 #include "common/GameConstants.h"
+#include "view/AmbientParticles.h"
 
 USING_NS_CC;
 
@@ -182,4 +183,9 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     reticle->drawLine(Vec2(rcx, rcy - rSize), Vec2(rcx, rcy + rSize), retColor);
     reticle->drawCircle(Vec2(rcx, rcy), rSize * 0.8f, 0, 24, false, retColor);
     parent->addChild(reticle, 0);
+
+    // 浮动光点粒子
+    auto ambient = AmbientParticles::create(Size(launchLeft, h));
+    parent->addChild(ambient, -5);
+    ambient->start();
 }

@@ -58,6 +58,7 @@ list(APPEND GAME_SOURCE
   Classes/view/HUD.cpp
   Classes/view/TrayView.cpp
   Classes/view/VFXHelper.cpp
+  Classes/view/AmbientParticles.cpp
   Classes/controller/InputController.cpp
   Classes/controller/GameController.cpp
 )
@@ -75,6 +76,7 @@ list(APPEND GAME_HEADER
   Classes/view/HUD.h
   Classes/view/TrayView.h
   Classes/view/VFXHelper.h
+  Classes/view/AmbientParticles.h
   Classes/controller/InputController.h
   Classes/controller/GameController.h
   Classes/common/Random.h
