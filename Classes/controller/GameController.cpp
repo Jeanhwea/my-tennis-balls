@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
-#include "scene/LevelMenuScene.h"
 #include "common/GameConstants.h"
+#include "scene/LevelMenuScene.h"
 #include "view/ArenaView.h"
 #include "view/BallView.h"
 #include "view/TrayView.h"
@@ -64,7 +64,6 @@ void GameController::loadLevel(int index)
 
 void GameController::clearLevelNodes()
 {
-    // 移除上一关的所有弹球、目标球和托盘
     std::vector<Node *> toRemove;
     for (auto child : _scene->getChildren()) {
         int tag = child->getTag();
@@ -72,9 +71,7 @@ void GameController::clearLevelNodes()
             toRemove.push_back(child);
         }
     }
-    for (auto node : toRemove) {
-        node->removeFromParent();
-    }
+    for (auto node : toRemove) node->removeFromParent();
 }
 
 void GameController::onLevelCleared()
@@ -188,62 +185,68 @@ void GameController::collectOutOfBounds()
 {
     std::vector<Node *> fallenTargets;
     std::vector<Node *> lostBalls;
+
     for (auto child : _scene->getChildren()) {
+        int tag = child->getTag();
         float y = child->getPositionY();
-        float x = child->getPositionX();
-        bool outOfBounds = y < -50.0f || y > _visibleSize.height + 200.0f || x < -200.0f ||
-                           x > _visibleSize.width + 200.0f;
-        if (child->getTag() == TAG_TARGET && y < -50.0f) {
+
+        if (tag == TAG_TARGET && y < OOB_BOTTOM) {
             fallenTargets.push_back(child);
-        } else if (child->getTag() == TAG_BALL && outOfBounds) {
-            lostBalls.push_back(child);
+        } else if (tag == TAG_BALL) {
+            float x = child->getPositionX();
+            if (y < OOB_BOTTOM || y > _visibleSize.height + OOB_TOP_MARGIN || x < -OOB_SIDE_MARGIN ||
+                x > _visibleSize.width + OOB_SIDE_MARGIN) {
+                lostBalls.push_back(child);
+            }
         }
     }
-    for (auto target : fallenTargets) {
-        removeTarget(target);
-    }
-    for (auto ball : lostBalls) {
-        removeBall(ball);
-    }
+
+    for (auto target : fallenTargets) removeTarget(target);
+    for (auto ball : lostBalls) removeBall(ball);
 }
 
 // ── 物理回调 ───────────────────────────────────────────
 
-bool GameController::handleFloorContact(Node *floor, Node *other, PhysicsContact &contact)
+namespace
 {
-    auto &score = _model.scoreManager();
+
+/// 计算 combo 加成后的分数并播放 VFX。
+void applyScoreVFX(Node *parent, ScoreManager &score, int basePoints, const Vec2 &pos)
+{
+    int points = basePoints * std::max(1, score.combo());
+    score.addScore(basePoints);
+    VFXHelper::showFloatingScore(parent, pos, points);
+}
+
+}  // namespace
+
+bool GameController::handleFloorContact(Node * /*floor*/, Node *other, PhysicsContact &contact)
+{
+    auto cp = Vec2(contact.getContactData()->points[0].x, contact.getContactData()->points[0].y);
+
     if (other->getTag() == TAG_TARGET) {
-        auto cp = contact.getContactData()->points[0];
-        int points = SCORE_TARGET_FALL * std::max(1, score.combo());
-        score.addScore(SCORE_TARGET_FALL);
-        VFXHelper::showFloatingScore(_scene, Vec2(cp.x, cp.y), points);
-        VFXHelper::spawnHitParticle(_scene, Vec2(cp.x, cp.y));
+        applyScoreVFX(_scene, _model.scoreManager(), SCORE_TARGET_FALL, cp);
+        VFXHelper::spawnHitParticle(_scene, cp);
         removeTarget(other);
     } else if (other->getTag() == TAG_BALL) {
         removeBall(other);
-        score.resetCombo();
+        _model.scoreManager().resetCombo();
     }
     return false;
 }
 
-bool GameController::handleBallTargetContact(Node *ball, Node *target, PhysicsContact &contact)
+bool GameController::handleBallTargetContact(Node * /*ball*/, Node * /*target*/, PhysicsContact &contact)
 {
-    auto &score = _model.scoreManager();
-    auto cp = contact.getContactData()->points[0];
-    int points = SCORE_PER_HIT * std::max(1, score.combo());
-    score.addScore(SCORE_PER_HIT);
-    VFXHelper::showFloatingScore(_scene, Vec2(cp.x, cp.y), points);
-    VFXHelper::spawnHitParticle(_scene, Vec2(cp.x, cp.y));
+    auto cp = Vec2(contact.getContactData()->points[0].x, contact.getContactData()->points[0].y);
+    applyScoreVFX(_scene, _model.scoreManager(), SCORE_PER_HIT, cp);
+    VFXHelper::spawnHitParticle(_scene, cp);
     return true;
 }
 
-bool GameController::handleBallBallContact(Node *a, Node *b, PhysicsContact &contact)
+bool GameController::handleBallBallContact(Node * /*a*/, Node * /*b*/, PhysicsContact &contact)
 {
-    auto &score = _model.scoreManager();
-    auto cp = contact.getContactData()->points[0];
-    int points = SCORE_PER_HIT / 2 * std::max(1, score.combo());
-    score.addScore(SCORE_PER_HIT / 2);
-    VFXHelper::showFloatingScore(_scene, Vec2(cp.x, cp.y), points);
+    auto cp = Vec2(contact.getContactData()->points[0].x, contact.getContactData()->points[0].y);
+    applyScoreVFX(_scene, _model.scoreManager(), SCORE_PER_HIT / 2, cp);
     return true;
 }
 

@@ -1,23 +1,8 @@
 #include "BallView.h"
 
 #include "common/GameConstants.h"
-#include "common/Random.h"
 
 USING_NS_CC;
-
-namespace
-{
-
-Color3B randomColor()
-{
-    static const Color3B palette[] = {
-        Color3B(255, 80, 80),  Color3B(80, 200, 255),  Color3B(80, 255, 120),  Color3B(255, 220, 50),
-        Color3B(255, 140, 50), Color3B(200, 100, 255), Color3B(255, 100, 200), Color3B(100, 255, 220),
-    };
-    return palette[std::rand() % 8];
-}
-
-}  // namespace
 
 Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity, int ballIndex)
 {

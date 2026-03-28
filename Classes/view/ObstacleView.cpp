@@ -23,7 +23,8 @@ void spawnOne(Node *parent, const Vec2 &position, bool isCircle)
         Color4F color(randomFloat(0.3f, 0.8f), randomFloat(0.3f, 0.8f), randomFloat(0.3f, 0.8f), 0.9f);
         obstacle->drawSolidCircle(Vec2::ZERO, radius, 0, 32, color);
         obstacle->drawCircle(Vec2::ZERO, radius, 0, 32, false, Color4F::WHITE);
-        body = PhysicsBody::createCircle(radius, PhysicsMaterial(1.0f, 1.0f, 0.0f));
+        body = PhysicsBody::createCircle(
+            radius, PhysicsMaterial(OBSTACLE_DENSITY, OBSTACLE_RESTITUTION, OBSTACLE_FRICTION));
     } else {
         float w = randomFloat(OBSTACLE_MIN_SIZE, OBSTACLE_MAX_SIZE);
         float h = randomFloat(OBSTACLE_MIN_SIZE * 0.4f, OBSTACLE_MIN_SIZE * 0.8f);
@@ -32,7 +33,8 @@ void spawnOne(Node *parent, const Vec2 &position, bool isCircle)
                          Vec2(-w / 2, h / 2)};
         obstacle->drawSolidPoly(verts, 4, color);
         obstacle->drawPoly(verts, 4, true, Color4F::WHITE);
-        body = PhysicsBody::createBox(Size(w, h), PhysicsMaterial(1.0f, 1.0f, 0.0f));
+        body = PhysicsBody::createBox(
+            Size(w, h), PhysicsMaterial(OBSTACLE_DENSITY, OBSTACLE_RESTITUTION, OBSTACLE_FRICTION));
     }
 
     body->setDynamic(false);

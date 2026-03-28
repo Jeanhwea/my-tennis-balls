@@ -7,15 +7,6 @@ USING_NS_CC;
 namespace
 {
 
-Color3B targetColor(int index)
-{
-    static const Color3B colors[] = {
-        Color3B(255, 60, 60),   Color3B(60, 220, 255),  Color3B(255, 200, 40), Color3B(60, 255, 130),
-        Color3B(255, 120, 220), Color3B(180, 100, 255), Color3B(255, 160, 80), Color3B(100, 255, 200),
-    };
-    return colors[index % 8];
-}
-
 void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
 {
     auto draw = DrawNode::create();
@@ -61,7 +52,8 @@ void createTrayPhysics(Node *parent, float trayX, float trayY, float trayW)
     trayNode->setTag(TAG_TRAY);
     trayNode->setPosition(Vec2(trayX, trayY));
 
-    auto body = PhysicsBody::createBox(Size(trayW, TRAY_THICKNESS), PhysicsMaterial(1.0f, 0.2f, 0.8f));
+    auto body = PhysicsBody::createBox(Size(trayW, TRAY_THICKNESS),
+                                       PhysicsMaterial(TRAY_DENSITY, TRAY_RESTITUTION, TRAY_FRICTION));
     body->setDynamic(false);
     body->setCategoryBitmask(CATEGORY_TRAY);
     body->setCollisionBitmask(CATEGORY_TARGET | CATEGORY_BALL);

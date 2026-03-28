@@ -1,14 +1,27 @@
 #ifndef __COMMON_RANDOM_H__
 #define __COMMON_RANDOM_H__
 
-#include <cstdlib>
+#include <random>
 
 namespace common
 {
 
+inline std::mt19937 &rng()
+{
+    static std::mt19937 gen{std::random_device{}()};
+    return gen;
+}
+
 inline float randomFloat(float min, float max)
 {
-    return min + static_cast<float>(std::rand()) / RAND_MAX * (max - min);
+    std::uniform_real_distribution<float> dist(min, max);
+    return dist(rng());
+}
+
+inline int randomInt(int min, int max)
+{
+    std::uniform_int_distribution<int> dist(min, max);
+    return dist(rng());
 }
 
 }  // namespace common

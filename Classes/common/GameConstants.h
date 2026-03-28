@@ -58,4 +58,29 @@ constexpr float TARGET_FRICTION = 0.6f;
 // 分隔线
 constexpr float DIVIDER_THICKNESS = 2.0f;
 
+// 障碍物
+constexpr int TAG_OBSTACLE = 500;
+constexpr int CATEGORY_OBSTACLE = 0x20;
+constexpr float OBSTACLE_MIN_SIZE = 30.0f;
+constexpr float OBSTACLE_MAX_SIZE = 80.0f;
+constexpr float OBSTACLE_ZONE_LEFT = 0.05f;
+constexpr float OBSTACLE_ZONE_RIGHT = 0.55f;
+constexpr float OBSTACLE_ZONE_BOTTOM = 0.10f;
+constexpr float OBSTACLE_ZONE_TOP = 0.40f;
+
+// 托盘物理
+constexpr float TRAY_DENSITY = 1.0f;
+constexpr float TRAY_RESTITUTION = 0.2f;
+constexpr float TRAY_FRICTION = 0.8f;
+
+// 障碍物物理
+constexpr float OBSTACLE_DENSITY = 1.0f;
+constexpr float OBSTACLE_RESTITUTION = 1.0f;
+constexpr float OBSTACLE_FRICTION = 0.0f;
+
+// 出界阈值
+constexpr float OOB_BOTTOM = -50.0f;
+constexpr float OOB_TOP_MARGIN = 200.0f;
+constexpr float OOB_SIDE_MARGIN = 200.0f;
+
 #endif  // __GAME_CONSTANTS_H__
