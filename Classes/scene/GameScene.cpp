@@ -18,7 +18,6 @@ Scene *GameScene::createSceneWithLevel(int levelIndex)
 
 bool GameScene::init()
 {
-    CCLOG("[GameScene] init begin");
     if (!Scene::initWithPhysics()) {
         return false;
     }
@@ -33,16 +32,13 @@ bool GameScene::init()
 
 void GameScene::onEnter()
 {
-    CCLOG("[GameScene] onEnter begin");
     Scene::onEnter();
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     _controller.init(this, visibleSize, _startLevel);
-    CCLOG("[GameScene] onEnter done");
 }
 
 void GameScene::update(float dt)
 {
-    CCLOG("[GameScene] update dt=%.4f", dt);
     _controller.update(dt);
 }

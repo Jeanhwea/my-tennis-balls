@@ -86,8 +86,9 @@ bool AppDelegate::applicationDidFinishLaunching()
     director->setAnimationInterval(1.0f / 60);
 
     // 设置设计分辨率
+    // FIXED_HEIGHT 保证纵向完整显示，横向自适应不同宽高比（16:9、18:9、21:9 等）
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
-                                    ResolutionPolicy::NO_BORDER);
+                                    ResolutionPolicy::FIXED_HEIGHT);
     auto frameSize = glview->getFrameSize();
     // 如果帧高度大于中等尺寸的高度
     if (frameSize.height > mediumResolutionSize.height) {
@@ -112,13 +113,10 @@ bool AppDelegate::applicationDidFinishLaunching()
     CCLOG("Version components: %d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
 
     // 创建关卡菜单场景
-    CCLOG("[AppDelegate] creating LevelMenuScene");
     auto scene = LevelMenuScene::createScene();
-    CCLOG("[AppDelegate] running scene");
 
     // 运行
     director->runWithScene(scene);
-    CCLOG("[AppDelegate] scene started");
 
     return true;
 }
