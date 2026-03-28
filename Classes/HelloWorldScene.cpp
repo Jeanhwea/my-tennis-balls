@@ -1,7 +1,5 @@
 #include "HelloWorldScene.h"
 
-#include "SimpleAudioEngine.h"
-
 USING_NS_CC;
 
 Scene *HelloWorld::createScene()
@@ -15,17 +13,16 @@ bool HelloWorld::init()
         return false;
     }
 
-    this->setName("HelloWorldScene");
-    this->getPhysicsWorld()->setGravity(Vec2(0, -98));
+    setName("HelloWorldScene");
+    getPhysicsWorld()->setGravity(Vec2(0, GRAVITY_Y));
 
 #if IS_DEBUG
-    this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
 #else
-    this->getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
+    getPhysicsWorld()->setDebugDrawMask(PhysicsWorld::DEBUGDRAW_NONE);
 #endif
 
     _visibleSize = Director::getInstance()->getVisibleSize();
-    _ballCounter = 0;
 
     auto contactListener = EventListenerPhysicsContact::create();
     contactListener->onContactBegin = CC_CALLBACK_1(HelloWorld::onContactBegin, this);
@@ -38,7 +35,6 @@ void HelloWorld::onEnter()
 {
     Scene::onEnter();
     addEdgeBox();
-    // addBall(Vec2(_visibleSize.width / 2, _visibleSize.height / 2));
 
     auto eventListener = EventListenerTouchOneByOne::create();
     eventListener->setSwallowTouches(true);
@@ -51,37 +47,39 @@ void HelloWorld::addEdgeBox()
     auto edgeNode = Node::create();
     edgeNode->setName("edgeBox");
     edgeNode->setPosition(Vec2(_visibleSize.width / 2, _visibleSize.height / 2));
-    auto body = PhysicsBody::createEdgeBox(_visibleSize, PhysicsMaterial(1.0, 1.0, 0.0), 1);
+
+    auto body = PhysicsBody::createEdgeBox(
+        _visibleSize, PhysicsMaterial(1.0f, EDGE_RESTITUTION, EDGE_FRICTION), 1);
     body->setCategoryBitmask(PHYSICS_CATEGORY_EDGE);
     body->setCollisionBitmask(PHYSICS_CATEGORY_ALL);
     body->setContactTestBitmask(PHYSICS_CATEGORY_ALL);
     edgeNode->setPhysicsBody(body);
-    this->addChild(edgeNode);
+    addChild(edgeNode);
 }
 
-void HelloWorld::addBall(Vec2 position)
+void HelloWorld::addBall(const Vec2 &position)
 {
     auto ball = Sprite::create("ball.png");
-    ball->setScale(0.1);
+    ball->setScale(BALL_SCALE);
     ball->setPosition(position);
-    std::string ballName = StringUtils::format("ball%02d", ++_ballCounter);
-    ball->setName(ballName);
-    float radius = ball->getContentSize().width / 2 - 18;
-    auto body = PhysicsBody::createCircle(radius, PhysicsMaterial(0.1, 0.85, 0.0));
+    ball->setName(StringUtils::format("ball%02d", ++_ballCounter));
+
+    const float radius = ball->getContentSize().width / 2 - BALL_SPRITE_PADDING;
+    auto body = PhysicsBody::createCircle(
+        radius, PhysicsMaterial(BALL_DENSITY, BALL_RESTITUTION, BALL_FRICTION));
     body->setCategoryBitmask(PHYSICS_CATEGORY_BALL);
     body->setCollisionBitmask(PHYSICS_CATEGORY_ALL);
     body->setContactTestBitmask(PHYSICS_CATEGORY_ALL);
     ball->setPhysicsBody(body);
-    this->addChild(ball);
+    addChild(ball);
 }
 
 bool HelloWorld::onTouchBegan(Touch *touch, Event *event)
 {
-    auto target = event->getCurrentTarget();
-    auto pos = touch->getLocation();
-    CCLOG("点击目标: %s, 位置: (%.2f, %.2f)", target->getName().c_str(), pos.x, pos.y);
+    const auto location = touch->getLocation();
+    CCLOG("点击目标: %s, 位置: (%.2f, %.2f)",
+          event->getCurrentTarget()->getName().c_str(), location.x, location.y);
 
-    auto location = touch->getLocation();
     addBall(location);
     return true;
 }
@@ -90,6 +88,9 @@ bool HelloWorld::onContactBegin(PhysicsContact &contact)
 {
     auto nodeA = contact.getShapeA()->getBody()->getNode();
     auto nodeB = contact.getShapeB()->getBody()->getNode();
-    CCLOG("碰撞检测： %s === %s", nodeA->getName().c_str(), nodeB->getName().c_str());
+
+    if (nodeA && nodeB) {
+        CCLOG("碰撞检测: %s === %s", nodeA->getName().c_str(), nodeB->getName().c_str());
+    }
     return true;
 }
