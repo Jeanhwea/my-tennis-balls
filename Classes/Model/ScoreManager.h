@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <functional>
 
-#include "Classes/GameConstants.h"
+#include "GameConstants.h"
 
 /// Pure scoring logic — no rendering dependency.
 class ScoreManager

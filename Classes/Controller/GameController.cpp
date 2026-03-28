@@ -2,11 +2,11 @@
 
 #include <algorithm>
 
-#include "Classes/GameConstants.h"
-#include "Classes/View/ArenaView.h"
-#include "Classes/View/BallView.h"
-#include "Classes/View/ObstacleView.h"
-#include "Classes/View/VFXHelper.h"
+#include "GameConstants.h"
+#include "View/ArenaView.h"
+#include "View/BallView.h"
+#include "View/ObstacleView.h"
+#include "View/VFXHelper.h"
 
 USING_NS_CC;
 

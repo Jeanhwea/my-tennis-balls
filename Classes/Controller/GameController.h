@@ -1,10 +1,10 @@
 #ifndef __GAME_CONTROLLER_H__
 #define __GAME_CONTROLLER_H__
 
-#include "Classes/Controller/InputController.h"
-#include "Classes/Model/GameModel.h"
-#include "Classes/View/AimLineView.h"
-#include "Classes/View/HUD.h"
+#include "Controller/InputController.h"
+#include "Model/GameModel.h"
+#include "View/AimLineView.h"
+#include "View/HUD.h"
 #include "cocos2d.h"
 
 /// Orchestrates Model ↔ View communication and handles physics events.

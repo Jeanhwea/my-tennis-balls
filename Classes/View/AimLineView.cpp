@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-#include "Classes/GameConstants.h"
+#include "GameConstants.h"
 
 USING_NS_CC;
 
