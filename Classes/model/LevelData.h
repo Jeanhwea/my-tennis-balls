@@ -4,23 +4,23 @@
 #include <string>
 #include <vector>
 
-/// Describes one tray shelf and its target balls.
+/// 描述一个托盘架及其上的目标球。
 struct TrayData {
-    float x;      // center X ratio (0~1)
-    float y;      // center Y ratio (0~1)
-    float width;  // width ratio (0~1)
-    int targets;  // number of target balls on this tray
+    float x;      // 中心 X 比例 (0~1)
+    float y;      // 中心 Y 比例 (0~1)
+    float width;  // 宽度比例 (0~1)
+    int targets;  // 此托盘上的目标球数量
 };
 
-/// Describes a complete level layout.
+/// 描述一个完整的关卡布局。
 struct LevelData {
     int id;
     std::string name;
-    int maxBalls;                 // max projectile balls allowed
-    std::vector<TrayData> trays;  // tray configurations
+    int maxBalls;                 // 允许的最大发射球数
+    std::vector<TrayData> trays;  // 托盘配置
 };
 
-/// Load and cache all levels from Resources/levels/level_NNN.json.
+/// 从 Resources/levels/level_NNN.json 加载并缓存所有关卡。
 const std::vector<LevelData> &getAllLevels();
 
 #endif  // __LEVEL_DATA_H__

@@ -4,7 +4,7 @@
 #include "LevelData.h"
 #include "ScoreManager.h"
 
-/// Central game state — pure data, no rendering.
+/// 核心游戏状态 - 纯数据，无渲染。
 class GameModel
 {
 public:

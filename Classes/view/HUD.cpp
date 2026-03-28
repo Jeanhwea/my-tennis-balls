@@ -19,7 +19,7 @@ bool HUD::initWithSize(const Size &visibleSize)
 {
     if (!Node::init()) return false;
 
-    // Semi-transparent top bar background
+    // 半透明顶部栏背景
     auto topBar = DrawNode::create();
     topBar->drawSolidRect(Vec2(0, visibleSize.height - 50),
                           Vec2(visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO), visibleSize.height),

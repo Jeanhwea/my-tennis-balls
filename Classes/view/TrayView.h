@@ -4,11 +4,11 @@
 #include "cocos2d.h"
 #include "model/LevelData.h"
 
-/// Draws tray shelves and spawns target balls based on level data.
+/// 绘制托盘架并根据关卡数据生成目标球。
 namespace TrayView
 {
 
-/// Create all trays and targets for a level. Returns total target count.
+/// 创建关卡中的所有托盘和目标球。返回目标球总数。
 int createFromLevel(cocos2d::Node *parent, const cocos2d::Size &visibleSize, const LevelData &level);
 
 }  // namespace TrayView

@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 
-/// Creates the physical boundary walls, floor sensor, and zone visuals.
+/// 创建物理边界墙、地板传感器和区域视觉效果。
 namespace ArenaView
 {
 

@@ -5,7 +5,7 @@
 
 #include "cocos2d.h"
 
-/// Handles touch input, translates drag gestures into launch commands.
+/// 处理触摸输入，将拖拽手势转换为发射命令。
 class InputController
 {
 public:
@@ -24,16 +24,16 @@ public:
 
     void setOnDragEnd(OnDragEndCallback cb) { _onDragEnd = std::move(cb); }
 
-    /// Set the minimum X coordinate for valid launch starts (right-side zone).
+    /// 设置有效发射起始位置的最小 X 坐标（右侧区域）。
     void setLaunchZoneMinX(float minX) { _launchZoneMinX = minX; }
 
-    /// Register touch listener on the given node.
+    /// 在指定节点上注册触摸监听器。
     void init(cocos2d::Node *target);
 
 private:
     bool _isDragging = false;
     cocos2d::Vec2 _dragStart;
-    float _launchZoneMinX = 0.0f;  // no constraint by default
+    float _launchZoneMinX = 0.0f;  // 默认无约束
 
     OnLaunchCallback _onLaunch;
     OnDragCallback _onDrag;

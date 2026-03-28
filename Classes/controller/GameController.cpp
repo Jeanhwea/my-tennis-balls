@@ -15,7 +15,7 @@ void GameController::init(Scene *scene, const Size &visibleSize)
     _scene = scene;
     _visibleSize = visibleSize;
 
-    // Static arena (persists across levels)
+    // 静态竞技场（跨关卡持续存在）
     ArenaView::addEdgeWalls(_scene, _visibleSize);
     ArenaView::addFloorSensor(_scene, _visibleSize);
     ArenaView::drawZones(_scene, _visibleSize);
@@ -30,7 +30,7 @@ void GameController::init(Scene *scene, const Size &visibleSize)
     setupInput();
     setupPhysics();
 
-    // Load first level
+    // 加载第一关
     loadLevel(0);
 }
 
@@ -38,7 +38,7 @@ void GameController::update(float dt)
 {
     _model.tick(dt);
 
-    // Check for targets/balls that fell off screen
+    // 检查掉出屏幕的目标球/弹球
     if (!_transitioning) {
         std::vector<Node *> fallenTargets;
         std::vector<Node *> lostBalls;
@@ -62,7 +62,7 @@ void GameController::update(float dt)
     }
 }
 
-// ── Level management ────────────────────────────────────────────
+// ── 关卡管理 ────────────────────────────────────────────
 
 void GameController::loadLevel(int index)
 {
@@ -83,7 +83,7 @@ void GameController::loadLevel(int index)
 
 void GameController::clearLevelNodes()
 {
-    // Remove all balls, targets, and trays from previous level
+    // 移除上一关的所有弹球、目标球和托盘
     std::vector<Node *> toRemove;
     for (auto child : _scene->getChildren()) {
         int tag = child->getTag();
@@ -105,14 +105,14 @@ void GameController::onLevelCleared()
 
     if (_model.hasNextLevel()) {
         int nextIdx = _model.levelIndex() + 1;
-        // Delay before loading next level
+        // 加载下一关前的延迟
         _scene->runAction(Sequence::create(
             DelayTime::create(2.5f), CallFunc::create([this, nextIdx]() { loadLevel(nextIdx); }), nullptr));
     }
-    // If no next level, game stays on "ALL CLEAR!" — player wins
+    // 如果没有下一关，游戏停留在 "ALL CLEAR!" — 玩家获胜
 }
 
-// ── Wiring ──────────────────────────────────────────────────────
+// ── 连接 ──────────────────────────────────────────────────────
 
 void GameController::setupInput()
 {
@@ -150,7 +150,7 @@ void GameController::refreshHUD()
     _hud->updateTargets(_model.targetsRemaining());
 }
 
-// ── Ball management ─────────────────────────────────────────────
+// ── 球管理 ─────────────────────────────────────────────
 
 int GameController::countBalls() const
 {
@@ -196,7 +196,7 @@ void GameController::removeTarget(Node *target)
     });
 }
 
-// ── Physics callbacks ───────────────────────────────────────────
+// ── 物理回调 ───────────────────────────────────────────
 
 bool GameController::onContactBegin(PhysicsContact &contact)
 {
@@ -206,7 +206,7 @@ bool GameController::onContactBegin(PhysicsContact &contact)
 
     auto &score = _model.scoreManager();
 
-    // Floor sensor
+    // 地板传感器
     bool aFloor = nodeA->getTag() == TAG_FLOOR;
     bool bFloor = nodeB->getTag() == TAG_FLOOR;
     if (aFloor || bFloor) {
@@ -225,7 +225,7 @@ bool GameController::onContactBegin(PhysicsContact &contact)
         return false;
     }
 
-    // Ball hits target
+    // 弹球击中目标球
     if ((nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_TARGET) ||
         (nodeA->getTag() == TAG_TARGET && nodeB->getTag() == TAG_BALL)) {
         auto target = (nodeA->getTag() == TAG_TARGET) ? nodeA : nodeB;
@@ -239,7 +239,7 @@ bool GameController::onContactBegin(PhysicsContact &contact)
         return true;
     }
 
-    // Ball hits ball
+    // 弹球互相碰撞
     if (nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_BALL) {
         auto cp = contact.getContactData()->points[0];
         int points = SCORE_PER_HIT / 2 * std::max(1, score.combo());

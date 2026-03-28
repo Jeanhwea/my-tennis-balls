@@ -3,17 +3,17 @@
 
 #include "cocos2d.h"
 
-/// Renders the drag-to-launch aim line and power indicator.
+/// 渲染拖拽发射的瞄准线和力度指示器。
 class AimLineView
 {
 public:
-    /// Create the internal DrawNode and add it to parent.
+    /// 创建内部 DrawNode 并添加到父节点。
     void init(cocos2d::Node *parent);
 
-    /// Draw aim line from dragStart given current touch delta.
+    /// 从拖拽起点根据当前触摸偏移绘制瞄准线。
     void draw(const cocos2d::Vec2 &dragStart, const cocos2d::Vec2 &delta);
 
-    /// Clear the aim line.
+    /// 清除瞄准线。
     void clear();
 
 private:

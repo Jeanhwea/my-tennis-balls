@@ -38,9 +38,18 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     ball->setPhysicsBody(body);
     parent->addChild(ball, 5);
 
-    // Spawn animation
+    // 生成动画
     ball->setScale(0);
     ball->runAction(EaseBackOut::create(ScaleTo::create(0.25f, BALL_SCALE)));
+
+    // 生成光环
+    auto ring = DrawNode::create();
+    ring->drawCircle(Vec2::ZERO, radius * 2.5f, 0, 24, false, Color4F(1, 1, 1, 0.6f));
+    ring->setPosition(position);
+    parent->addChild(ring, 4);
+    ring->runAction(
+        Sequence::create(Spawn::create(ScaleTo::create(0.3f, 2.0f), FadeOut::create(0.3f), nullptr),
+                         RemoveSelf::create(), nullptr));
 
     return ball;
 }

@@ -4,7 +4,7 @@
 #include "cocos2d.h"
 #include "controller/GameController.h"
 
-/// Thin scene shell — delegates all logic to GameController.
+/// 轻量场景外壳 - 将所有逻辑委托给 GameController。
 class GameScene : public cocos2d::Scene
 {
 public:

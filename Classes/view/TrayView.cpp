@@ -22,24 +22,24 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
     float trayY = visibleSize.height * tray.y;
     float trayW = visibleSize.width * tray.width;
 
-    // Visual shelf with 3D effect
+    // 带 3D 效果的视觉架子
     auto draw = DrawNode::create();
     float halfW = trayW / 2;
     float halfH = TRAY_THICKNESS / 2;
 
-    // Shadow
+    // 阴影
     draw->drawSolidRect(Vec2(trayX - halfW + 2, trayY - halfH - 2),
                         Vec2(trayX + halfW + 2, trayY + halfH - 2), Color4F(0.0f, 0.0f, 0.0f, 0.3f));
-    // Main body
+    // 主体
     draw->drawSolidRect(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX + halfW, trayY + halfH),
                         Color4F(0.45f, 0.48f, 0.55f, 0.95f));
-    // Top highlight
+    // 顶部高光
     draw->drawSolidRect(Vec2(trayX - halfW, trayY + halfH - 2), Vec2(trayX + halfW, trayY + halfH),
                         Color4F(0.7f, 0.75f, 0.85f, 0.9f));
-    // Bottom edge
+    // 底部边线
     draw->drawLine(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX + halfW, trayY - halfH),
                    Color4F(0.3f, 0.32f, 0.38f, 0.8f));
-    // Left/right caps
+    // 左右端盖
     draw->drawLine(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX - halfW, trayY + halfH),
                    Color4F(0.55f, 0.58f, 0.65f, 0.6f));
     draw->drawLine(Vec2(trayX + halfW, trayY - halfH), Vec2(trayX + halfW, trayY + halfH),
@@ -47,7 +47,18 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
     draw->setTag(TAG_TRAY);
     parent->addChild(draw, 2);
 
-    // Physics shelf
+    // 托盘下方的微光
+    auto glow = DrawNode::create();
+    for (int g = 4; g >= 0; --g) {
+        float gy = static_cast<float>(g) * 3.0f;
+        float alpha = 0.03f * (5 - g);
+        glow->drawSolidRect(Vec2(trayX - halfW + 4, trayY - halfH - gy - 3),
+                            Vec2(trayX + halfW - 4, trayY - halfH - gy), Color4F(0.3f, 0.5f, 0.9f, alpha));
+    }
+    glow->setTag(TAG_TRAY);
+    parent->addChild(glow, 1);
+
+    // 物理架子
     auto trayNode = Node::create();
     trayNode->setName("tray");
     trayNode->setTag(TAG_TRAY);
@@ -61,7 +72,7 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
     trayNode->setPhysicsBody(body);
     parent->addChild(trayNode, 2);
 
-    // Target balls
+    // 目标球
     float spacing = trayW / (tray.targets + 1);
     float startX = trayX - trayW / 2;
     float ballY = trayY + TRAY_THICKNESS / 2 + 20.0f;

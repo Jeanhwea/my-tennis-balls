@@ -4,9 +4,9 @@
 #include "cocos2d.h"
 
 /**
- * @brief    The cocos2d Application.
+ * @brief    cocos2d 应用程序。
  *
- * Private inheritance here hides part of interface from Director.
+ * 此处使用私有继承，对 Director 隐藏部分接口。
  */
 class AppDelegate : private cocos2d::Application
 {

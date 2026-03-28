@@ -6,7 +6,7 @@
 
 #include "GameConstants.h"
 
-/// Pure scoring logic — no rendering dependency.
+/// 纯计分逻辑 - 无渲染依赖。
 class ScoreManager
 {
 public:

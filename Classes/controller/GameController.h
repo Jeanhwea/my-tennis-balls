@@ -7,7 +7,7 @@
 #include "view/AimLineView.h"
 #include "view/HUD.h"
 
-/// Orchestrates Model ↔ View communication, level progression, and physics.
+/// 协调 Model ↔ View 通信、关卡推进和物理系统。
 class GameController
 {
 public:
@@ -26,24 +26,24 @@ private:
     int _ballCounter = 0;
     bool _transitioning = false;
 
-    // Level management
+    // 关卡管理
     void loadLevel(int index);
     void clearLevelNodes();
     void onLevelCleared();
 
-    // Wiring
+    // 连接
     void setupInput();
     void setupPhysics();
     void refreshHUD();
 
-    // Ball management
+    // 球管理
     void spawnBall(const cocos2d::Vec2 &position, const cocos2d::Vec2 &velocity);
     void removeBall(cocos2d::Node *ball);
     void removeTarget(cocos2d::Node *target);
     int countBalls() const;
     int countTargets() const;
 
-    // Physics
+    // 物理
     bool onContactBegin(cocos2d::PhysicsContact &contact);
 };
 
