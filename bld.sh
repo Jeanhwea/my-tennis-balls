@@ -1,18 +1,61 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
-# Check if cmake is installed
-if ! command -v cmake &> /dev/null
-then
-    echo "cmake could not be found"
-    exit
+# ── Configuration ────────────────────────────────────────────────
+BUILD_DIR="build"
+
+# ── Parse arguments ──────────────────────────────────────────────
+BUILD_TYPE="Debug"
+CMAKE_DEBUG_FLAG="-DIS_DEBUG=ON"
+
+case "${1:-}" in
+    release)
+        BUILD_TYPE="Release"
+        CMAKE_DEBUG_FLAG="-DIS_DEBUG=OFF"
+        ;;
+    clean)
+        echo "[*] Cleaning build directory..."
+        rm -rf "$BUILD_DIR"
+        echo "[*] Done."
+        exit 0
+        ;;
+esac
+
+# ── Prerequisite check ──────────────────────────────────────────
+if ! command -v cmake &>/dev/null; then
+    echo "[ERROR] cmake not found. Please install CMake first."
+    exit 1
 fi
 
-# Display cmake version
+echo "[*] CMake version:"
 cmake --version
+echo
 
-# Set macOS deployment target for compatibility with macOS 10
-export MACOSX_DEPLOYMENT_TARGET=10.15
+# ── Detect platform & generator ─────────────────────────────────
+PLATFORM_FLAGS=()
 
-cmake -B build -G"Xcode" --log-level=STATUS -DIS_DEBUG=ON -DCMAKE_OSX_DEPLOYMENT_TARGET=10.15
+case "$(uname -s)" in
+    Darwin)
+        GENERATOR="Xcode"
+        export MACOSX_DEPLOYMENT_TARGET=10.15
+        PLATFORM_FLAGS+=("-DCMAKE_OSX_DEPLOYMENT_TARGET=10.15")
+        ;;
+    Linux)
+        GENERATOR="Unix Makefiles"
+        ;;
+    *)
+        echo "[ERROR] Unsupported platform: $(uname -s)"
+        exit 1
+        ;;
+esac
 
-cmake --build build
+# ── Configure ────────────────────────────────────────────────────
+echo "[*] Configuring ($BUILD_TYPE, $GENERATOR)..."
+cmake -B "$BUILD_DIR" -G"$GENERATOR" --log-level=STATUS \
+    "$CMAKE_DEBUG_FLAG" "${PLATFORM_FLAGS[@]}"
+
+# ── Build ────────────────────────────────────────────────────────
+echo "[*] Building..."
+cmake --build "$BUILD_DIR" --config "$BUILD_TYPE" --parallel
+
+echo "[*] Build succeeded ($BUILD_TYPE)."
