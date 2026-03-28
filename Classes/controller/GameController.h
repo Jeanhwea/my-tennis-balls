@@ -42,9 +42,13 @@ private:
     void removeTarget(cocos2d::Node *target);
     int countBalls() const;
     int countTargets() const;
+    void collectOutOfBounds();
 
     // 物理
     bool onContactBegin(cocos2d::PhysicsContact &contact);
+    bool handleFloorContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);
+    bool handleBallTargetContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);
+    bool handleBallBallContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);
 };
 
 #endif  // __GAME_CONTROLLER_H__

@@ -16,13 +16,8 @@ Color3B targetColor(int index)
     return colors[index % 8];
 }
 
-void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, int &targetIndex)
+void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
 {
-    float trayX = visibleSize.width * tray.x;
-    float trayY = visibleSize.height * tray.y;
-    float trayW = visibleSize.width * tray.width;
-
-    // 带 3D 效果的视觉架子
     auto draw = DrawNode::create();
     float halfW = trayW / 2;
     float halfH = TRAY_THICKNESS / 2;
@@ -57,8 +52,10 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
     }
     glow->setTag(TAG_TRAY);
     parent->addChild(glow, 1);
+}
 
-    // 物理架子
+void createTrayPhysics(Node *parent, float trayX, float trayY, float trayW)
+{
     auto trayNode = Node::create();
     trayNode->setName("tray");
     trayNode->setTag(TAG_TRAY);
@@ -71,13 +68,15 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
     body->setContactTestBitmask(CATEGORY_ALL);
     trayNode->setPhysicsBody(body);
     parent->addChild(trayNode, 2);
+}
 
-    // 目标球
-    float spacing = trayW / (tray.targets + 1);
+void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count, int &targetIndex)
+{
+    float spacing = trayW / (count + 1);
     float startX = trayX - trayW / 2;
     float ballY = trayY + TRAY_THICKNESS / 2 + 20.0f;
 
-    for (int i = 0; i < tray.targets; ++i) {
+    for (int i = 0; i < count; ++i) {
         float bx = startX + spacing * (i + 1);
 
         auto target = Sprite::create("ball.png");
@@ -96,6 +95,17 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
         target->setPhysicsBody(tbody);
         parent->addChild(target, 5);
     }
+}
+
+void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, int &targetIndex)
+{
+    float trayX = visibleSize.width * tray.x;
+    float trayY = visibleSize.height * tray.y;
+    float trayW = visibleSize.width * tray.width;
+
+    drawTrayVisual(parent, trayX, trayY, trayW);
+    createTrayPhysics(parent, trayX, trayY, trayW);
+    spawnTargets(parent, trayX, trayY, trayW, tray.targets, targetIndex);
 }
 
 }  // namespace

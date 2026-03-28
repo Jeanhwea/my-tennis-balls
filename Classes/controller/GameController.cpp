@@ -38,28 +38,8 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 void GameController::update(float dt)
 {
     _model.tick(dt);
-
-    // 检查掉出屏幕的目标球/弹球
     if (!_transitioning) {
-        std::vector<Node *> fallenTargets;
-        std::vector<Node *> lostBalls;
-        for (auto child : _scene->getChildren()) {
-            float y = child->getPositionY();
-            float x = child->getPositionX();
-            bool outOfBounds = y < -50.0f || y > _visibleSize.height + 200.0f || x < -200.0f ||
-                               x > _visibleSize.width + 200.0f;
-            if (child->getTag() == TAG_TARGET && y < -50.0f) {
-                fallenTargets.push_back(child);
-            } else if (child->getTag() == TAG_BALL && outOfBounds) {
-                lostBalls.push_back(child);
-            }
-        }
-        for (auto target : fallenTargets) {
-            removeTarget(target);
-        }
-        for (auto ball : lostBalls) {
-            removeBall(ball);
-        }
+        collectOutOfBounds();
     }
 }
 
@@ -204,7 +184,68 @@ void GameController::removeTarget(Node *target)
     });
 }
 
+void GameController::collectOutOfBounds()
+{
+    std::vector<Node *> fallenTargets;
+    std::vector<Node *> lostBalls;
+    for (auto child : _scene->getChildren()) {
+        float y = child->getPositionY();
+        float x = child->getPositionX();
+        bool outOfBounds = y < -50.0f || y > _visibleSize.height + 200.0f || x < -200.0f ||
+                           x > _visibleSize.width + 200.0f;
+        if (child->getTag() == TAG_TARGET && y < -50.0f) {
+            fallenTargets.push_back(child);
+        } else if (child->getTag() == TAG_BALL && outOfBounds) {
+            lostBalls.push_back(child);
+        }
+    }
+    for (auto target : fallenTargets) {
+        removeTarget(target);
+    }
+    for (auto ball : lostBalls) {
+        removeBall(ball);
+    }
+}
+
 // ── 物理回调 ───────────────────────────────────────────
+
+bool GameController::handleFloorContact(Node *floor, Node *other, PhysicsContact &contact)
+{
+    auto &score = _model.scoreManager();
+    if (other->getTag() == TAG_TARGET) {
+        auto cp = contact.getContactData()->points[0];
+        int points = SCORE_TARGET_FALL * std::max(1, score.combo());
+        score.addScore(SCORE_TARGET_FALL);
+        VFXHelper::showFloatingScore(_scene, Vec2(cp.x, cp.y), points);
+        VFXHelper::spawnHitParticle(_scene, Vec2(cp.x, cp.y));
+        removeTarget(other);
+    } else if (other->getTag() == TAG_BALL) {
+        removeBall(other);
+        score.resetCombo();
+    }
+    return false;
+}
+
+bool GameController::handleBallTargetContact(Node *ball, Node *target, PhysicsContact &contact)
+{
+    auto &score = _model.scoreManager();
+    auto cp = contact.getContactData()->points[0];
+    int points = SCORE_PER_HIT * std::max(1, score.combo());
+    score.addScore(SCORE_PER_HIT);
+    VFXHelper::showFloatingScore(_scene, Vec2(cp.x, cp.y), points);
+    VFXHelper::spawnHitParticle(_scene, Vec2(cp.x, cp.y));
+    return true;
+}
+
+bool GameController::handleBallBallContact(Node *a, Node *b, PhysicsContact &contact)
+{
+    auto &score = _model.scoreManager();
+    auto cp = contact.getContactData()->points[0];
+    int points = SCORE_PER_HIT / 2 * std::max(1, score.combo());
+    score.addScore(SCORE_PER_HIT / 2);
+    VFXHelper::showFloatingScore(_scene, Vec2(cp.x, cp.y), points);
+    return true;
+}
 
 bool GameController::onContactBegin(PhysicsContact &contact)
 {
@@ -212,47 +253,24 @@ bool GameController::onContactBegin(PhysicsContact &contact)
     auto nodeB = contact.getShapeB()->getBody()->getNode();
     if (!nodeA || !nodeB) return true;
 
-    auto &score = _model.scoreManager();
-
     // 地板传感器
     bool aFloor = nodeA->getTag() == TAG_FLOOR;
     bool bFloor = nodeB->getTag() == TAG_FLOOR;
     if (aFloor || bFloor) {
+        auto floor = aFloor ? nodeA : nodeB;
         auto other = aFloor ? nodeB : nodeA;
-        if (other->getTag() == TAG_TARGET) {
-            auto cp = contact.getContactData()->points[0];
-            int points = SCORE_TARGET_FALL * std::max(1, score.combo());
-            score.addScore(SCORE_TARGET_FALL);
-            VFXHelper::showFloatingScore(_scene, Vec2(cp.x, cp.y), points);
-            VFXHelper::spawnHitParticle(_scene, Vec2(cp.x, cp.y));
-            removeTarget(other);
-        } else if (other->getTag() == TAG_BALL) {
-            removeBall(other);
-            score.resetCombo();
-        }
-        return false;
+        return handleFloorContact(floor, other, contact);
     }
 
     // 弹球击中目标球
     if ((nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_TARGET) ||
         (nodeA->getTag() == TAG_TARGET && nodeB->getTag() == TAG_BALL)) {
-        auto target = (nodeA->getTag() == TAG_TARGET) ? nodeA : nodeB;
-        auto cp = contact.getContactData()->points[0];
-        int points = SCORE_PER_HIT * std::max(1, score.combo());
-
-        score.addScore(SCORE_PER_HIT);
-        VFXHelper::showFloatingScore(_scene, Vec2(cp.x, cp.y), points);
-        VFXHelper::spawnHitParticle(_scene, Vec2(cp.x, cp.y));
-        return true;
+        return handleBallTargetContact(nodeA, nodeB, contact);
     }
 
     // 弹球互相碰撞
     if (nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_BALL) {
-        auto cp = contact.getContactData()->points[0];
-        int points = SCORE_PER_HIT / 2 * std::max(1, score.combo());
-        score.addScore(SCORE_PER_HIT / 2);
-        VFXHelper::showFloatingScore(_scene, Vec2(cp.x, cp.y), points);
-        return true;
+        return handleBallBallContact(nodeA, nodeB, contact);
     }
 
     return true;
