@@ -29,6 +29,7 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
     _model.scoreManager().setOnChange([this]() { refreshHUD(); });
 
     _hud->setOnBack([this]() {
+        LevelMenuScene::setInitialLevelIndex(_model.levelIndex());
         auto menuScene = LevelMenuScene::createScene();
         Director::getInstance()->replaceScene(TransitionFade::create(0.4f, menuScene, Color3B(10, 10, 30)));
     });
@@ -95,7 +96,8 @@ void GameController::onLevelCleared()
         _scene->runAction(Sequence::create(
             DelayTime::create(2.5f), CallFunc::create([this, nextIdx]() { loadLevel(nextIdx); }), nullptr));
     } else {
-        _scene->runAction(Sequence::create(DelayTime::create(3.0f), CallFunc::create([]() {
+        _scene->runAction(Sequence::create(DelayTime::create(3.0f), CallFunc::create([this]() {
+                                               LevelMenuScene::setInitialLevelIndex(_model.levelIndex());
                                                auto menuScene = LevelMenuScene::createScene();
                                                Director::getInstance()->replaceScene(TransitionFade::create(
                                                    0.5f, menuScene, Color3B(10, 10, 30)));

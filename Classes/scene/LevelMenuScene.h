@@ -9,12 +9,17 @@ class LevelMenuScene : public cocos2d::Scene
 public:
     static cocos2d::Scene *createScene();
 
+    /// 设置下次打开菜单时自动跳转到包含该关卡索引的页面。
+    static void setInitialLevelIndex(int levelIndex);
+
     bool init() override;
     void onEnter() override;
 
     CREATE_FUNC(LevelMenuScene);
 
 private:
+    static int s_initialPage;
+
     static constexpr int COLS = 4;
     static constexpr int ROWS = 4;
     static constexpr int PER_PAGE = COLS * ROWS;

@@ -7,6 +7,13 @@
 
 USING_NS_CC;
 
+int LevelMenuScene::s_initialPage = 0;
+
+void LevelMenuScene::setInitialLevelIndex(int levelIndex)
+{
+    s_initialPage = levelIndex / PER_PAGE;
+}
+
 Scene *LevelMenuScene::createScene()
 {
     return LevelMenuScene::create();
@@ -113,12 +120,14 @@ void LevelMenuScene::createLevelButtons(const Size &size)
     _pageContainer->setPosition(Vec2::ZERO);
     addChild(_pageContainer, 1);
 
-    showPage(0);
+    int startPage = std::max(0, std::min(s_initialPage, _totalPages - 1));
+    showPage(startPage);
 }
 
 void LevelMenuScene::showPage(int page)
 {
     _currentPage = page;
+    s_initialPage = page;
     _pageContainer->removeAllChildren();
 
     auto size = Director::getInstance()->getVisibleSize();
