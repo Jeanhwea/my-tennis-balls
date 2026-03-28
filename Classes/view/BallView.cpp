@@ -1,7 +1,7 @@
 #include "BallView.h"
 
 #include "GameConstants.h"
-#include "utils/Random.h"
+#include "common/Random.h"
 
 USING_NS_CC;
 

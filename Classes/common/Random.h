@@ -1,15 +1,16 @@
-#ifndef __UTILS_RANDOM_H__
-#define __UTILS_RANDOM_H__
+#ifndef __COMMON_RANDOM_H__
+#define __COMMON_RANDOM_H__
 
 #include <cstdlib>
 
-namespace utils {
+namespace common
+{
 
 inline float randomFloat(float min, float max)
 {
     return min + static_cast<float>(std::rand()) / RAND_MAX * (max - min);
 }
 
-}  // namespace utils
+}  // namespace common
 
-#endif  // __UTILS_RANDOM_H__
+#endif  // __COMMON_RANDOM_H__
