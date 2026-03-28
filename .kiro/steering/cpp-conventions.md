@@ -32,4 +32,3 @@ fileMatchPattern: "**/*.cpp,**/*.h,**/*.hpp,**/*.h.in"
 ## 构建
 
 - 新增源文件需更新 `CMakeLists.txt` 的 `GAME_SOURCE` 和 `GAME_HEADER`
-- 完成后运行 `fmt.bat` / `fmt.sh` 格式化，再运行 `bld.bat` / `bld.sh` 构建
