@@ -1,6 +1,6 @@
 #include "AppDelegate.h"
 
-#include "GameScene.h"
+#include "LevelMenuScene.h"
 #include "Version.h"
 
 // #define USE_AUDIO_ENGINE 1
@@ -111,8 +111,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     CCLOG("Application version: %s", VERSION_STRING);
     CCLOG("Version components: %d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
 
-    // 创建场景，这是一个自动释放对象
-    auto scene = GameScene::createScene();
+    // 创建关卡菜单场景
+    auto scene = LevelMenuScene::createScene();
 
     // 运行
     director->runWithScene(scene);

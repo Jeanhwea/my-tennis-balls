@@ -11,7 +11,7 @@
 class GameController
 {
 public:
-    void init(cocos2d::Scene *scene, const cocos2d::Size &visibleSize);
+    void init(cocos2d::Scene *scene, const cocos2d::Size &visibleSize, int startLevel = 0);
     void update(float dt);
 
 private:

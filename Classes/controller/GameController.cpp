@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include "GameConstants.h"
+#include "LevelMenuScene.h"
 #include "view/ArenaView.h"
 #include "view/BallView.h"
 #include "view/TrayView.h"
@@ -10,7 +11,7 @@
 
 USING_NS_CC;
 
-void GameController::init(Scene *scene, const Size &visibleSize)
+void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 {
     _scene = scene;
     _visibleSize = visibleSize;
@@ -30,8 +31,8 @@ void GameController::init(Scene *scene, const Size &visibleSize)
     setupInput();
     setupPhysics();
 
-    // 加载第一关
-    loadLevel(0);
+    // 加载指定关卡
+    loadLevel(startLevel);
 }
 
 void GameController::update(float dt)
@@ -108,8 +109,17 @@ void GameController::onLevelCleared()
         // 加载下一关前的延迟
         _scene->runAction(Sequence::create(
             DelayTime::create(2.5f), CallFunc::create([this, nextIdx]() { loadLevel(nextIdx); }), nullptr));
+    } else {
+        // 全部通关，返回关卡菜单
+        _scene->runAction(Sequence::create(
+            DelayTime::create(3.0f),
+            CallFunc::create([]() {
+                auto menuScene = LevelMenuScene::createScene();
+                Director::getInstance()->replaceScene(
+                    TransitionFade::create(0.5f, menuScene, Color3B(10, 10, 30)));
+            }),
+            nullptr));
     }
-    // 如果没有下一关，游戏停留在 "ALL CLEAR!" — 玩家获胜
 }
 
 // ── 连接 ──────────────────────────────────────────────────────

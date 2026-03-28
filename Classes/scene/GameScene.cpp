@@ -9,6 +9,13 @@ Scene *GameScene::createScene()
     return GameScene::create();
 }
 
+Scene *GameScene::createSceneWithLevel(int levelIndex)
+{
+    auto scene = GameScene::create();
+    scene->setStartLevel(levelIndex);
+    return scene;
+}
+
 bool GameScene::init()
 {
     if (!Scene::initWithPhysics()) {
@@ -33,7 +40,7 @@ void GameScene::onEnter()
     Scene::onEnter();
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
-    _controller.init(this, visibleSize);
+    _controller.init(this, visibleSize, _startLevel);
 }
 
 void GameScene::update(float dt)

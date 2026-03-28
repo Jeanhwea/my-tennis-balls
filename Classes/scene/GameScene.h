@@ -4,11 +4,12 @@
 #include "cocos2d.h"
 #include "controller/GameController.h"
 
-/// 轻量场景外壳 - 将所有逻辑委托给 GameController。
+/// 游戏场景 - 支持指定起始关卡
 class GameScene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene *createScene();
+    static cocos2d::Scene *createSceneWithLevel(int levelIndex);
 
     bool init() override;
     void onEnter() override;
@@ -16,8 +17,11 @@ public:
 
     CREATE_FUNC(GameScene);
 
+    void setStartLevel(int index) { _startLevel = index; }
+
 private:
     GameController _controller;
+    int _startLevel = 0;
 };
 
 #endif  // __GAME_SCENE_H__

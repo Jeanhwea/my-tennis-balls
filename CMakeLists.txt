@@ -48,6 +48,7 @@ endif()
 list(APPEND GAME_SOURCE
   Classes/AppDelegate.cpp
   Classes/GameScene.cpp
+  Classes/LevelMenuScene.cpp
   Classes/model/GameModel.cpp
   Classes/model/LevelData.cpp
   Classes/model/ScoreManager.cpp
@@ -64,6 +65,7 @@ list(APPEND GAME_HEADER
   Classes/AppDelegate.h
   Classes/GameConstants.h
   Classes/GameScene.h
+  Classes/LevelMenuScene.h
   Classes/model/GameModel.h
   Classes/model/LevelData.h
   Classes/model/ScoreManager.h
