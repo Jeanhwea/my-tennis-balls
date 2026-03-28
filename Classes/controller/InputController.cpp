@@ -19,9 +19,10 @@ void InputController::init(Node *target)
 bool InputController::onTouchBegan(Touch *touch, Event * /*event*/)
 {
     auto pos = touch->getLocation();
+    // 忽略发射区域外的触摸
     if (pos.x < _launchZoneMinX) {
         _isDragging = false;
-        return false;  // 忽略发射区域外的触摸
+        return false;
     }
     _isDragging = true;
     _dragStart = pos;

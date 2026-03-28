@@ -25,14 +25,14 @@ constexpr int CATEGORY_ALL = 0xFFFFFFFF;
 constexpr float GRAVITY_Y = -980.0f;
 
 // 发射球
-constexpr float BALL_SCALE = 0.20f;
+constexpr float BALL_SCALE = 0.22f;
 constexpr float BALL_SPRITE_PADDING = 18.0f;
 constexpr float BALL_DENSITY = 1.0f;
 constexpr float BALL_RESTITUTION = 0.8f;
 constexpr float BALL_FRICTION = 0.3f;
 
 // 发射参数
-constexpr float LAUNCH_FORCE_SCALE = 3.5f;
+constexpr float LAUNCH_FORCE_SCALE = 5.5f;
 constexpr float MAX_LAUNCH_SPEED = 1500.0f;
 constexpr float MIN_DRAG_DISTANCE = 20.0f;
 

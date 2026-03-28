@@ -41,26 +41,22 @@ AppDelegate::~AppDelegate()
 #endif
 }
 
-// 如需不同的上下文，请修改 glContextAttrs 的值
-// 这会影响所有平台
+// 设置 GL 上下文属性
 void AppDelegate::initGLContextAttrs()
 {
-    // 设置 OpenGL 上下文属性：红、绿、蓝、透明度、深度、模板、多重采样数
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
 
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
-// 如需使用包管理器安装更多包，
-// 请勿修改或删除此函数
+// 包管理器注册（勿删除）
 static int register_all_packages()
 {
-    return 0;  // 包管理器标志
+    return 0;
 }
 
 bool AppDelegate::applicationDidFinishLaunching()
 {
-    // 初始化导演
     auto director = Director::getInstance();
     auto glview = director->getOpenGLView();
     if (!glview) {
@@ -75,53 +71,40 @@ bool AppDelegate::applicationDidFinishLaunching()
     }
 
 #if IS_DEBUG
-    // 开启 FPS 显示
     director->setDisplayStats(true);
 #else
-    // 关闭 FPS 显示
     director->setDisplayStats(false);
 #endif
 
-    // 设置帧率，不调用此方法时默认值为 1.0/60
     director->setAnimationInterval(1.0f / 60);
 
-    // 设置设计分辨率
-    // FIXED_HEIGHT 保证纵向完整显示，横向自适应不同宽高比（16:9、18:9、21:9 等）
+    // FIXED_HEIGHT: 纵向完整显示，横向自适应（16:9、18:9、21:9 等）
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
                                     ResolutionPolicy::FIXED_HEIGHT);
     auto frameSize = glview->getFrameSize();
-    // 如果帧高度大于中等尺寸的高度
     if (frameSize.height > mediumResolutionSize.height) {
         director->setContentScaleFactor(MIN(largeResolutionSize.height / designResolutionSize.height,
                                             largeResolutionSize.width / designResolutionSize.width));
-    }
-    // 如果帧高度大于小尺寸的高度
-    else if (frameSize.height > smallResolutionSize.height) {
+    } else if (frameSize.height > smallResolutionSize.height) {
         director->setContentScaleFactor(MIN(mediumResolutionSize.height / designResolutionSize.height,
                                             mediumResolutionSize.width / designResolutionSize.width));
-    }
-    // 如果帧高度小于中等尺寸的高度
-    else {
+    } else {
         director->setContentScaleFactor(MIN(smallResolutionSize.height / designResolutionSize.height,
                                             smallResolutionSize.width / designResolutionSize.width));
     }
 
     register_all_packages();
 
-    // 记录应用版本
     CCLOG("Application version: %s", VERSION_STRING);
     CCLOG("Version components: %d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
 
-    // 创建关卡菜单场景
     auto scene = LevelMenuScene::createScene();
-
-    // 运行
     director->runWithScene(scene);
 
     return true;
 }
 
-// 当应用进入非活跃状态时调用此函数。注意，接听电话时也会触发。
+// 进入后台
 void AppDelegate::applicationDidEnterBackground()
 {
     Director::getInstance()->stopAnimation();
@@ -134,7 +117,7 @@ void AppDelegate::applicationDidEnterBackground()
 #endif
 }
 
-// 当应用重新变为活跃状态时调用此函数
+// 回到前台
 void AppDelegate::applicationWillEnterForeground()
 {
     Director::getInstance()->startAnimation();
