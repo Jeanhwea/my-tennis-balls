@@ -91,7 +91,7 @@ void HUD::createTargetLabel(const Size &visibleSize)
 {
     _targetLabel = Label::createWithTTF("Targets: 0", FONT_UI, FONT_SZ - 2);
     _targetLabel->setAnchorPoint(Vec2(0, 1));
-    _targetLabel->setPosition(Vec2(MARGIN, visibleSize.height - MARGIN - 24));
+    _targetLabel->setPosition(Vec2(MARGIN + 160, visibleSize.height - MARGIN + 4));
     _targetLabel->setTextColor(Color4B(255, 200, 80, 230));
     _targetLabel->enableShadow(Color4B(0, 0, 0, 120), Size(1, -1));
     addChild(_targetLabel);
