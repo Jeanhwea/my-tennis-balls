@@ -22,13 +22,28 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
     float trayY = visibleSize.height * tray.y;
     float trayW = visibleSize.width * tray.width;
 
-    // Visual shelf
+    // Visual shelf with 3D effect
     auto draw = DrawNode::create();
-    draw->drawSolidRect(Vec2(trayX - trayW / 2, trayY - TRAY_THICKNESS / 2),
-                        Vec2(trayX + trayW / 2, trayY + TRAY_THICKNESS / 2),
-                        Color4F(0.6f, 0.6f, 0.7f, 0.9f));
-    draw->drawLine(Vec2(trayX - trayW / 2, trayY + TRAY_THICKNESS / 2),
-                   Vec2(trayX + trayW / 2, trayY + TRAY_THICKNESS / 2), Color4F::WHITE);
+    float halfW = trayW / 2;
+    float halfH = TRAY_THICKNESS / 2;
+
+    // Shadow
+    draw->drawSolidRect(Vec2(trayX - halfW + 2, trayY - halfH - 2),
+                        Vec2(trayX + halfW + 2, trayY + halfH - 2), Color4F(0.0f, 0.0f, 0.0f, 0.3f));
+    // Main body
+    draw->drawSolidRect(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX + halfW, trayY + halfH),
+                        Color4F(0.45f, 0.48f, 0.55f, 0.95f));
+    // Top highlight
+    draw->drawSolidRect(Vec2(trayX - halfW, trayY + halfH - 2), Vec2(trayX + halfW, trayY + halfH),
+                        Color4F(0.7f, 0.75f, 0.85f, 0.9f));
+    // Bottom edge
+    draw->drawLine(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX + halfW, trayY - halfH),
+                   Color4F(0.3f, 0.32f, 0.38f, 0.8f));
+    // Left/right caps
+    draw->drawLine(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX - halfW, trayY + halfH),
+                   Color4F(0.55f, 0.58f, 0.65f, 0.6f));
+    draw->drawLine(Vec2(trayX + halfW, trayY - halfH), Vec2(trayX + halfW, trayY + halfH),
+                   Color4F(0.35f, 0.38f, 0.42f, 0.6f));
     draw->setTag(TAG_TRAY);
     parent->addChild(draw, 2);
 

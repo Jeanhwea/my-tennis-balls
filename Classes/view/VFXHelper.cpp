@@ -47,13 +47,14 @@ void VFXHelper::showFloatingScore(Node *parent, const Vec2 &position, int points
 {
     auto label = Label::createWithSystemFont(StringUtils::format("+%d", points), "Arial", FLOAT_SCORE_FONT);
     label->setPosition(position);
-    label->setTextColor(Color4B::YELLOW);
+    label->setTextColor(Color4B(255, 240, 100, 255));
+    label->enableShadow(Color4B(200, 150, 0, 80), Size(1, -1));
     parent->addChild(label, 20);
 
-    label->runAction(
-        Sequence::create(Spawn::create(MoveBy::create(FLOAT_SCORE_DUR, Vec2(0, FLOAT_SCORE_RISE)),
-                                       FadeOut::create(FLOAT_SCORE_DUR), nullptr),
-                         RemoveSelf::create(), nullptr));
+    label->runAction(Sequence::create(
+        Spawn::create(MoveBy::create(FLOAT_SCORE_DUR, Vec2(0, FLOAT_SCORE_RISE)),
+                      FadeOut::create(FLOAT_SCORE_DUR), ScaleTo::create(FLOAT_SCORE_DUR, 0.6f), nullptr),
+        RemoveSelf::create(), nullptr));
 }
 
 void VFXHelper::flashNode(Node *node)
