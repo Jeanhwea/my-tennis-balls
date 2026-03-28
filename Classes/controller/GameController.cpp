@@ -3,10 +3,10 @@
 #include <algorithm>
 
 #include "GameConstants.h"
-#include "View/ArenaView.h"
-#include "View/BallView.h"
-#include "View/ObstacleView.h"
-#include "View/VFXHelper.h"
+#include "view/ArenaView.h"
+#include "view/BallView.h"
+#include "view/ObstacleView.h"
+#include "view/VFXHelper.h"
 
 USING_NS_CC;
 

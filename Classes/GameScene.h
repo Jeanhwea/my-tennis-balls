@@ -1,8 +1,8 @@
 #ifndef __GAME_SCENE_H__
 #define __GAME_SCENE_H__
 
-#include "Controller/GameController.h"
 #include "cocos2d.h"
+#include "controller/GameController.h"
 
 /// Thin scene shell — delegates all logic to GameController.
 class GameScene : public cocos2d::Scene

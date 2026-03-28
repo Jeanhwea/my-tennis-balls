@@ -48,30 +48,30 @@ endif()
 list(APPEND GAME_SOURCE
   Classes/AppDelegate.cpp
   Classes/GameScene.cpp
-  Classes/Model/ScoreManager.cpp
-  Classes/View/AimLineView.cpp
-  Classes/View/ArenaView.cpp
-  Classes/View/BallView.cpp
-  Classes/View/HUD.cpp
-  Classes/View/ObstacleView.cpp
-  Classes/View/VFXHelper.cpp
-  Classes/Controller/InputController.cpp
-  Classes/Controller/GameController.cpp
+  Classes/model/ScoreManager.cpp
+  Classes/view/AimLineView.cpp
+  Classes/view/ArenaView.cpp
+  Classes/view/BallView.cpp
+  Classes/view/HUD.cpp
+  Classes/view/ObstacleView.cpp
+  Classes/view/VFXHelper.cpp
+  Classes/controller/InputController.cpp
+  Classes/controller/GameController.cpp
 )
 list(APPEND GAME_HEADER
   Classes/AppDelegate.h
   Classes/GameConstants.h
   Classes/GameScene.h
-  Classes/Model/GameModel.h
-  Classes/Model/ScoreManager.h
-  Classes/View/AimLineView.h
-  Classes/View/ArenaView.h
-  Classes/View/BallView.h
-  Classes/View/HUD.h
-  Classes/View/ObstacleView.h
-  Classes/View/VFXHelper.h
-  Classes/Controller/InputController.h
-  Classes/Controller/GameController.h
+  Classes/model/GameModel.h
+  Classes/model/ScoreManager.h
+  Classes/view/AimLineView.h
+  Classes/view/ArenaView.h
+  Classes/view/BallView.h
+  Classes/view/HUD.h
+  Classes/view/ObstacleView.h
+  Classes/view/VFXHelper.h
+  Classes/controller/InputController.h
+  Classes/controller/GameController.h
 )
 
 if(ANDROID)
