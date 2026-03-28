@@ -4,7 +4,7 @@ set(APP_NAME my-tennis-balls)
 
 project(${APP_NAME}
   VERSION 0.7.6
-  LANGUAGES CXX
+  LANGUAGES C CXX
 )
 
 # set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
