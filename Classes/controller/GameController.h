@@ -33,7 +33,9 @@ private:
     // Ball management
     void spawnBall(const cocos2d::Vec2 &position, const cocos2d::Vec2 &velocity);
     void removeBall(cocos2d::Node *ball);
+    void removeTarget(cocos2d::Node *target);
     int countBalls() const;
+    int countTargets() const;
 
     // Physics
     bool onContactBegin(cocos2d::PhysicsContact &contact);

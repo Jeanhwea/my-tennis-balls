@@ -12,7 +12,9 @@ public:
     void updateScore(int score);
     void updateCombo(int combo);
     void updateBallCount(int current, int max);
+    void updateTargets(int remaining);
     void hideHint();
+    void showCleared();
 
 private:
     bool initWithSize(const cocos2d::Size &visibleSize);
@@ -20,6 +22,7 @@ private:
     cocos2d::Label *_scoreLabel = nullptr;
     cocos2d::Label *_comboLabel = nullptr;
     cocos2d::Label *_ballCountLabel = nullptr;
+    cocos2d::Label *_targetLabel = nullptr;
     cocos2d::Label *_hintLabel = nullptr;
 
     static constexpr float MARGIN = 20.0f;

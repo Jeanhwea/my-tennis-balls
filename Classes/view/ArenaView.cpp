@@ -42,7 +42,7 @@ void ArenaView::addFloorSensor(Node *parent, const Size &visibleSize)
     body->setDynamic(false);
     body->setCategoryBitmask(CATEGORY_FLOOR);
     body->setCollisionBitmask(0);
-    body->setContactTestBitmask(CATEGORY_BALL);
+    body->setContactTestBitmask(CATEGORY_BALL | CATEGORY_TARGET);
     floor->setPhysicsBody(body);
     parent->addChild(floor);
 }
