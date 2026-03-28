@@ -39,7 +39,6 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     // 运动拖尾
     auto trail = MotionStreak::create(0.3f, 3.0f, radius * 1.5f, Color3B(100, 180, 255), "ball.png");
     trail->setName("trail_" + ball->getName());
-    trail->setOpacity(80);
     trail->setTag(TAG_BALL);
     parent->addChild(trail, 4);
 
