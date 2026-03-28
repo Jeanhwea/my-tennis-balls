@@ -81,7 +81,6 @@ void LevelMenuScene::drawBackground(const Size &size)
     corners->drawSolidRect(Vec2(w - pad - cThick, pad), Vec2(w - pad, pad + cLen), cColor);
     addChild(corners, 0);
 
-    CCLOG("[LevelMenuScene] drawBackground: ambient particles");
     auto ambient = AmbientParticles::create(size);
     addChild(ambient, 0);
     ambient->start();

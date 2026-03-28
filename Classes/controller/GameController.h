@@ -26,19 +26,19 @@ private:
     int _ballCounter = 0;
     bool _transitioning = false;
 
-    // 关卡管理
+    // 关卡
     void loadLevel(int index);
     void clearLevelNodes();
     void onLevelCleared();
     void onLevelFailed();
     void checkFailCondition();
 
-    // 连接
+    // 输入与物理
     void setupInput();
     void setupPhysics();
     void refreshHUD();
 
-    // 球管理
+    // 球
     void spawnBall(const cocos2d::Vec2 &position, const cocos2d::Vec2 &velocity);
     void removeBall(cocos2d::Node *ball);
     void removeTarget(cocos2d::Node *target);
@@ -46,7 +46,7 @@ private:
     int countTargets() const;
     void collectOutOfBounds();
 
-    // 物理
+    // 碰撞
     bool onContactBegin(cocos2d::PhysicsContact &contact);
     bool handleFloorContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);
     bool handleBallTargetContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);

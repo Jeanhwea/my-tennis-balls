@@ -38,7 +38,7 @@ void HUD::createTopBar(const Size &visibleSize)
     float barBot = visibleSize.height - 50;
     float barRight = visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO);
 
-    // 渐变半透明背景
+    // 渐变背景
     constexpr int strips = 5;
     for (int i = 0; i < strips; ++i) {
         float t0 = static_cast<float>(i) / strips;
@@ -49,7 +49,7 @@ void HUD::createTopBar(const Size &visibleSize)
                               Color4F(0.02f, 0.03f, 0.08f, alpha));
     }
 
-    // 底部高光线
+    // 底部高光
     topBar->drawSolidRect(Vec2(0, barBot), Vec2(barRight, barBot + 1), Color4F(0.3f, 0.5f, 0.9f, 0.35f));
     topBar->drawSolidRect(Vec2(0, barBot + 1), Vec2(barRight, barBot + 2),
                           Color4F(0.2f, 0.35f, 0.7f, 0.15f));
@@ -136,7 +136,6 @@ void HUD::createBackButton(const Size &visibleSize)
                           Vec2(BTN_W / 2, -BTN_H / 2 + BTN_H * t1),
                           Color4F(bright, bright + 0.04f, bright + 0.18f, 0.9f));
     }
-    // 顶部高光
     bg->drawSolidRect(Vec2(-BTN_W / 2, BTN_H / 2 - 1), Vec2(BTN_W / 2, BTN_H / 2),
                       Color4F(0.4f, 0.6f, 1.0f, 0.3f));
     bg->drawRect(Vec2(-BTN_W / 2, -BTN_H / 2), Vec2(BTN_W / 2, BTN_H / 2), Color4F(0.3f, 0.5f, 0.9f, 0.5f));
@@ -208,7 +207,7 @@ void HUD::showCleared()
     float cx = parentSize.width * 0.35f;
     float cy = parentSize.height / 2;
 
-    // 背景闪光
+    // 闪光
     auto flash = DrawNode::create();
     flash->drawSolidCircle(Vec2(cx, cy), 120.0f, 0, 24, Color4F(0.4f, 0.6f, 1.0f, 0.15f));
     flash->setScale(0);

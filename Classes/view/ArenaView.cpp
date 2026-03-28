@@ -32,7 +32,7 @@ void ArenaView::addEdgeWalls(Node *parent, const Size &visibleSize)
     edgeNode->setPhysicsBody(body);
     parent->addChild(edgeNode);
 
-    // 视觉墙壁边框（微光线条）
+    // 墙壁微光边框
     auto wallDraw = DrawNode::create();
     Color4F wallColor(0.2f, 0.4f, 0.7f, 0.4f);
     wallDraw->drawLine(Vec2(0, 0), Vec2(0, h), wallColor);
@@ -64,7 +64,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     float h = visibleSize.height;
     float launchLeft = w * (1.0f - LAUNCH_ZONE_RATIO);
 
-    // 背景渐变（深蓝到深紫，从下到上）
+    // 背景渐变
     auto bg = DrawNode::create();
     Color4F bgBot(0.04f, 0.04f, 0.10f, 1.0f);
     Color4F bgTop(0.08f, 0.06f, 0.16f, 1.0f);
@@ -78,13 +78,12 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
                    bgBot.b + (bgTop.b - bgBot.b) * t0, 1.0f);
         Color4F c1(bgBot.r + (bgTop.r - bgBot.r) * t1, bgBot.g + (bgTop.g - bgBot.g) * t1,
                    bgBot.b + (bgTop.b - bgBot.b) * t1, 1.0f);
-        // 使用条带的平均颜色
         Color4F avg((c0.r + c1.r) / 2, (c0.g + c1.g) / 2, (c0.b + c1.b) / 2, 1.0f);
         bg->drawSolidRect(Vec2(0, y0), Vec2(w, y1), avg);
     }
     parent->addChild(bg, -10);
 
-    // 微妙的网格图案
+    // 网格图案
     auto grid = DrawNode::create();
     Color4F gridColor(0.15f, 0.18f, 0.28f, 0.15f);
     float gridSpacing = 60.0f;
@@ -96,10 +95,9 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     }
     parent->addChild(grid, -9);
 
-    // 发射区域
+    // 发射区域渐变 + 分隔线
     auto zone = DrawNode::create();
 
-    // 发射区域渐变背景
     int zoneStrips = 8;
     for (int i = 0; i < zoneStrips; ++i) {
         float t0 = static_cast<float>(i) / zoneStrips;
@@ -110,7 +108,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
         zone->drawSolidRect(Vec2(x0, 0), Vec2(x1, h), Color4F(0.15f, 0.25f, 0.5f, alpha));
     }
 
-    // 带发光效果的分隔线
+    // 分隔线（带发光）
     for (int i = 3; i >= 0; --i) {
         float offset = static_cast<float>(i) * 2.0f;
         float alpha = 0.1f + 0.15f * (3 - i);
@@ -121,42 +119,36 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
 
     parent->addChild(zone, -8);
 
-    // 游戏区域的角落装饰
+    // 角落装饰
     auto corners = DrawNode::create();
     Color4F cornerColor(0.3f, 0.5f, 0.9f, 0.35f);
     float cLen = 30.0f;
     float cThick = 2.0f;
     float pad = 4.0f;
 
-    // 左上角
     corners->drawSolidRect(Vec2(pad, h - pad - cThick), Vec2(pad + cLen, h - pad), cornerColor);
     corners->drawSolidRect(Vec2(pad, h - pad - cLen), Vec2(pad + cThick, h - pad), cornerColor);
-    // 右上角（游戏区域边界）
     corners->drawSolidRect(Vec2(launchLeft - pad - cLen, h - pad - cThick), Vec2(launchLeft - pad, h - pad),
                            cornerColor);
     corners->drawSolidRect(Vec2(launchLeft - pad - cThick, h - pad - cLen), Vec2(launchLeft - pad, h - pad),
                            cornerColor);
-    // 左下角
     corners->drawSolidRect(Vec2(pad, pad), Vec2(pad + cLen, pad + cThick), cornerColor);
     corners->drawSolidRect(Vec2(pad, pad), Vec2(pad + cThick, pad + cLen), cornerColor);
-    // 右下角
     corners->drawSolidRect(Vec2(launchLeft - pad - cLen, pad), Vec2(launchLeft - pad, pad + cThick),
                            cornerColor);
     corners->drawSolidRect(Vec2(launchLeft - pad - cThick, pad), Vec2(launchLeft - pad, pad + cLen),
                            cornerColor);
     parent->addChild(corners, -7);
 
-    // 暗角叠加（边缘变暗）
+    // 暗角
     auto vignette = DrawNode::create();
     float vSize = 80.0f;
-    // 底部边缘
     for (int i = 0; i < 8; ++i) {
         float t = static_cast<float>(i) / 8;
         float alpha = 0.15f * (1.0f - t);
         vignette->drawSolidRect(Vec2(0, vSize * t), Vec2(launchLeft, vSize * (t + 1.0f / 8)),
                                 Color4F(0, 0, 0, alpha));
     }
-    // 顶部边缘
     for (int i = 0; i < 8; ++i) {
         float t = static_cast<float>(i) / 8;
         float alpha = 0.15f * t;
@@ -173,7 +165,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     label->setTextColor(Color4B(100, 160, 255, 60));
     parent->addChild(label, 0);
 
-    // 发射区域的准星装饰
+    // 准星装饰
     auto reticle = DrawNode::create();
     float rcx = launchLeft + (w - launchLeft) / 2;
     float rcy = h * 0.3f;
@@ -184,7 +176,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     reticle->drawCircle(Vec2(rcx, rcy), rSize * 0.8f, 0, 24, false, retColor);
     parent->addChild(reticle, 0);
 
-    // 浮动光点粒子
+    // 浮动光点
     auto ambient = AmbientParticles::create(Size(launchLeft, h));
     parent->addChild(ambient, -5);
     ambient->start();

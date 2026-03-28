@@ -22,13 +22,12 @@ constexpr float FLOAT_SCORE_DUR = 0.8f;
 
 void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
 {
-    // 粒子爆发（带拖尾感的不同大小）
+    // 粒子爆发
     for (int i = 0; i < PARTICLE_COUNT; ++i) {
         auto dot = DrawNode::create();
         float size = randomFloat(PARTICLE_SIZE * 0.5f, PARTICLE_SIZE * 1.2f);
         Color4F c(randomFloat(0.8f, 1.0f), randomFloat(0.7f, 1.0f), randomFloat(0.2f, 0.5f), 1.0f);
         dot->drawSolidCircle(Vec2::ZERO, size, 0, 8, c);
-        // 粒子内核高光
         dot->drawSolidCircle(Vec2::ZERO, size * 0.4f, 0, 6, Color4F(1, 1, 1, 0.6f));
         dot->setPosition(position);
         parent->addChild(dot, 15);
@@ -70,7 +69,7 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
         Sequence::create(Spawn::create(ScaleTo::create(0.12f, 0.1f), FadeOut::create(0.12f), nullptr),
                          RemoveSelf::create(), nullptr));
 
-    // 微震动（screen shake）
+    // 微震动
     if (parent->getNumberOfRunningActions() < 3) {
         parent->runAction(
             Sequence::create(MoveBy::create(0.02f, Vec2(randomFloat(-2, 2), randomFloat(-2, 2))),

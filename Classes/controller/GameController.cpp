@@ -49,7 +49,7 @@ void GameController::update(float dt)
     }
 }
 
-// 关卡管理
+// ── 关卡管理 ──────────────────────────────────────────
 
 void GameController::loadLevel(int index)
 {
@@ -128,7 +128,7 @@ void GameController::checkFailCondition()
     }
 }
 
-// 输入与物理连接
+// ── 输入与物理 ────────────────────────────────────────
 
 void GameController::setupInput()
 {
@@ -166,7 +166,7 @@ void GameController::refreshHUD()
     _hud->updateTargets(_model.targetsRemaining());
 }
 
-// 球管理
+// ── 球管理 ────────────────────────────────────────────
 
 int GameController::countBalls() const
 {
@@ -237,12 +237,11 @@ void GameController::collectOutOfBounds()
     for (auto ball : lostBalls) removeBall(ball);
 }
 
-// 物理回调
+// ── 物理回调 ──────────────────────────────────────────
 
 namespace
 {
 
-/// 计算 combo 加成后的分数并播放 VFX。
 void applyScoreVFX(Node *parent, ScoreManager &score, int basePoints, const Vec2 &pos)
 {
     int points = basePoints * std::max(1, score.combo());

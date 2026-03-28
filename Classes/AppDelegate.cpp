@@ -3,13 +3,6 @@
 #include "Version.h"
 #include "scene/LevelMenuScene.h"
 
-// #define USE_AUDIO_ENGINE 1
-// #define USE_SIMPLE_AUDIO_ENGINE 1
-
-#if USE_AUDIO_ENGINE && USE_SIMPLE_AUDIO_ENGINE
-#error "Don't use AudioEngine and SimpleAudioEngine at the same time. Please just select one in your game!"
-#endif
-
 #if USE_AUDIO_ENGINE
 #include "audio/include/AudioEngine.h"
 using namespace cocos2d::experimental;
@@ -24,10 +17,11 @@ USING_NS_CC;
 
 namespace
 {
-const cocos2d::Size designResolutionSize(960, 540);    // 16:9 HD 基准
-const cocos2d::Size smallResolutionSize(480, 320);     // HVGA (ldpi/mdpi)
-const cocos2d::Size mediumResolutionSize(1920, 1080);  // FHD (xhdpi)
-const cocos2d::Size largeResolutionSize(2560, 1440);   // QHD (xxhdpi/xxxhdpi)
+// 分辨率阶梯：设计基准 → 低端 → 全高清 → 2K
+const cocos2d::Size designResolutionSize(960, 540);
+const cocos2d::Size smallResolutionSize(480, 320);
+const cocos2d::Size mediumResolutionSize(1920, 1080);
+const cocos2d::Size largeResolutionSize(2560, 1440);
 }  // namespace
 
 AppDelegate::AppDelegate() {}
@@ -41,7 +35,6 @@ AppDelegate::~AppDelegate()
 #endif
 }
 
-// 设置 GL 上下文属性
 void AppDelegate::initGLContextAttrs()
 {
     GLContextAttrs glContextAttrs = {8, 8, 8, 8, 24, 8, 0};
@@ -49,7 +42,6 @@ void AppDelegate::initGLContextAttrs()
     GLView::setGLContextAttrs(glContextAttrs);
 }
 
-// 包管理器注册（勿删除）
 static int register_all_packages()
 {
     return 0;
@@ -78,7 +70,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     director->setAnimationInterval(1.0f / 60);
 
-    // FIXED_HEIGHT: 纵向完整显示，横向自适应（16:9、18:9、21:9 等）
+    // FIXED_HEIGHT：纵向完整显示，横向自适应各种宽高比
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
                                     ResolutionPolicy::FIXED_HEIGHT);
     auto frameSize = glview->getFrameSize();
@@ -104,7 +96,6 @@ bool AppDelegate::applicationDidFinishLaunching()
     return true;
 }
 
-// 进入后台
 void AppDelegate::applicationDidEnterBackground()
 {
     Director::getInstance()->stopAnimation();
@@ -117,7 +108,6 @@ void AppDelegate::applicationDidEnterBackground()
 #endif
 }
 
-// 回到前台
 void AppDelegate::applicationWillEnterForeground()
 {
     Director::getInstance()->startAnimation();
