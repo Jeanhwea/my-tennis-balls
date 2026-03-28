@@ -26,6 +26,7 @@ bool HUD::initWithSize(const Size &visibleSize)
     createTargetLabel(visibleSize);
     createLevelLabel(visibleSize);
     createHintLabel(visibleSize);
+    createBackButton(visibleSize);
 
     return true;
 }
@@ -98,6 +99,38 @@ void HUD::createHintLabel(const Size &visibleSize)
     _hintLabel->setPosition(Vec2(levelX, visibleSize.height - MARGIN * 3));
     _hintLabel->setTextColor(Color4B(200, 220, 255, 140));
     addChild(_hintLabel);
+}
+
+void HUD::createBackButton(const Size &visibleSize)
+{
+    static constexpr float BTN_W = 80.0f;
+    static constexpr float BTN_H = 32.0f;
+
+    float x = visibleSize.width - MARGIN - BTN_W / 2;
+    float y = visibleSize.height - MARGIN - BTN_H / 2;
+
+    auto bg = DrawNode::create();
+    bg->drawSolidRect(Vec2(-BTN_W / 2, -BTN_H / 2), Vec2(BTN_W / 2, BTN_H / 2),
+                      Color4F(0.15f, 0.2f, 0.35f, 0.85f));
+    bg->drawRect(Vec2(-BTN_W / 2, -BTN_H / 2), Vec2(BTN_W / 2, BTN_H / 2), Color4F(0.4f, 0.6f, 1.0f, 0.5f));
+    bg->setPosition(Vec2(x, y));
+    addChild(bg, 1);
+
+    auto label = Label::createWithTTF("< BACK", FONT_UI, 16);
+    label->setPosition(Vec2(x, y));
+    label->setTextColor(Color4B(180, 210, 255, 220));
+    addChild(label, 2);
+
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->setSwallowTouches(true);
+    listener->onTouchBegan = [x, y](Touch *touch, Event *) {
+        Rect rect(x - BTN_W / 2, y - BTN_H / 2, BTN_W, BTN_H);
+        return rect.containsPoint(touch->getLocation());
+    };
+    listener->onTouchEnded = [this](Touch *, Event *) {
+        if (_onBack) _onBack();
+    };
+    getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, bg);
 }
 
 void HUD::updateScore(int score)

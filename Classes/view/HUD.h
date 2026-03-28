@@ -31,6 +31,7 @@ private:
     void createTargetLabel(const cocos2d::Size &size);
     void createLevelLabel(const cocos2d::Size &size);
     void createHintLabel(const cocos2d::Size &size);
+    void createBackButton(const cocos2d::Size &size);
 
     cocos2d::Label *_scoreLabel = nullptr;
     cocos2d::Label *_comboLabel = nullptr;

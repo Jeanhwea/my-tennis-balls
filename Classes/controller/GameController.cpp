@@ -28,6 +28,11 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 
     _model.scoreManager().setOnChange([this]() { refreshHUD(); });
 
+    _hud->setOnBack([this]() {
+        auto menuScene = LevelMenuScene::createScene();
+        Director::getInstance()->replaceScene(TransitionFade::create(0.4f, menuScene, Color3B(10, 10, 30)));
+    });
+
     setupInput();
     setupPhysics();
 
