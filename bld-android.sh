@@ -44,6 +44,9 @@ GIT_DESC=$(git describe --tags --always --dirty="+dev" 2>/dev/null || echo "unkn
 DIST_DIR="dist"
 mkdir -p "$DIST_DIR"
 APK_SRC="$PROJ_DIR/app/build/outputs/apk/$BUILD_TYPE/${APP_NAME}-${BUILD_TYPE}.apk"
+if [[ ! -f "$APK_SRC" ]]; then
+    APK_SRC="$PROJ_DIR/app/build/outputs/apk/$BUILD_TYPE/${APP_NAME}-${BUILD_TYPE}-unsigned.apk"
+fi
 APK_DEST="$DIST_DIR/${APP_NAME}-${GIT_DESC}-${BUILD_TYPE}.apk"
 if [[ -f "$APK_SRC" ]]; then
     cp "$APK_SRC" "$APK_DEST"

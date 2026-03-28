@@ -46,6 +46,8 @@ android {
         }
     }
 
+    project.archivesBaseName = "my-tennis-balls"
+
     sourceSets.main {
         java.srcDir "src"
         res.srcDir "res"
