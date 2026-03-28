@@ -1,7 +1,7 @@
 #include "LevelMenuScene.h"
 
-#include "common/GameConstants.h"
 #include "GameScene.h"
+#include "common/GameConstants.h"
 #include "model/LevelData.h"
 
 USING_NS_CC;
@@ -94,8 +94,7 @@ void LevelMenuScene::onEnter()
         listener->onTouchEnded = [levelIdx, btnBg](Touch *, Event *) {
             // 按钮点击动画
             btnBg->runAction(Sequence::create(
-                ScaleTo::create(0.05f, 0.95f), ScaleTo::create(0.05f, 1.0f),
-                CallFunc::create([levelIdx]() {
+                ScaleTo::create(0.05f, 0.95f), ScaleTo::create(0.05f, 1.0f), CallFunc::create([levelIdx]() {
                     auto scene = GameScene::createSceneWithLevel(levelIdx);
                     Director::getInstance()->replaceScene(
                         TransitionFade::create(0.3f, scene, Color3B(10, 10, 30)));

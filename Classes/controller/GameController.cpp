@@ -2,8 +2,8 @@
 
 #include <algorithm>
 
+#include "scene/LevelMenuScene.h"
 #include "common/GameConstants.h"
-#include "LevelMenuScene.h"
 #include "view/ArenaView.h"
 #include "view/BallView.h"
 #include "view/TrayView.h"
@@ -111,14 +111,12 @@ void GameController::onLevelCleared()
             DelayTime::create(2.5f), CallFunc::create([this, nextIdx]() { loadLevel(nextIdx); }), nullptr));
     } else {
         // 全部通关，返回关卡菜单
-        _scene->runAction(Sequence::create(
-            DelayTime::create(3.0f),
-            CallFunc::create([]() {
-                auto menuScene = LevelMenuScene::createScene();
-                Director::getInstance()->replaceScene(
-                    TransitionFade::create(0.5f, menuScene, Color3B(10, 10, 30)));
-            }),
-            nullptr));
+        _scene->runAction(Sequence::create(DelayTime::create(3.0f), CallFunc::create([]() {
+                                               auto menuScene = LevelMenuScene::createScene();
+                                               Director::getInstance()->replaceScene(TransitionFade::create(
+                                                   0.5f, menuScene, Color3B(10, 10, 30)));
+                                           }),
+                                           nullptr));
     }
 }
 
