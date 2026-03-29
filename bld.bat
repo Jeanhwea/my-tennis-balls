@@ -7,11 +7,9 @@ set "ARCH=win32"
 
 rem Parse arguments
 set "BUILD_TYPE=Debug"
-set "CMAKE_DEBUG_FLAG=-DIS_DEBUG=ON"
 
 if /i "%~1"=="release" (
     set "BUILD_TYPE=Release"
-    set "CMAKE_DEBUG_FLAG=-DIS_DEBUG=OFF"
 )
 if /i "%~1"=="clean" (
     echo [*] Cleaning build directory...
@@ -33,7 +31,7 @@ echo.
 
 rem Configure
 echo [*] Configuring (%BUILD_TYPE%)...
-cmake -B "%BUILD_DIR%" -G"%GENERATOR%" -A %ARCH% --log-level=STATUS %CMAKE_DEBUG_FLAG%
+cmake -B "%BUILD_DIR%" -G"%GENERATOR%" -A %ARCH% --log-level=STATUS
 if %errorlevel% neq 0 (
     echo [ERROR] CMake configure failed.
     exit /b 1

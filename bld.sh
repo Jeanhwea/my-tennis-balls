@@ -5,12 +5,10 @@ BUILD_DIR="build"
 
 # Parse arguments
 BUILD_TYPE="Debug"
-CMAKE_DEBUG_FLAG="-DIS_DEBUG=ON"
 
 case "${1:-}" in
     release)
         BUILD_TYPE="Release"
-        CMAKE_DEBUG_FLAG="-DIS_DEBUG=OFF"
         ;;
     clean)
         echo "[*] Cleaning build directory..."
@@ -51,7 +49,7 @@ esac
 # Configure
 echo "[*] Configuring ($BUILD_TYPE, $GENERATOR)..."
 cmake -B "$BUILD_DIR" -G"$GENERATOR" --log-level=STATUS \
-    "$CMAKE_DEBUG_FLAG" "${PLATFORM_FLAGS[@]}"
+    "${PLATFORM_FLAGS[@]}"
 
 # Build
 echo "[*] Building..."

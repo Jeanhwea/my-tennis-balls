@@ -5,14 +5,12 @@ BUILD_DIR="build-ios"
 
 # Parse arguments
 BUILD_TYPE="Debug"
-CMAKE_DEBUG_FLAG="-DIS_DEBUG=ON"
 SDK="iphoneos"
 ARCHS="arm64"
 
 case "${1:-}" in
     release)
         BUILD_TYPE="Release"
-        CMAKE_DEBUG_FLAG="-DIS_DEBUG=OFF"
         ;;
     simulator)
         SDK="iphonesimulator"
@@ -66,7 +64,7 @@ cmake -B "$BUILD_DIR" -GXcode \
     -DCMAKE_OSX_ARCHITECTURES="$ARCHS" \
     -DCMAKE_OSX_DEPLOYMENT_TARGET="12.0" \
     -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED="NO" \
-    "$CMAKE_DEBUG_FLAG"
+    --log-level=STATUS
 
 # Build
 echo "[*] Building..."
