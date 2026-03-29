@@ -70,6 +70,7 @@ cmake -B "$BUILD_DIR" -GXcode \
 echo "[*] Building..."
 cmake --build "$BUILD_DIR" --config "$BUILD_TYPE" --parallel -- \
     -destination "generic/platform=iOS" \
-    IPHONEOS_DEPLOYMENT_TARGET=12.0
+    IPHONEOS_DEPLOYMENT_TARGET=12.0 \
+    -skipUnavailableActions
 
 echo "[*] Build succeeded (iOS $BUILD_TYPE, sdk=$SDK)."
