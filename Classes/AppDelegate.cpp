@@ -62,7 +62,11 @@ bool AppDelegate::applicationDidFinishLaunching()
         director->setOpenGLView(glview);
     }
 
-    director->setDisplayStats(COCOS2D_DEBUG > 0);
+#if defined(COCOS2D_DEBUG) && (COCOS2D_DEBUG > 0)
+    director->setDisplayStats(true);
+#else
+    director->setDisplayStats(false);
+#endif
 
     director->setAnimationInterval(1.0f / 60);
 
