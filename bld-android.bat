@@ -1,6 +1,10 @@
 @echo off
 setlocal enabledelayedexpansion
 
+
+set "JAVA_HOME=D:\tool\OpenJDK8U-jdk_x64_windows_hotspot_8u482b08\jdk8u482-b08"
+set "PATH=%JAVA_HOME%\bin;%PATH%"
+
 set "PROJ_DIR=proj.android"
 set "APP_NAME=my-tennis-balls"
 for /f "tokens=*" %%g in ('git describe --tags --always --dirty^="+dev" 2^>nul') do set "GIT_DESC=%%g"
