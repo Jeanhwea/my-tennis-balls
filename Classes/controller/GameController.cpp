@@ -55,7 +55,7 @@ void GameController::update(float dt)
 
 void GameController::updateBallEffects()
 {
-    // 同步每个球的阴影、光晕位置，并更新滚动光照效果
+    // 同步每个球的阴影、光晕位置，并更新运动模糊
     for (auto ball : _activeBalls) {
         auto name = ball->getName();
         if (name.empty()) continue;
@@ -75,11 +75,11 @@ void GameController::updateBallEffects()
             glow->setPosition(ballPos);
         }
 
-        // 更新滚动光照效果
-        BallView::updateRollingEffect(ball);
-
         // 更新运动模糊
         BallView::updateMotionBlur(ball, blur);
+
+        // 更新高光位置（模拟固定光源）
+        BallView::updateHighlights(ball);
     }
 }
 

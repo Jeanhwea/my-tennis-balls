@@ -7,18 +7,17 @@ USING_NS_CC;
 namespace
 {
 // 光照效果参数
-constexpr float HIGHLIGHT_OFFSET_RATIO = 0.25f;  // 高光偏移比例
 constexpr float HIGHLIGHT_SCALE = 0.35f;         // 高光缩放
 constexpr float SHADOW_OFFSET_Y = -8.0f;         // 阴影Y偏移
 constexpr float SHADOW_SCALE = 1.1f;             // 阴影缩放
 constexpr float SHADOW_OPACITY = 0.25f;          // 阴影透明度
 constexpr float GLOW_OPACITY = 0.15f;            // 光晕透明度
+constexpr float MOTION_BLUR_OPACITY = 0.3f;      // 运动模糊透明度
+constexpr float MOTION_BLUR_THRESHOLD = 200.0f;  // 运动模糊触发速度
 
-// 滚动光照参数
-constexpr float ROLLING_HIGHLIGHT_MAX_OFFSET = 0.35f;  // 滚动时高光最大偏移比例
-constexpr float ROLLING_SPEED_THRESHOLD = 100.0f;      // 触发滚动效果的最低速度
-constexpr float ROLLING_SPEED_MAX = 800.0f;            // 最大速度（用于归一化）
-constexpr float MOTION_BLUR_OPACITY = 0.3f;            // 运动模糊透明度
+// 光源方向（从左上方照射，归一化向量）
+constexpr float LIGHT_DIR_X = -0.5f;
+constexpr float LIGHT_DIR_Y = 0.5f;
 }  // namespace
 
 Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity, int ballIndex)
@@ -66,25 +65,26 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     ball->setPhysicsBody(body);
     parent->addChild(ball, 5);
 
-    // 创建高光层（顶层）- 初始位置在左上方
+    // 创建高光层（独立节点，不是球的子节点，模拟固定光源）
     auto highlight = Sprite::create("ball.png");
     highlight->setColor(Color3B(255, 255, 255));
     highlight->setOpacity(180);
-    highlight->setScale(BALL_SCALE * HIGHLIGHT_SCALE);
+    highlight->setScale(HIGHLIGHT_SCALE);
     highlight->setBlendFunc(BlendFunc::ADDITIVE);
-    highlight->setPosition(Vec2(radius * HIGHLIGHT_OFFSET_RATIO, radius * HIGHLIGHT_OFFSET_RATIO));
-    highlight->setName("highlight");
-    ball->addChild(highlight, 1);
+    // 高光初始位置：球的左上方（模拟光源从左上方照射）
+    highlight->setPosition(position.x + radius * LIGHT_DIR_X, position.y + radius * LIGHT_DIR_Y);
+    highlight->setName(StringUtils::format("ball%02d_highlight", ballIndex));
+    parent->addChild(highlight, 6);
 
-    // 创建次高光层（模拟环境反射）
+    // 创建次高光层（模拟环境反射，在右下方）
     auto subHighlight = Sprite::create("ball.png");
     subHighlight->setColor(Color3B(200, 230, 255));
     subHighlight->setOpacity(60);
-    subHighlight->setScale(BALL_SCALE * 0.2f);
+    subHighlight->setScale(0.2f);
     subHighlight->setBlendFunc(BlendFunc::ADDITIVE);
-    subHighlight->setPosition(Vec2(-radius * 0.3f, -radius * 0.3f));
-    subHighlight->setName("subHighlight");
-    ball->addChild(subHighlight, 1);
+    subHighlight->setPosition(position.x - radius * LIGHT_DIR_X, position.y - radius * LIGHT_DIR_Y);
+    subHighlight->setName(StringUtils::format("ball%02d_subhl", ballIndex));
+    parent->addChild(subHighlight, 6);
 
     // 生成动画
     ball->setScale(0);
@@ -95,6 +95,12 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
 
     glow->setScale(0);
     glow->runAction(EaseBackOut::create(ScaleTo::create(0.25f, BALL_SCALE * 1.3f)));
+
+    highlight->setScale(0);
+    highlight->runAction(EaseBackOut::create(ScaleTo::create(0.25f, HIGHLIGHT_SCALE)));
+
+    subHighlight->setScale(0);
+    subHighlight->runAction(EaseBackOut::create(ScaleTo::create(0.25f, 0.2f)));
 
     // 生成光环效果
     auto ring = DrawNode::create();
@@ -107,71 +113,49 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     return ball;
 }
 
-void BallView::updateRollingEffect(Node *ball)
+void BallView::updateHighlights(Node *ball)
 {
     if (!ball) return;
 
+    auto parent = ball->getParent();
+    if (!parent) return;
+
+    std::string name = ball->getName();
+    if (name.empty()) return;
+
+    // 获取高光节点
+    auto highlight = parent->getChildByName(name + "_highlight");
+    auto subHighlight = parent->getChildByName(name + "_subhl");
+    if (!highlight || !subHighlight) return;
+
+    // 获取球的物理体来获取旋转角度
     auto body = ball->getPhysicsBody();
-    if (!body) return;
+    float rotation = body ? -body->getRotation() : 0.0f;
 
-    // 获取球的速度
-    Vec2 velocity = body->getVelocity();
-    float speed = velocity.length();
+    // 计算球的半径
+    float radius = ball->getContentSize().width * BALL_SCALE / 2 - BALL_SPRITE_PADDING;
 
-    // 获取高光层
-    auto highlight = ball->getChildByName("highlight");
-    auto subHighlight = ball->getChildByName("subHighlight");
-    if (!highlight) return;
+    // 将旋转角度转换为弧度
+    float rad = CC_DEGREES_TO_RADIANS(rotation);
 
-    const float radius = ball->getContentSize().width * ball->getScale() / 2;
+    // 光源方向向量（固定在左上方）
+    Vec2 lightDir(LIGHT_DIR_X, LIGHT_DIR_Y);
 
-    // 计算高光偏移：模拟固定光源（假设光源在左上方）
-    // 球滚动时，高光相对于球体表面"滑动"
-    // 速度方向决定球体旋转方向，高光应该反向滑动
-    if (speed > ROLLING_SPEED_THRESHOLD) {
-        // 归一化速度
-        float normalizedSpeed = std::min(speed / ROLLING_SPEED_MAX, 1.0f);
+    // 根据球的旋转，计算高光应该在球表面的位置
+    // 当球旋转时，高光应该"滑动"到球表面的新位置
+    float cosR = cosf(rad);
+    float sinR = sinf(rad);
 
-        // 球体旋转方向：速度方向决定旋转轴
-        // 假设光源固定在左上方，高光应该在球体表面的"迎光面"
-        // 当球向右滚动时，球体顺时针旋转，高光应该向左滑动（相对于球心）
-        // 当球向上滚动时，球体逆时针旋转，高光应该向下滑动
+    // 旋转光源方向向量（模拟球表面上的点随球旋转）
+    Vec2 rotatedLightDir(lightDir.x * cosR - lightDir.y * sinR, lightDir.x * sinR + lightDir.y * cosR);
 
-        // 计算高光偏移：速度的反方向（因为球滚动时表面点相对光源移动）
-        Vec2 velocityDir = velocity.getNormalized();
+    // 高光位置：球心 + 旋转后的偏移
+    Vec2 ballPos = ball->getPosition();
+    highlight->setPosition(ballPos.x + rotatedLightDir.x * radius, ballPos.y + rotatedLightDir.y * radius);
 
-        // 高光偏移方向：速度反方向（模拟球体旋转时光照点的相对运动）
-        // 但要考虑光源位置，这里假设光源在左上方 (Vec2(-1, 1))
-        Vec2 lightDir = Vec2(-0.5f, 0.5f).getNormalized();  // 光源方向
-
-        // 高光位置 = 基础位置 + 速度引起的偏移
-        // 速度越快，偏移越大，但方向与速度相反（球滚动方向）
-        Vec2 rollOffset = -velocityDir * radius * ROLLING_HIGHLIGHT_MAX_OFFSET * normalizedSpeed;
-
-        // 基础高光位置（光源方向）
-        Vec2 basePos = lightDir * radius * 0.3f;
-
-        // 最终高光位置
-        highlight->setPosition(basePos + rollOffset);
-
-        // 根据速度调整高光透明度（高速时更亮）
-        uint8_t opacity = static_cast<uint8_t>(180 + 75 * normalizedSpeed);
-        highlight->setOpacity(opacity);
-
-        // 次高光（环境反射，在相反方向）
-        if (subHighlight) {
-            Vec2 subBasePos = -lightDir * radius * 0.3f;
-            subHighlight->setPosition(subBasePos - rollOffset * 0.3f);
-        }
-    } else {
-        // 静止时，高光在光源方向（左上方）
-        Vec2 lightDir = Vec2(-0.5f, 0.5f).getNormalized();
-        highlight->setPosition(lightDir * radius * 0.3f);
-        highlight->setOpacity(180);
-        if (subHighlight) {
-            subHighlight->setPosition(-lightDir * radius * 0.3f);
-        }
-    }
+    // 次高光在相反方向
+    subHighlight->setPosition(ballPos.x - rotatedLightDir.x * radius,
+                              ballPos.y - rotatedLightDir.y * radius);
 }
 
 void BallView::updateMotionBlur(Node *ball, Node *blurNode)
@@ -185,8 +169,8 @@ void BallView::updateMotionBlur(Node *ball, Node *blurNode)
     float speed = velocity.length();
 
     // 高速时显示运动模糊
-    if (speed > ROLLING_SPEED_THRESHOLD * 2) {
-        float normalizedSpeed = std::min(speed / ROLLING_SPEED_MAX, 1.0f);
+    if (speed > MOTION_BLUR_THRESHOLD) {
+        float normalizedSpeed = std::min(speed / 1000.0f, 1.0f);
         uint8_t opacity = static_cast<uint8_t>(255 * MOTION_BLUR_OPACITY * normalizedSpeed);
         blurNode->setOpacity(opacity);
         blurNode->setPosition(ball->getPosition() - velocity.getNormalized() * 5);
@@ -201,18 +185,32 @@ void BallView::despawn(Node *ball, const std::function<void()> &onComplete)
     if (!ball) return;
     ball->getPhysicsBody()->setEnabled(false);
 
-    // 同时移除关联的阴影和光晕
+    // 同时移除关联的阴影、光晕和高光
     auto name = ball->getName();
     if (!name.empty()) {
         auto parent = ball->getParent();
         if (parent) {
             auto shadow = parent->getChildByName(name + "_shadow");
             auto glow = parent->getChildByName(name + "_glow");
+            auto blur = parent->getChildByName(name + "_blur");
+            auto highlight = parent->getChildByName(name + "_highlight");
+            auto subHighlight = parent->getChildByName(name + "_subhl");
             if (shadow) {
                 shadow->runAction(Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
             }
             if (glow) {
                 glow->runAction(Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
+            }
+            if (blur) {
+                blur->runAction(Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
+            }
+            if (highlight) {
+                highlight->runAction(
+                    Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
+            }
+            if (subHighlight) {
+                subHighlight->runAction(
+                    Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
             }
         }
     }
