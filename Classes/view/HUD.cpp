@@ -35,14 +35,14 @@ void HUD::createTopBar(const Size &visibleSize)
 {
     auto topBar = DrawNode::create();
     float barTop = visibleSize.height;
-    float barBot = visibleSize.height - 50;
+    float barBot = visibleSize.height - TOP_BAR_HEIGHT;
     float barRight = visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO);
 
     // 渐变
-    constexpr int strips = 5;
-    for (int i = 0; i < strips; ++i) {
-        float t0 = static_cast<float>(i) / strips;
-        float t1 = static_cast<float>(i + 1) / strips;
+    static constexpr int STRIPS = 5;
+    for (int i = 0; i < STRIPS; ++i) {
+        float t0 = static_cast<float>(i) / STRIPS;
+        float t1 = static_cast<float>(i + 1) / STRIPS;
         float alpha = 0.45f - 0.15f * (t0 + t1) / 2;
         topBar->drawSolidRect(Vec2(0, barBot + (barTop - barBot) * t0),
                               Vec2(barRight, barBot + (barTop - barBot) * t1),
@@ -127,10 +127,10 @@ void HUD::createBackButton(const Size &visibleSize)
 
     auto bg = DrawNode::create();
     // 渐变填充
-    constexpr int strips = 3;
-    for (int i = 0; i < strips; ++i) {
-        float t0 = static_cast<float>(i) / strips;
-        float t1 = static_cast<float>(i + 1) / strips;
+    static constexpr int BTN_STRIPS = 3;
+    for (int i = 0; i < BTN_STRIPS; ++i) {
+        float t0 = static_cast<float>(i) / BTN_STRIPS;
+        float t1 = static_cast<float>(i + 1) / BTN_STRIPS;
         float bright = 0.12f + 0.06f * (t0 + t1) / 2;
         bg->drawSolidRect(Vec2(-BTN_W / 2, -BTN_H / 2 + BTN_H * t0),
                           Vec2(BTN_W / 2, -BTN_H / 2 + BTN_H * t1),

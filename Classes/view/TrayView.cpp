@@ -18,10 +18,10 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
                         Vec2(trayX + halfW + 3, trayY + halfH - 3), Color4F(0.0f, 0.0f, 0.0f, 0.25f));
 
     // 主体
-    constexpr int tStrips = 3;
-    for (int i = 0; i < tStrips; ++i) {
-        float t0 = static_cast<float>(i) / tStrips;
-        float t1 = static_cast<float>(i + 1) / tStrips;
+    static constexpr int T_STRIPS = 3;
+    for (int i = 0; i < T_STRIPS; ++i) {
+        float t0 = static_cast<float>(i) / T_STRIPS;
+        float t1 = static_cast<float>(i + 1) / T_STRIPS;
         float bright = 0.38f + 0.18f * (t0 + t1) / 2;
         draw->drawSolidRect(Vec2(trayX - halfW, trayY - halfH + TRAY_THICKNESS * t0),
                             Vec2(trayX + halfW, trayY - halfH + TRAY_THICKNESS * t1),
@@ -41,14 +41,16 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
     draw->drawSolidCircle(Vec2(trayX + halfW, trayY), halfH, 0, 8, Color4F(0.38f, 0.40f, 0.48f, 0.7f));
 
     // 支架
-    constexpr float bracketH = 12.0f;
-    constexpr float bracketW = 6.0f;
+    static constexpr float BRACKET_H = 12.0f;
+    static constexpr float BRACKET_W = 6.0f;
     Color4F bracketColor(0.30f, 0.35f, 0.50f, 0.6f);
-    Vec2 lb[3] = {Vec2(trayX - halfW + 2, trayY - halfH), Vec2(trayX - halfW + 2, trayY - halfH - bracketH),
-                  Vec2(trayX - halfW + 2 + bracketW, trayY - halfH)};
+    Vec2 lb[3] = {Vec2(trayX - halfW + 2, trayY - halfH),
+                  Vec2(trayX - halfW + 2, trayY - halfH - BRACKET_H),
+                  Vec2(trayX - halfW + 2 + BRACKET_W, trayY - halfH)};
     draw->drawSolidPoly(lb, 3, bracketColor);
-    Vec2 rb[3] = {Vec2(trayX + halfW - 2, trayY - halfH), Vec2(trayX + halfW - 2, trayY - halfH - bracketH),
-                  Vec2(trayX + halfW - 2 - bracketW, trayY - halfH)};
+    Vec2 rb[3] = {Vec2(trayX + halfW - 2, trayY - halfH),
+                  Vec2(trayX + halfW - 2, trayY - halfH - BRACKET_H),
+                  Vec2(trayX + halfW - 2 - BRACKET_W, trayY - halfH)};
     draw->drawSolidPoly(rb, 3, bracketColor);
 
     draw->setTag(TAG_TRAY);

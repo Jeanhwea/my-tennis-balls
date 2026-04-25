@@ -9,14 +9,14 @@ using common::randomFloat;
 namespace
 {
 
-constexpr int PARTICLE_COUNT = 12;
-constexpr float PARTICLE_SIZE = 4.5f;
-constexpr float PARTICLE_SPEED = 150.0f;
-constexpr float PARTICLE_LIFE = 0.45f;
+static constexpr int PARTICLE_COUNT = 12;
+static constexpr float PARTICLE_SIZE = 4.5f;
+static constexpr float PARTICLE_SPEED = 150.0f;
+static constexpr float PARTICLE_LIFE = 0.45f;
 
-constexpr float FLOAT_SCORE_FONT = 28.0f;
-constexpr float FLOAT_SCORE_RISE = 60.0f;
-constexpr float FLOAT_SCORE_DUR = 0.8f;
+static constexpr float FLOAT_SCORE_FONT = 28.0f;
+static constexpr float FLOAT_SCORE_RISE = 60.0f;
+static constexpr float FLOAT_SCORE_DUR = 0.8f;
 
 }  // namespace
 

@@ -68,10 +68,10 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     auto bg = DrawNode::create();
     Color4F bgBot(0.04f, 0.04f, 0.10f, 1.0f);
     Color4F bgTop(0.08f, 0.06f, 0.16f, 1.0f);
-    int strips = 20;
-    for (int i = 0; i < strips; ++i) {
-        float t0 = static_cast<float>(i) / strips;
-        float t1 = static_cast<float>(i + 1) / strips;
+    static constexpr int BG_STRIPS = 20;
+    for (int i = 0; i < BG_STRIPS; ++i) {
+        float t0 = static_cast<float>(i) / BG_STRIPS;
+        float t1 = static_cast<float>(i + 1) / BG_STRIPS;
         float y0 = h * t0;
         float y1 = h * t1;
         Color4F c0(bgBot.r + (bgTop.r - bgBot.r) * t0, bgBot.g + (bgTop.g - bgBot.g) * t0,
@@ -86,11 +86,11 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     // 网格
     auto grid = DrawNode::create();
     Color4F gridColor(0.15f, 0.18f, 0.28f, 0.15f);
-    float gridSpacing = 60.0f;
-    for (float x = 0; x < launchLeft; x += gridSpacing) {
+    static constexpr float GRID_SPACING = 60.0f;
+    for (float x = 0; x < launchLeft; x += GRID_SPACING) {
         grid->drawLine(Vec2(x, 0), Vec2(x, h), gridColor);
     }
-    for (float y = 0; y < h; y += gridSpacing) {
+    for (float y = 0; y < h; y += GRID_SPACING) {
         grid->drawLine(Vec2(0, y), Vec2(launchLeft, y), gridColor);
     }
     parent->addChild(grid, -9);
@@ -98,10 +98,10 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     // 发射区域 + 分隔线
     auto zone = DrawNode::create();
 
-    int zoneStrips = 8;
-    for (int i = 0; i < zoneStrips; ++i) {
-        float t0 = static_cast<float>(i) / zoneStrips;
-        float t1 = static_cast<float>(i + 1) / zoneStrips;
+    static constexpr int ZONE_STRIPS = 8;
+    for (int i = 0; i < ZONE_STRIPS; ++i) {
+        float t0 = static_cast<float>(i) / ZONE_STRIPS;
+        float t1 = static_cast<float>(i + 1) / ZONE_STRIPS;
         float x0 = launchLeft + (w - launchLeft) * t0;
         float x1 = launchLeft + (w - launchLeft) * t1;
         float alpha = 0.08f + 0.12f * t0;

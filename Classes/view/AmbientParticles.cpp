@@ -8,13 +8,13 @@ using common::randomFloat;
 namespace
 {
 
-constexpr int MAX_DOTS = 25;
-constexpr float SPAWN_INTERVAL = 0.6f;
-constexpr float DOT_MIN_LIFE = 4.0f;
-constexpr float DOT_MAX_LIFE = 8.0f;
-constexpr float DOT_MIN_SIZE = 1.0f;
-constexpr float DOT_MAX_SIZE = 3.0f;
-constexpr float DRIFT_SPEED = 15.0f;
+static constexpr int MAX_DOTS = 25;
+static constexpr float SPAWN_INTERVAL = 0.6f;
+static constexpr float DOT_MIN_LIFE = 4.0f;
+static constexpr float DOT_MAX_LIFE = 8.0f;
+static constexpr float DOT_MIN_SIZE = 1.0f;
+static constexpr float DOT_MAX_SIZE = 3.0f;
+static constexpr float DRIFT_SPEED = 15.0f;
 
 }  // namespace
 

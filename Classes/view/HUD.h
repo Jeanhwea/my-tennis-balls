@@ -47,6 +47,7 @@ private:
     static constexpr float FONT_SZ = 24.0f;
     static constexpr float COMBO_SZ = 32.0f;
     static constexpr float HINT_SZ = 20.0f;
+    static constexpr float TOP_BAR_HEIGHT = 50.0f;
 };
 
 #endif  // __HUD_H__
