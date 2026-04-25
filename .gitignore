@@ -33,6 +33,7 @@ Temporary Items
 Classes/Version.h
 
 # build folders
+.kiro/*
 .cxx/
 build/
 dist/
