@@ -21,7 +21,6 @@ cocos2d-x 3.17.2 C++11 物理弹球游戏。
 - `cocos2d/` 是引擎源码，禁止修改
 - `Classes/Version.h` 自动生成，版本号在 `CMakeLists.txt` 的 `project(VERSION ...)` 维护
 - 新增源文件需更新 `CMakeLists.txt` 的 `GAME_SOURCE` / `GAME_HEADER`
-- 完成后先格式化，再构建
 
 ## 编码规范
 
