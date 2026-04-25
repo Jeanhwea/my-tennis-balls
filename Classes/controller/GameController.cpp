@@ -47,8 +47,39 @@ void GameController::update(float dt)
 {
     _model.tick(dt);
     if (!_transitioning) {
+        updateBallEffects();  // 同步球的光照效果
         collectOutOfBounds();
         processPendingRemovals();
+    }
+}
+
+void GameController::updateBallEffects()
+{
+    // 同步每个球的阴影、光晕位置，并更新滚动光照效果
+    for (auto ball : _activeBalls) {
+        auto name = ball->getName();
+        if (name.empty()) continue;
+
+        auto parent = ball->getParent();
+        if (!parent) continue;
+
+        auto shadow = parent->getChildByName(name + "_shadow");
+        auto glow = parent->getChildByName(name + "_glow");
+        auto blur = parent->getChildByName(name + "_blur");
+
+        Vec2 ballPos = ball->getPosition();
+        if (shadow) {
+            shadow->setPosition(ballPos.x, ballPos.y + BALL_SHADOW_OFFSET_Y);
+        }
+        if (glow) {
+            glow->setPosition(ballPos);
+        }
+
+        // 更新滚动光照效果
+        BallView::updateRollingEffect(ball);
+
+        // 更新运动模糊
+        BallView::updateMotionBlur(ball, blur);
     }
 }
 

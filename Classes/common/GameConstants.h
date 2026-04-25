@@ -34,6 +34,9 @@ constexpr float BALL_DENSITY = 1.0f;
 constexpr float BALL_RESTITUTION = 0.8f;
 constexpr float BALL_FRICTION = 0.3f;
 
+// ── 弹球光照效果 ──
+constexpr float BALL_SHADOW_OFFSET_Y = -8.0f;  // 阴影Y偏移
+
 // ── 发射参数 ──
 constexpr float LAUNCH_FORCE_SCALE = 5.5f;
 constexpr float MAX_LAUNCH_SPEED = 1500.0f;

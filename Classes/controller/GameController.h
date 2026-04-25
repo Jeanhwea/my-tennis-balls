@@ -51,6 +51,7 @@ private:
     void removeTarget(cocos2d::Node *target);
     void collectOutOfBounds();
     void processPendingRemovals();
+    void updateBallEffects();  // 同步球的光照效果
 
     // ── 碰撞 ──
     bool onContactBegin(cocos2d::PhysicsContact &contact);
