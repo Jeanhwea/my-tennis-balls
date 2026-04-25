@@ -11,6 +11,11 @@ cocos2d-x 3.17.2 C++11 物理弹球游戏。
 - Windows: `bld.bat`
 - macOS: `./bld.sh`
 
+## 格式化
+
+- Windows: `fmt.bat`
+- macOS: `./fmt.sh`
+
 ## 关键约束
 
 - `cocos2d/` 是引擎源码，禁止修改
