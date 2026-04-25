@@ -125,34 +125,51 @@ void BallView::updateRollingEffect(Node *ball)
 
     const float radius = ball->getContentSize().width * ball->getScale() / 2;
 
-    // 计算高光偏移：根据速度方向反向偏移（模拟光源固定，球滚动时光照点相对移动）
+    // 计算高光偏移：模拟固定光源（假设光源在左上方）
+    // 球滚动时，高光相对于球体表面"滑动"
+    // 速度方向决定球体旋转方向，高光应该反向滑动
     if (speed > ROLLING_SPEED_THRESHOLD) {
         // 归一化速度
         float normalizedSpeed = std::min(speed / ROLLING_SPEED_MAX, 1.0f);
 
-        // 速度方向的反方向（光从固定方向照射，球滚动时光点相对移动）
-        Vec2 velocityDir = velocity.getNormalized();
-        Vec2 lightOffset = -velocityDir * radius * ROLLING_HIGHLIGHT_MAX_OFFSET * normalizedSpeed;
+        // 球体旋转方向：速度方向决定旋转轴
+        // 假设光源固定在左上方，高光应该在球体表面的"迎光面"
+        // 当球向右滚动时，球体顺时针旋转，高光应该向左滑动（相对于球心）
+        // 当球向上滚动时，球体逆时针旋转，高光应该向下滑动
 
-        // 平滑移动高光位置
-        Vec2 basePos(radius * HIGHLIGHT_OFFSET_RATIO, radius * HIGHLIGHT_OFFSET_RATIO);
-        highlight->setPosition(basePos + lightOffset);
+        // 计算高光偏移：速度的反方向（因为球滚动时表面点相对光源移动）
+        Vec2 velocityDir = velocity.getNormalized();
+
+        // 高光偏移方向：速度反方向（模拟球体旋转时光照点的相对运动）
+        // 但要考虑光源位置，这里假设光源在左上方 (Vec2(-1, 1))
+        Vec2 lightDir = Vec2(-0.5f, 0.5f).getNormalized();  // 光源方向
+
+        // 高光位置 = 基础位置 + 速度引起的偏移
+        // 速度越快，偏移越大，但方向与速度相反（球滚动方向）
+        Vec2 rollOffset = -velocityDir * radius * ROLLING_HIGHLIGHT_MAX_OFFSET * normalizedSpeed;
+
+        // 基础高光位置（光源方向）
+        Vec2 basePos = lightDir * radius * 0.3f;
+
+        // 最终高光位置
+        highlight->setPosition(basePos + rollOffset);
 
         // 根据速度调整高光透明度（高速时更亮）
         uint8_t opacity = static_cast<uint8_t>(180 + 75 * normalizedSpeed);
         highlight->setOpacity(opacity);
 
-        // 次高光也跟随移动（相反方向）
+        // 次高光（环境反射，在相反方向）
         if (subHighlight) {
-            Vec2 subBasePos(-radius * 0.3f, -radius * 0.3f);
-            subHighlight->setPosition(subBasePos - lightOffset * 0.3f);
+            Vec2 subBasePos = -lightDir * radius * 0.3f;
+            subHighlight->setPosition(subBasePos - rollOffset * 0.3f);
         }
     } else {
-        // 静止时恢复默认位置
-        highlight->setPosition(Vec2(radius * HIGHLIGHT_OFFSET_RATIO, radius * HIGHLIGHT_OFFSET_RATIO));
+        // 静止时，高光在光源方向（左上方）
+        Vec2 lightDir = Vec2(-0.5f, 0.5f).getNormalized();
+        highlight->setPosition(lightDir * radius * 0.3f);
         highlight->setOpacity(180);
         if (subHighlight) {
-            subHighlight->setPosition(Vec2(-radius * 0.3f, -radius * 0.3f));
+            subHighlight->setPosition(-lightDir * radius * 0.3f);
         }
     }
 }
