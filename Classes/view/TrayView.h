@@ -8,8 +8,11 @@
 namespace TrayView
 {
 
-/// 创建关卡中的所有托盘和目标球。返回目标球总数。
-int createFromLevel(cocos2d::Node *parent, const cocos2d::Size &visibleSize, const LevelData &level);
+/// 创建关卡中的所有托盘和目标球。
+/// @param outTargets 输出参数，用于存储创建的目标球节点指针
+/// @return 目标球总数
+int createFromLevel(cocos2d::Node *parent, const cocos2d::Size &visibleSize, const LevelData &level,
+                    cocos2d::Vector<cocos2d::Node *> &outTargets);
 
 }  // namespace TrayView
 

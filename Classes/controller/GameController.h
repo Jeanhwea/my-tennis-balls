@@ -26,6 +26,13 @@ private:
     int _ballCounter = 0;
     bool _transitioning = false;
 
+    // Cached node references for O(1) access
+    cocos2d::Vector<cocos2d::Node *> _activeBalls;
+    cocos2d::Vector<cocos2d::Node *> _activeTargets;
+
+    // Batched removal to avoid scene graph modifications during iteration
+    std::vector<cocos2d::Node *> _pendingRemoval;
+
     // ── 关卡 ──
     void loadLevel(int index);
     void clearLevelNodes();
@@ -42,9 +49,8 @@ private:
     void spawnBall(const cocos2d::Vec2 &position, const cocos2d::Vec2 &velocity);
     void removeBall(cocos2d::Node *ball);
     void removeTarget(cocos2d::Node *target);
-    int countBalls() const;
-    int countTargets() const;
     void collectOutOfBounds();
+    void processPendingRemovals();
 
     // ── 碰撞 ──
     bool onContactBegin(cocos2d::PhysicsContact &contact);

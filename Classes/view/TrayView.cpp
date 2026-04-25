@@ -86,7 +86,8 @@ void createTrayPhysics(Node *parent, float trayX, float trayY, float trayW)
     parent->addChild(trayNode, 2);
 }
 
-void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count, int &targetIndex)
+void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count, int &targetIndex,
+                  Vector<Node *> &outTargets)
 {
     float spacing = trayW / (count + 1);
     float startX = trayX - trayW / 2;
@@ -110,10 +111,13 @@ void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count
         tbody->setContactTestBitmask(CATEGORY_ALL);
         target->setPhysicsBody(tbody);
         parent->addChild(target, 5);
+
+        outTargets.pushBack(target);
     }
 }
 
-void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, int &targetIndex)
+void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, int &targetIndex,
+                   Vector<Node *> &outTargets)
 {
     float trayX = visibleSize.width * tray.x;
     float trayY = visibleSize.height * tray.y;
@@ -121,16 +125,17 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
 
     drawTrayVisual(parent, trayX, trayY, trayW);
     createTrayPhysics(parent, trayX, trayY, trayW);
-    spawnTargets(parent, trayX, trayY, trayW, tray.targets, targetIndex);
+    spawnTargets(parent, trayX, trayY, trayW, tray.targets, targetIndex, outTargets);
 }
 
 }  // namespace
 
-int TrayView::createFromLevel(Node *parent, const Size &visibleSize, const LevelData &level)
+int TrayView::createFromLevel(Node *parent, const Size &visibleSize, const LevelData &level,
+                              Vector<Node *> &outTargets)
 {
     int targetIndex = 0;
     for (const auto &tray : level.trays) {
-        createOneTray(parent, visibleSize, tray, targetIndex);
+        createOneTray(parent, visibleSize, tray, targetIndex, outTargets);
     }
     return targetIndex;
 }

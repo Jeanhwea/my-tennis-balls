@@ -16,6 +16,10 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
     _scene = scene;
     _visibleSize = visibleSize;
 
+    // Initialize cached vectors
+    _activeBalls.clear();
+    _activeTargets.clear();
+
     ArenaView::addEdgeWalls(_scene, _visibleSize);
     ArenaView::addFloorSensor(_scene, _visibleSize);
     ArenaView::drawZones(_scene, _visibleSize);
@@ -44,6 +48,7 @@ void GameController::update(float dt)
     _model.tick(dt);
     if (!_transitioning) {
         collectOutOfBounds();
+        processPendingRemovals();
     }
 }
 
@@ -62,7 +67,7 @@ void GameController::loadLevel(int index)
     clearLevelNodes();
 
     const auto &level = _model.currentLevel();
-    int totalTargets = TrayView::createFromLevel(_scene, _visibleSize, level);
+    int totalTargets = TrayView::createFromLevel(_scene, _visibleSize, level, _activeTargets);
     _model.setTargetsRemaining(totalTargets);
 
     _hud->updateLevel(level.id, level.name);
@@ -72,6 +77,9 @@ void GameController::loadLevel(int index)
 
 void GameController::clearLevelNodes()
 {
+    _activeBalls.clear();
+    _activeTargets.clear();
+
     std::vector<Node *> toRemove;
     for (auto child : _scene->getChildren()) {
         int tag = child->getTag();
@@ -121,7 +129,7 @@ void GameController::checkFailCondition()
     if (_transitioning) return;
     if (_model.isCleared()) return;
     const auto &level = _model.currentLevel();
-    if (_ballCounter >= level.maxBalls && countBalls() == 0) {
+    if (_ballCounter >= level.maxBalls && _activeBalls.empty()) {
         onLevelFailed();
     }
 }
@@ -166,35 +174,19 @@ void GameController::refreshHUD()
 
 // ── 球管理 ──
 
-int GameController::countBalls() const
-{
-    int count = 0;
-    for (auto child : _scene->getChildren()) {
-        if (child->getTag() == TAG_BALL) ++count;
-    }
-    return count;
-}
-
-int GameController::countTargets() const
-{
-    int count = 0;
-    for (auto child : _scene->getChildren()) {
-        if (child->getTag() == TAG_TARGET) ++count;
-    }
-    return count;
-}
-
 void GameController::spawnBall(const Vec2 &position, const Vec2 &velocity)
 {
-    BallView::spawn(_scene, position, velocity, ++_ballCounter);
-    _model.setBallCount(countBalls());
+    auto ball = BallView::spawn(_scene, position, velocity, ++_ballCounter);
+    _activeBalls.pushBack(ball);
+    _model.setBallCount(static_cast<int>(_activeBalls.size()));
     refreshHUD();
 }
 
 void GameController::removeBall(Node *ball)
 {
+    _activeBalls.eraseObject(ball);
     BallView::despawn(ball, [this]() {
-        _model.setBallCount(countBalls());
+        _model.setBallCount(static_cast<int>(_activeBalls.size()));
         refreshHUD();
         checkFailCondition();
     });
@@ -202,8 +194,9 @@ void GameController::removeBall(Node *ball)
 
 void GameController::removeTarget(Node *target)
 {
+    _activeTargets.eraseObject(target);
     BallView::despawn(target, [this]() {
-        _model.setTargetsRemaining(countTargets());
+        _model.setTargetsRemaining(static_cast<int>(_activeTargets.size()));
         refreshHUD();
         if (_model.isCleared()) {
             onLevelCleared();
@@ -213,26 +206,41 @@ void GameController::removeTarget(Node *target)
 
 void GameController::collectOutOfBounds()
 {
-    std::vector<Node *> fallenTargets;
-    std::vector<Node *> lostBalls;
+    // Early-exit: skip iteration if no active objects
+    if (_activeTargets.empty() && _activeBalls.empty()) {
+        return;
+    }
 
-    for (auto child : _scene->getChildren()) {
-        int tag = child->getTag();
-        float y = child->getPositionY();
-
-        if (tag == TAG_TARGET && y < OOB_BOTTOM) {
-            fallenTargets.push_back(child);
-        } else if (tag == TAG_BALL) {
-            float x = child->getPositionX();
-            if (y < OOB_BOTTOM || y > _visibleSize.height + OOB_TOP_MARGIN || x < -OOB_SIDE_MARGIN ||
-                x > _visibleSize.width + OOB_SIDE_MARGIN) {
-                lostBalls.push_back(child);
-            }
+    // Collect out-of-bounds nodes into pending removal vector
+    // instead of removing immediately to avoid scene graph modifications during iteration
+    for (auto target : _activeTargets) {
+        if (target->getPositionY() < OOB_BOTTOM) {
+            _pendingRemoval.push_back(target);
         }
     }
 
-    for (auto target : fallenTargets) removeTarget(target);
-    for (auto ball : lostBalls) removeBall(ball);
+    for (auto ball : _activeBalls) {
+        float x = ball->getPositionX();
+        float y = ball->getPositionY();
+        if (y < OOB_BOTTOM || y > _visibleSize.height + OOB_TOP_MARGIN || x < -OOB_SIDE_MARGIN ||
+            x > _visibleSize.width + OOB_SIDE_MARGIN) {
+            _pendingRemoval.push_back(ball);
+        }
+    }
+}
+
+void GameController::processPendingRemovals()
+{
+    // Process all pending removals in batch
+    for (auto node : _pendingRemoval) {
+        int tag = node->getTag();
+        if (tag == TAG_TARGET) {
+            removeTarget(node);
+        } else if (tag == TAG_BALL) {
+            removeBall(node);
+        }
+    }
+    _pendingRemoval.clear();
 }
 
 // ── 物理回调 ──
