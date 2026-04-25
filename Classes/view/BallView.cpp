@@ -17,8 +17,8 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
         PhysicsBody::createCircle(radius, PhysicsMaterial(BALL_DENSITY, BALL_RESTITUTION, BALL_FRICTION));
     body->setVelocity(velocity);
     body->setCategoryBitmask(CATEGORY_BALL);
-    body->setCollisionBitmask(CATEGORY_ALL);
-    body->setContactTestBitmask(CATEGORY_ALL);
+    body->setCollisionBitmask(CATEGORY_EDGE | CATEGORY_TARGET | CATEGORY_TRAY | CATEGORY_OBSTACLE);
+    body->setContactTestBitmask(CATEGORY_TARGET | CATEGORY_FLOOR);
     ball->setPhysicsBody(body);
     parent->addChild(ball, 5);
 

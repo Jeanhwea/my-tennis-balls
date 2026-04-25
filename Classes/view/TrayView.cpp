@@ -81,7 +81,7 @@ void createTrayPhysics(Node *parent, float trayX, float trayY, float trayW)
     body->setDynamic(false);
     body->setCategoryBitmask(CATEGORY_TRAY);
     body->setCollisionBitmask(CATEGORY_TARGET | CATEGORY_BALL);
-    body->setContactTestBitmask(CATEGORY_ALL);
+    body->setContactTestBitmask(CATEGORY_BALL | CATEGORY_TARGET);
     trayNode->setPhysicsBody(body);
     parent->addChild(trayNode, 2);
 }
@@ -107,8 +107,9 @@ void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count
         auto tbody = PhysicsBody::createCircle(
             radius, PhysicsMaterial(TARGET_DENSITY, TARGET_RESTITUTION, TARGET_FRICTION));
         tbody->setCategoryBitmask(CATEGORY_TARGET);
-        tbody->setCollisionBitmask(CATEGORY_TRAY | CATEGORY_BALL | CATEGORY_TARGET);
-        tbody->setContactTestBitmask(CATEGORY_ALL);
+        tbody->setCollisionBitmask(CATEGORY_EDGE | CATEGORY_TRAY | CATEGORY_BALL | CATEGORY_TARGET |
+                                   CATEGORY_OBSTACLE);
+        tbody->setContactTestBitmask(CATEGORY_BALL | CATEGORY_FLOOR);
         target->setPhysicsBody(tbody);
         parent->addChild(target, 5);
 

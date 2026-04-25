@@ -60,8 +60,8 @@ void spawnOne(Node *parent, const Vec2 &position, bool isCircle)
 
     body->setDynamic(false);
     body->setCategoryBitmask(CATEGORY_OBSTACLE);
-    body->setCollisionBitmask(CATEGORY_ALL);
-    body->setContactTestBitmask(CATEGORY_ALL);
+    body->setCollisionBitmask(CATEGORY_BALL | CATEGORY_TARGET);
+    body->setContactTestBitmask(CATEGORY_BALL | CATEGORY_TARGET);
     obstacle->setPhysicsBody(body);
     parent->addChild(obstacle, 1);
 }

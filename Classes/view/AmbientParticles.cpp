@@ -8,7 +8,6 @@ using common::randomFloat;
 namespace
 {
 
-static constexpr int MAX_DOTS = 25;
 static constexpr float SPAWN_INTERVAL = 0.6f;
 static constexpr float DOT_MIN_LIFE = 4.0f;
 static constexpr float DOT_MAX_LIFE = 8.0f;
@@ -46,12 +45,46 @@ void AmbientParticles::start()
 void AmbientParticles::stop()
 {
     _running = false;
+    _paused = false;
     unschedule("ambient_spawn");
+}
+
+void AmbientParticles::pause()
+{
+    if (!_running || _paused) return;
+    _paused = true;
+    unschedule("ambient_spawn");
+}
+
+void AmbientParticles::resume()
+{
+    if (!_running || !_paused) return;
+    _paused = false;
+    schedule([this](float) { spawnDot(); }, SPAWN_INTERVAL, "ambient_spawn");
+}
+
+void AmbientParticles::setQualityLevel(int level)
+{
+    _qualityLevel = level;
+}
+
+int AmbientParticles::getMaxDots() const
+{
+    switch (_qualityLevel) {
+        case 3:
+            return MAX_DOTS_HIGH;
+        case 2:
+            return MAX_DOTS_MEDIUM;
+        case 1:
+            return MAX_DOTS_LOW;
+        default:
+            return 0;
+    }
 }
 
 void AmbientParticles::spawnDot()
 {
-    if (getChildrenCount() >= MAX_DOTS) return;
+    if (getChildrenCount() >= getMaxDots()) return;
 
     auto dot = DrawNode::create();
     float size = randomFloat(DOT_MIN_SIZE, DOT_MAX_SIZE);

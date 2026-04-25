@@ -27,8 +27,8 @@ void ArenaView::addEdgeWalls(Node *parent, const Size &visibleSize)
         Vec2(0, 0), Vec2(w, 0), PhysicsMaterial(1.0f, EDGE_RESTITUTION, EDGE_FRICTION), 1));
 
     body->setCategoryBitmask(CATEGORY_EDGE);
-    body->setCollisionBitmask(CATEGORY_BALL | CATEGORY_TRAY);
-    body->setContactTestBitmask(CATEGORY_ALL);
+    body->setCollisionBitmask(CATEGORY_BALL | CATEGORY_TARGET | CATEGORY_TRAY | CATEGORY_OBSTACLE);
+    body->setContactTestBitmask(CATEGORY_BALL | CATEGORY_TARGET);
     edgeNode->setPhysicsBody(body);
     parent->addChild(edgeNode);
 
