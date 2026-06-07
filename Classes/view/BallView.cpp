@@ -65,18 +65,21 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     ball->setPhysicsBody(body);
     parent->addChild(ball, 5);
 
-    // 创建高光层（独立节点，不是球的子节点，模拟固定光源）
+    // ── 光照系统 ──
+    // 高光和次高光是独立节点，不是球的子节点，从而模拟固定光源空间效果
+    // 随着球旋转，高光会在球表面滑动（updateHighlights 中计算）
+
+    // 主高光：球左上方白色高光（模拟主光源照射）
     auto highlight = Sprite::create("ball.png");
     highlight->setColor(Color3B(255, 255, 255));
     highlight->setOpacity(180);
     highlight->setScale(HIGHLIGHT_SCALE);
     highlight->setBlendFunc(BlendFunc::ADDITIVE);
-    // 高光初始位置：球的左上方（模拟光源从左上方照射）
     highlight->setPosition(position.x + radius * LIGHT_DIR_X, position.y + radius * LIGHT_DIR_Y);
     highlight->setName(StringUtils::format("ball%02d_highlight", ballIndex));
     parent->addChild(highlight, 6);
 
-    // 创建次高光层（模拟环境反射，在右下方）
+    // 次高光：球右下方淡蓝色（模拟环境反射补光）
     auto subHighlight = Sprite::create("ball.png");
     subHighlight->setColor(Color3B(200, 230, 255));
     subHighlight->setOpacity(60);
@@ -115,6 +118,8 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
 
 void BallView::updateHighlights(Node *ball)
 {
+    /// 随球旋转同步更新高光位置，模拟固定光源下球表面反射点的滑动。
+    /// 核心思路：高光是独立节点，通过旋转光源方向向量来计算球表面上的反射位置。
     if (!ball) return;
 
     auto parent = ball->getParent();
@@ -123,37 +128,26 @@ void BallView::updateHighlights(Node *ball)
     std::string name = ball->getName();
     if (name.empty()) return;
 
-    // 获取高光节点
     auto highlight = parent->getChildByName(name + "_highlight");
     auto subHighlight = parent->getChildByName(name + "_subhl");
     if (!highlight || !subHighlight) return;
 
-    // 获取球的物理体来获取旋转角度
+    // 读取物理体的旋转角（碰撞反弹产生的自然旋转）
     auto body = ball->getPhysicsBody();
     float rotation = body ? -body->getRotation() : 0.0f;
 
-    // 计算球的半径
     float radius = ball->getContentSize().width * BALL_SCALE / 2 - BALL_SPRITE_PADDING;
-
-    // 将旋转角度转换为弧度
     float rad = CC_DEGREES_TO_RADIANS(rotation);
 
-    // 光源方向向量（固定在左上方）
     Vec2 lightDir(LIGHT_DIR_X, LIGHT_DIR_Y);
 
-    // 根据球的旋转，计算高光应该在球表面的位置
-    // 当球旋转时，高光应该"滑动"到球表面的新位置
+    // 固定光源向量绕球心旋转，得到球表面反射点的新位置
     float cosR = cosf(rad);
     float sinR = sinf(rad);
-
-    // 旋转光源方向向量（模拟球表面上的点随球旋转）
     Vec2 rotatedLightDir(lightDir.x * cosR - lightDir.y * sinR, lightDir.x * sinR + lightDir.y * cosR);
 
-    // 高光位置：球心 + 旋转后的偏移
     Vec2 ballPos = ball->getPosition();
     highlight->setPosition(ballPos.x + rotatedLightDir.x * radius, ballPos.y + rotatedLightDir.y * radius);
-
-    // 次高光在相反方向
     subHighlight->setPosition(ballPos.x - rotatedLightDir.x * radius,
                               ballPos.y - rotatedLightDir.y * radius);
 }
