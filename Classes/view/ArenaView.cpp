@@ -5,6 +5,8 @@
 
 USING_NS_CC;
 
+// ── 创建物理边界墙和墙壁微光 ──
+
 void ArenaView::addEdgeWalls(Node *parent, const Size &visibleSize)
 {
     auto edgeNode = Node::create();
@@ -42,6 +44,8 @@ void ArenaView::addEdgeWalls(Node *parent, const Size &visibleSize)
     parent->addChild(wallDraw, 1);
 }
 
+// ── 创建底部地板传感器（检测出界） ──
+
 void ArenaView::addFloorSensor(Node *parent, const Size &visibleSize)
 {
     auto floor = Node::create();
@@ -57,6 +61,8 @@ void ArenaView::addFloorSensor(Node *parent, const Size &visibleSize)
     floor->setPhysicsBody(body);
     parent->addChild(floor);
 }
+
+// ── 绘制竞技场视觉元素（背景渐变、网格、发射区域、装饰） ──
 
 void ArenaView::drawZones(Node *parent, const Size &visibleSize)
 {

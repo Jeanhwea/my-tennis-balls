@@ -11,6 +11,8 @@
 
 USING_NS_CC;
 
+// ── 游戏控制器初始化 ──
+
 void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 {
     _scene = scene;
@@ -42,6 +44,8 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 
     loadLevel(startLevel);
 }
+
+// ── 每帧更新 ──
 
 void GameController::update(float dt)
 {

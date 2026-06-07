@@ -1,8 +1,12 @@
+/// @file HUD.h
+/// 平视显示界面。管理分数、连击、球数、关卡提示、过关/失败动画及返回按钮。
+
 #ifndef __HUD_H__
 #define __HUD_H__
 
 #include "cocos2d.h"
 
+/// @class HUD
 /// 平视显示界面：分数、连击、球数、关卡提示。
 class HUD : public cocos2d::Node
 {

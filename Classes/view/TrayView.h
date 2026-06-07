@@ -1,9 +1,13 @@
+/// @file TrayView.h
+/// 托盘架和目标球渲染。根据 LevelData 在对应位置创建托盘物理体、视觉效果和可碰撞的目标球。
+
 #ifndef __TRAY_VIEW_H__
 #define __TRAY_VIEW_H__
 
 #include "cocos2d.h"
 #include "model/LevelData.h"
 
+/// @namespace TrayView
 /// 绘制托盘架并根据关卡数据生成目标球。
 namespace TrayView
 {

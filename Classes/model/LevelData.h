@@ -1,9 +1,13 @@
+/// @file LevelData.h
+/// 关卡数据结构定义。包含 TrayData 托盘配置和 LevelData 关卡布局。
+
 #ifndef __LEVEL_DATA_H__
 #define __LEVEL_DATA_H__
 
 #include <string>
 #include <vector>
 
+/// @struct TrayData
 /// 描述单个托盘及其上的目标球。
 struct TrayData {
     float x;      ///< 中心 X（屏幕宽度比例 0~1）

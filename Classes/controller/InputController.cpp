@@ -6,6 +6,8 @@
 
 USING_NS_CC;
 
+// ── 初始化触摸监听 ──
+
 void InputController::init(Node *target)
 {
     // 注册单点触摸事件监听器
@@ -16,6 +18,8 @@ void InputController::init(Node *target)
     listener->onTouchEnded = [this](Touch *t, Event *e) { onTouchEnded(t, e); };
     target->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, target);
 }
+
+// ── 触摸开始 ──
 
 bool InputController::onTouchBegan(Touch *touch, Event * /*event*/)
 {
@@ -30,6 +34,8 @@ bool InputController::onTouchBegan(Touch *touch, Event * /*event*/)
     return true;
 }
 
+// ── 触摸移动（拖拽瞄准） ──
+
 void InputController::onTouchMoved(Touch *touch, Event * /*event*/)
 {
     if (!_isDragging) return;
@@ -39,6 +45,8 @@ void InputController::onTouchMoved(Touch *touch, Event * /*event*/)
         _onDrag(_dragStart, delta);
     }
 }
+
+// ── 触摸结束（发射弹球） ──
 
 void InputController::onTouchEnded(Touch *touch, Event * /*event*/)
 {

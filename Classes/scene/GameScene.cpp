@@ -4,6 +4,8 @@
 
 USING_NS_CC;
 
+// ── 创建默认场景（使用关卡索引0） ──
+
 Scene *GameScene::createScene()
 {
     return GameScene::create();
@@ -15,6 +17,8 @@ Scene *GameScene::createSceneWithLevel(int levelIndex)
     scene->setStartLevel(levelIndex);
     return scene;
 }
+
+// ── 场景初始化（开启物理世界） ──
 
 bool GameScene::init()
 {
@@ -30,6 +34,8 @@ bool GameScene::init()
     return true;
 }
 
+// ── 进入场景时初始化控制器 ──
+
 void GameScene::onEnter()
 {
     Scene::onEnter();
@@ -37,6 +43,8 @@ void GameScene::onEnter()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     _controller.init(this, visibleSize, _startLevel);
 }
+
+// ── 每帧将更新委托给控制器 ──
 
 void GameScene::update(float dt)
 {

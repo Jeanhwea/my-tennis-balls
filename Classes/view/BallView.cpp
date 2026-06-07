@@ -20,6 +20,8 @@ constexpr float LIGHT_DIR_X = -0.5f;
 constexpr float LIGHT_DIR_Y = 0.5f;
 }  // namespace
 
+// ── 创建弹球（含阴影、光晕、高光、运动模糊等层） ──
+
 Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity, int ballIndex)
 {
     // 创建阴影层（最底层）
@@ -173,6 +175,8 @@ void BallView::updateMotionBlur(Node *ball, Node *blurNode)
         blurNode->setOpacity(0);
     }
 }
+
+// ── 移除弹球（含所有关联渲染层） ──
 
 void BallView::despawn(Node *ball, const std::function<void()> &onComplete)
 {

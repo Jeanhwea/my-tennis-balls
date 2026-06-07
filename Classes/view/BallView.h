@@ -1,8 +1,12 @@
+/// @file BallView.h
+/// 弹球精灵工厂。负责弹球的创建、移除动画，以及高光、阴影、光晕和运动模糊等视觉特效更新。
+
 #ifndef __BALL_VIEW_H__
 #define __BALL_VIEW_H__
 
 #include "cocos2d.h"
 
+/// @namespace BallView
 /// 弹球精灵的创建和移除动画。
 namespace BallView
 {

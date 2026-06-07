@@ -7,6 +7,7 @@ USING_NS_CC;
 namespace
 {
 
+/// 绘制一个托盘的可视化外观（包含阴影、主体、高光、暗线、端盖、支架、柔光）
 void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
 {
     auto draw = DrawNode::create();
@@ -69,6 +70,7 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
     parent->addChild(glow, 1);
 }
 
+/// 创建托盘的物理碰撞体（静态盒子）
 void createTrayPhysics(Node *parent, float trayX, float trayY, float trayW)
 {
     auto trayNode = Node::create();
@@ -86,6 +88,7 @@ void createTrayPhysics(Node *parent, float trayX, float trayY, float trayW)
     parent->addChild(trayNode, 2);
 }
 
+/// 在托盘上生成目标球，每个球带有独立物理体和标签
 void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count, int &targetIndex,
                   Vector<Node *> &outTargets)
 {
@@ -117,6 +120,7 @@ void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count
     }
 }
 
+/// 创建单个托盘（可视化 + 物理体 + 目标球）的完整流程
 void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, int &targetIndex,
                    Vector<Node *> &outTargets)
 {
@@ -131,6 +135,7 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
 
 }  // namespace
 
+/// 遍历关卡中的所有托盘配置，逐一创建
 int TrayView::createFromLevel(Node *parent, const Size &visibleSize, const LevelData &level,
                               Vector<Node *> &outTargets)
 {

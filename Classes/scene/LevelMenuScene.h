@@ -1,8 +1,12 @@
+/// @file LevelMenuScene.h
+/// 关卡选择菜单场景，支持分页浏览关卡按钮列表，带入场动画和导航控件。
+
 #ifndef __LEVEL_MENU_SCENE_H__
 #define __LEVEL_MENU_SCENE_H__
 
 #include "cocos2d.h"
 
+/// @class LevelMenuScene
 /// 关卡选择菜单场景，支持分页浏览。
 class LevelMenuScene : public cocos2d::Scene
 {

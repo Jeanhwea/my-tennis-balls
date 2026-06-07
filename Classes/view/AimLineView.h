@@ -1,8 +1,12 @@
+/// @file AimLineView.h
+/// 拖拽瞄准线视图。渲染虚线弹道轨迹、力度指示圆环和末端落点标记。
+
 #ifndef __AIM_LINE_VIEW_H__
 #define __AIM_LINE_VIEW_H__
 
 #include "cocos2d.h"
 
+/// @class AimLineView
 /// 渲染拖拽发射的瞄准线和力度指示器。
 class AimLineView
 {

@@ -9,6 +9,8 @@ USING_NS_CC;
 
 int LevelMenuScene::s_initialPage = 0;
 
+// ── 设置初始页面（根据上次选中的关卡索引） ──
+
 void LevelMenuScene::setInitialLevelIndex(int levelIndex)
 {
     s_initialPage = levelIndex / PER_PAGE;
@@ -19,6 +21,8 @@ Scene *LevelMenuScene::createScene()
     return LevelMenuScene::create();
 }
 
+// ── 场景初始化 ──
+
 bool LevelMenuScene::init()
 {
     if (!Scene::init()) {
@@ -27,6 +31,8 @@ bool LevelMenuScene::init()
     setName("LevelMenuScene");
     return true;
 }
+
+// ── 进入场景时构建所有 UI 元素 ──
 
 void LevelMenuScene::onEnter()
 {

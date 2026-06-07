@@ -30,12 +30,15 @@ AppDelegate::AppDelegate() {}
 
 AppDelegate::~AppDelegate()
 {
+    // ── 清理音频引擎 ──
 #if USE_AUDIO_ENGINE
     AudioEngine::end();
 #elif USE_SIMPLE_AUDIO_ENGINE
     SimpleAudioEngine::end();
 #endif
 }
+
+// ── GL 上下文属性设置 ──
 
 void AppDelegate::initGLContextAttrs()
 {
@@ -90,16 +93,20 @@ bool AppDelegate::applicationDidFinishLaunching()
                                             smallResolutionSize.width / designResolutionSize.width));
     }
 
+    // ── 随机数种子初始化 ──
     register_all_packages();
 
     CCLOG("Application version: %s", VERSION_STRING);
     CCLOG("Version components: %d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
 
+    // ── 切换至关卡选择场景 ──
     auto scene = LevelMenuScene::createScene();
     director->runWithScene(scene);
 
     return true;
 }
+
+// ── 前后台切换 ──
 
 void AppDelegate::applicationDidEnterBackground()
 {

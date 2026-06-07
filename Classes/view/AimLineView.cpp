@@ -6,11 +6,15 @@
 
 USING_NS_CC;
 
+// ── 初始化瞄准线节点 ──
+
 void AimLineView::init(Node *parent)
 {
     _drawNode = DrawNode::create();
     parent->addChild(_drawNode, 10);
 }
+
+// ── 清除瞄准线 ──
 
 void AimLineView::clear()
 {
@@ -18,6 +22,8 @@ void AimLineView::clear()
         _drawNode->clear();
     }
 }
+
+// ── 绘制瞄准引导线（虚线轨迹 + 力度指示器） ──
 
 void AimLineView::draw(const Vec2 &dragStart, const Vec2 &delta)
 {

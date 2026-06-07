@@ -1,8 +1,12 @@
+/// @file VFXHelper.h
+/// 无状态视觉特效工具集。提供粒子池、浮动分数、命中特效和节点闪烁等通用效果。
+
 #ifndef __VFX_HELPER_H__
 #define __VFX_HELPER_H__
 
 #include "cocos2d.h"
 
+/// @namespace VFXHelper
 /// 无状态视觉特效工具集。
 namespace VFXHelper
 {

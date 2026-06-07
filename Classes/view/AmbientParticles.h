@@ -1,8 +1,12 @@
+/// @file AmbientParticles.h
+/// 背景浮动光点粒子系统，营造深空氛围。支持动态质量调节以控制粒子数量。
+
 #ifndef __AMBIENT_PARTICLES_H__
 #define __AMBIENT_PARTICLES_H__
 
 #include "cocos2d.h"
 
+/// @class AmbientParticles
 /// 背景浮动光点，营造深空氛围。
 class AmbientParticles : public cocos2d::Node
 {
