@@ -1,9 +1,13 @@
+/// @file ArenaView.h
+/// Arena view. Creates physical boundary walls, floor sensor, background gradient, grid lines, launch zone, and decorative effects.
+
 #ifndef __ARENA_VIEW_H__
 #define __ARENA_VIEW_H__
 
 #include "cocos2d.h"
 
-/// 创建物理边界墙、地板传感器和区域视觉效果。
+/// @namespace ArenaView
+/// Create physical boundary walls, floor sensor, and zone visual effects.
 namespace ArenaView
 {
 

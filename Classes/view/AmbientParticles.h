@@ -1,9 +1,13 @@
+/// @file AmbientParticles.h
+/// Background floating light dot particle system, creating a deep space atmosphere. Supports dynamic quality adjustment to control particle count.
+
 #ifndef __AMBIENT_PARTICLES_H__
 #define __AMBIENT_PARTICLES_H__
 
 #include "cocos2d.h"
 
-/// 背景浮动光点，营造深空氛围。
+/// @class AmbientParticles
+/// Background floating light dots, creating a deep space atmosphere.
 class AmbientParticles : public cocos2d::Node
 {
 public:

@@ -1,19 +1,23 @@
+/// @file AimLineView.h
+/// Drag aim line view. Renders dashed trajectory, power indicator ring, and end-point marker.
+
 #ifndef __AIM_LINE_VIEW_H__
 #define __AIM_LINE_VIEW_H__
 
 #include "cocos2d.h"
 
-/// 渲染拖拽发射的瞄准线和力度指示器。
+/// @class AimLineView
+/// Renders the drag-and-launch aim line and power indicator.
 class AimLineView
 {
 public:
-    /// 创建内部 DrawNode 并添加到父节点。
+    /// Create internal DrawNode and add to parent.
     void init(cocos2d::Node *parent);
 
-    /// 从拖拽起点根据当前触摸偏移绘制瞄准线。
+    /// Draw aim line from drag start based on current touch offset.
     void draw(const cocos2d::Vec2 &dragStart, const cocos2d::Vec2 &delta);
 
-    /// 清除瞄准线。
+    /// Clear the aim line.
     void clear();
 
 private:

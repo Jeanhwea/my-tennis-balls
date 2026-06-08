@@ -8,20 +8,18 @@ USING_NS_CC;
 namespace
 {
 
-/// Parse a single level JSON string. Returns true on success, false on failure.
+/// 解析单个关卡的 JSON 字符串，成功返回 true，失败返回 false。
 bool parseLevel(const std::string &json, LevelData &outLevel)
 {
     rapidjson::Document doc;
     doc.Parse(json.c_str());
 
-    // Check for JSON parse errors
     if (doc.HasParseError()) {
         CCLOG("[LevelData] ERROR: JSON parse error at offset %zu: %d", doc.GetErrorOffset(),
               static_cast<int>(doc.GetParseError()));
         return false;
     }
 
-    // Validate required top-level fields exist and have correct types
     if (!doc.HasMember("id") || !doc["id"].IsInt()) {
         CCLOG("[LevelData] ERROR: Missing or invalid 'id' field");
         return false;
@@ -48,7 +46,6 @@ bool parseLevel(const std::string &json, LevelData &outLevel)
     for (rapidjson::SizeType i = 0; i < trays.Size(); ++i) {
         const auto &t = trays[i];
 
-        // Validate tray object fields
         if (!t.IsObject()) {
             CCLOG("[LevelData] ERROR: Tray %zu is not an object", static_cast<size_t>(i));
             return false;
@@ -89,26 +86,22 @@ std::vector<LevelData> loadAllLevels()
     for (int i = 1;; ++i) {
         auto filename = StringUtils::format("levels/level_%03d.json", i);
 
-        // Check if file exists
         if (!FileUtils::getInstance()->isFileExist(filename)) {
-            break;  // No more level files, stop loading
+            break;
         }
 
-        // Read file content
         auto content = FileUtils::getInstance()->getStringFromFile(filename);
         if (content.empty()) {
             CCLOG("[LevelData] WARNING: Empty content in %s, skipping", filename.c_str());
-            continue;  // Skip empty file, try next
+            continue;
         }
 
-        // Parse level data
         LevelData level;
         if (parseLevel(content, level)) {
             levels.push_back(level);
             CCLOG("Loaded level %d: %s", levels.back().id, levels.back().name.c_str());
         } else {
             CCLOG("[LevelData] WARNING: Failed to parse %s, skipping", filename.c_str());
-            // Continue loading other levels instead of stopping
         }
     }
 

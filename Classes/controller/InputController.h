@@ -1,3 +1,6 @@
+/// @file InputController.h
+/// 触摸输入控制器，将拖拽手势转换为弹球发射命令。支持拖拽回调、发射回调和发射区域限制。
+
 #ifndef __INPUT_CONTROLLER_H__
 #define __INPUT_CONTROLLER_H__
 
@@ -5,6 +8,7 @@
 
 #include "cocos2d.h"
 
+/// @class InputController
 /// 处理触摸输入，将拖拽手势转换为发射命令。
 class InputController
 {
