@@ -18,7 +18,7 @@ public:
 
     void setOnChange(OnChangeCallback cb) { _onChange = std::move(cb); }
 
-    void addScore(int basePoints);
+    int addScore(int basePoints);
     void resetCombo();
     void tick(float dt);
 

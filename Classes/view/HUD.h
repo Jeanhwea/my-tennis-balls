@@ -26,6 +26,8 @@ public:
     void showFailed();
     void showLevelIntro(int levelId, const std::string &name);
 
+    void setOverlayParent(cocos2d::Node *parent) { _overlayParent = parent; }
+
 private:
     bool initWithSize(const cocos2d::Size &visibleSize);
 
@@ -46,6 +48,7 @@ private:
     cocos2d::Label *_hintLabel = nullptr;
 
     std::function<void()> _onBack;
+    cocos2d::Node *_overlayParent = nullptr;
 
     static constexpr float MARGIN = 20.0f;
     static constexpr float FONT_SZ = 24.0f;

@@ -16,6 +16,10 @@ namespace VFXHelper
 /// @param poolSize Pool size, defaults to 50
 void initParticlePool(cocos2d::Node *parent, int poolSize = 50);
 
+/// Release all pooled nodes and reset initialization state.
+void resetParticlePool();
+void resetLabelPool();
+
 void spawnHitParticle(cocos2d::Node *parent, const cocos2d::Vec2 &position);
 void showFloatingScore(cocos2d::Node *parent, const cocos2d::Vec2 &position, int points);
 void flashNode(cocos2d::Node *node);

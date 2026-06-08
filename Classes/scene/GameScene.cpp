@@ -1,8 +1,16 @@
 #include "GameScene.h"
 
 #include "common/GameConstants.h"
+#include "view/VFXHelper.h"
 
 USING_NS_CC;
+
+GameScene::~GameScene()
+{
+    stopAllActions();
+    VFXHelper::resetParticlePool();
+    VFXHelper::resetLabelPool();
+}
 
 Scene *GameScene::createScene()
 {

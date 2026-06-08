@@ -26,6 +26,7 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
     _aimLine.init(_scene);
 
     _hud = HUD::create(_visibleSize);
+    _hud->setOverlayParent(_scene);
     _scene->addChild(_hud, 20);
 
     _model.scoreManager().setOnChange([this]() { refreshHUD(); });
@@ -85,11 +86,11 @@ void GameController::loadLevel(int index)
         return;
     }
     _transitioning = false;
-    _model.setLevelIndex(index);
     _ballCounter = 0;
 
     clearLevelNodes();
 
+    _model.loadLevel(index);
     const auto &level = _model.currentLevel();
     int totalTargets = TrayView::createFromLevel(_scene, _visibleSize, level, _activeTargets);
     _model.setTargetsRemaining(totalTargets);
@@ -196,17 +197,18 @@ void GameController::refreshHUD()
 
 void GameController::spawnBall(const Vec2 &position, const Vec2 &velocity)
 {
-    auto ball = BallView::spawn(_scene, position, velocity, ++_ballCounter);
+    _ballCounter++;
+    auto ball = BallView::spawn(_scene, position, velocity, _ballCounter);
     _activeBalls.pushBack(ball);
-    _model.setBallCount(static_cast<int>(_activeBalls.size()));
+    _model.useBall();
     refreshHUD();
 }
 
 void GameController::removeBall(Node *ball)
 {
     _activeBalls.eraseObject(ball);
+    _model.resetCombo();
     BallView::despawn(ball, [this]() {
-        _model.setBallCount(static_cast<int>(_activeBalls.size()));
         refreshHUD();
         checkFailCondition();
     });
@@ -215,8 +217,8 @@ void GameController::removeBall(Node *ball)
 void GameController::removeTarget(Node *target)
 {
     _activeTargets.eraseObject(target);
+    _model.removeTarget();
     BallView::despawn(target, [this]() {
-        _model.setTargetsRemaining(static_cast<int>(_activeTargets.size()));
         refreshHUD();
         if (_model.isCleared()) {
             onLevelCleared();
@@ -264,8 +266,7 @@ namespace
 
 void applyScoreVFX(Node *parent, ScoreManager &score, int basePoints, const Vec2 &pos)
 {
-    int points = basePoints * std::max(1, score.combo());
-    score.addScore(basePoints);
+    int points = score.addScore(basePoints);
     VFXHelper::showFloatingScore(parent, pos, points);
 }
 
@@ -281,7 +282,6 @@ bool GameController::handleFloorContact(Node * /*floor*/, Node *other, PhysicsCo
         removeTarget(other);
     } else if (other->getTag() == TAG_BALL) {
         removeBall(other);
-        _model.scoreManager().resetCombo();
     }
     return false;
 }

@@ -1,11 +1,13 @@
 #include "ScoreManager.h"
 
-void ScoreManager::addScore(int basePoints)
+int ScoreManager::addScore(int basePoints)
 {
-    _score += basePoints * std::max(1, _combo);
+    int points = basePoints * std::max(1, _combo);
+    _score += points;
     _combo++;
     _comboTimer = COMBO_TIMEOUT;
     notifyChange();
+    return points;
 }
 
 void ScoreManager::resetCombo()
