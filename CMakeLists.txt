@@ -47,6 +47,7 @@ endif()
 # Add cross-platforms source files and header files
 list(APPEND GAME_SOURCE
   Classes/AppDelegate.cpp
+  Classes/util/VisualUtil.cpp
   Classes/scene/GameScene.cpp
   Classes/scene/LevelMenuScene.cpp
   Classes/model/GameModel.cpp
@@ -82,6 +83,7 @@ list(APPEND GAME_HEADER
   Classes/controller/InputController.h
   Classes/controller/GameController.h
   Classes/common/Random.h
+  Classes/util/VisualUtil.h
 )
 
 if(ANDROID)
