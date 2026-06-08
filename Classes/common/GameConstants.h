@@ -2,20 +2,20 @@
 #define __GAME_CONSTANTS_H__
 
 /// @file GameConstants.h
-/// 全局常量：标签、掩码、物理参数、布局比例、计分规则。
+/// Global constants: tags, masks, physics parameters, layout ratios, scoring rules.
 
-// ── 字体 ──
+// -- Fonts --
 constexpr const char *FONT_UI = "fonts/arial.ttf";
 constexpr const char *FONT_TITLE = "fonts/Marker Felt.ttf";
 
-// ── 节点标签 ──
+// -- Node Tags --
 constexpr int TAG_BALL = 100;
 constexpr int TAG_TARGET = 200;
 constexpr int TAG_FLOOR = 300;
 constexpr int TAG_TRAY = 400;
 constexpr int TAG_OBSTACLE = 500;
 
-// ── 碰撞分类掩码 ──
+// -- Collision Category Masks --
 constexpr int CATEGORY_BALL = 0x01;
 constexpr int CATEGORY_EDGE = 0x02;
 constexpr int CATEGORY_TARGET = 0x04;
@@ -24,35 +24,35 @@ constexpr int CATEGORY_TRAY = 0x10;
 constexpr int CATEGORY_OBSTACLE = 0x20;
 constexpr int CATEGORY_ALL = 0xFFFFFFFF;
 
-// ── 全局物理 ──
+// -- Global Physics --
 constexpr float GRAVITY_Y = -980.0f;
 
-// ── 弹球 ──
+// -- Ball --
 constexpr float BALL_SCALE = 0.22f;
 constexpr float BALL_SPRITE_PADDING = 18.0f;
 constexpr float BALL_DENSITY = 1.0f;
 constexpr float BALL_RESTITUTION = 0.8f;
 constexpr float BALL_FRICTION = 0.3f;
 
-// ── 弹球光照效果 ──
-constexpr float BALL_SHADOW_OFFSET_Y = -8.0f;  // 阴影Y偏移
+// -- Ball Lighting --
+constexpr float BALL_SHADOW_OFFSET_Y = -8.0f;  // Shadow Y offset
 
-// ── 发射参数 ──
+// -- Launch Parameters --
 constexpr float LAUNCH_FORCE_SCALE = 5.5f;
 constexpr float MAX_LAUNCH_SPEED = 1500.0f;
 constexpr float MIN_DRAG_DISTANCE = 20.0f;
 
-// ── 目标球 ──
+// -- Target Ball --
 constexpr float TARGET_SCALE = 0.18f;
 constexpr float TARGET_DENSITY = 0.8f;
 constexpr float TARGET_RESTITUTION = 0.5f;
 constexpr float TARGET_FRICTION = 0.6f;
 
-// ── 边墙 ──
+// -- Edge Walls --
 constexpr float EDGE_RESTITUTION = 0.9f;
 constexpr float EDGE_FRICTION = 0.2f;
 
-// ── 托盘 ──
+// -- Tray --
 constexpr float TRAY_X = 0.15f;
 constexpr float TRAY_Y = 0.45f;
 constexpr float TRAY_WIDTH_RATIO = 0.22f;
@@ -61,7 +61,7 @@ constexpr float TRAY_DENSITY = 1.0f;
 constexpr float TRAY_RESTITUTION = 0.2f;
 constexpr float TRAY_FRICTION = 0.8f;
 
-// ── 障碍物 ──
+// -- Obstacle --
 constexpr float OBSTACLE_MIN_SIZE = 30.0f;
 constexpr float OBSTACLE_MAX_SIZE = 80.0f;
 constexpr float OBSTACLE_ZONE_LEFT = 0.05f;
@@ -72,17 +72,17 @@ constexpr float OBSTACLE_DENSITY = 1.0f;
 constexpr float OBSTACLE_RESTITUTION = 1.0f;
 constexpr float OBSTACLE_FRICTION = 0.0f;
 
-// ── 区域布局 ──
+// -- Area Layout --
 constexpr float LAUNCH_ZONE_RATIO = 0.20f;
 constexpr float DIVIDER_THICKNESS = 2.0f;
 constexpr float FLOOR_HEIGHT = 10.0f;
 
-// ── 计分 ──
+// -- Scoring --
 constexpr float COMBO_TIMEOUT = 2.0f;
 constexpr int SCORE_PER_HIT = 10;
 constexpr int SCORE_TARGET_FALL = 50;
 
-// ── 出界阈值 ──
+// -- Out-of-Bounds Thresholds --
 constexpr float OOB_BOTTOM = -50.0f;
 constexpr float OOB_TOP_MARGIN = 200.0f;
 constexpr float OOB_SIDE_MARGIN = 200.0f;

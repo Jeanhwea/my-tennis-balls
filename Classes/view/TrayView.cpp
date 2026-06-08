@@ -7,18 +7,18 @@ USING_NS_CC;
 namespace
 {
 
-/// 绘制一个托盘的可视化外观（包含阴影、主体、高光、暗线、端盖、支架、柔光）
+/// Draw the visual appearance of a tray (including shadow, body, highlight, dark line, end caps, brackets, soft glow)
 void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
 {
     auto draw = DrawNode::create();
     float halfW = trayW / 2;
     float halfH = TRAY_THICKNESS / 2;
 
-    // 阴影
+    // Shadow
     draw->drawSolidRect(Vec2(trayX - halfW + 3, trayY - halfH - 3),
                         Vec2(trayX + halfW + 3, trayY + halfH - 3), Color4F(0.0f, 0.0f, 0.0f, 0.25f));
 
-    // 主体
+    // Body
     static constexpr int T_STRIPS = 3;
     for (int i = 0; i < T_STRIPS; ++i) {
         float t0 = static_cast<float>(i) / T_STRIPS;
@@ -29,19 +29,19 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
                             Color4F(bright - 0.05f, bright, bright + 0.08f, 0.95f));
     }
 
-    // 高光
+    // Highlight
     draw->drawSolidRect(Vec2(trayX - halfW + 1, trayY + halfH - 2), Vec2(trayX + halfW - 1, trayY + halfH),
                         Color4F(0.75f, 0.80f, 0.92f, 0.85f));
 
-    // 暗线
+    // Dark line
     draw->drawLine(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX + halfW, trayY - halfH),
                    Color4F(0.22f, 0.24f, 0.30f, 0.9f));
 
-    // 端盖
+    // End caps
     draw->drawSolidCircle(Vec2(trayX - halfW, trayY), halfH, 0, 8, Color4F(0.50f, 0.54f, 0.62f, 0.7f));
     draw->drawSolidCircle(Vec2(trayX + halfW, trayY), halfH, 0, 8, Color4F(0.38f, 0.40f, 0.48f, 0.7f));
 
-    // 支架
+    // Brackets
     static constexpr float BRACKET_H = 12.0f;
     static constexpr float BRACKET_W = 6.0f;
     Color4F bracketColor(0.30f, 0.35f, 0.50f, 0.6f);
@@ -57,7 +57,7 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
     draw->setTag(TAG_TRAY);
     parent->addChild(draw, 2);
 
-    // 底部柔光
+    // Bottom soft glow
     auto glow = DrawNode::create();
     for (int g = 5; g >= 0; --g) {
         float gy = static_cast<float>(g) * 2.5f;
@@ -70,7 +70,7 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
     parent->addChild(glow, 1);
 }
 
-/// 创建托盘的物理碰撞体（静态盒子）
+/// Create the tray physics collision body (static box)
 void createTrayPhysics(Node *parent, float trayX, float trayY, float trayW)
 {
     auto trayNode = Node::create();
@@ -88,7 +88,7 @@ void createTrayPhysics(Node *parent, float trayX, float trayY, float trayW)
     parent->addChild(trayNode, 2);
 }
 
-/// 在托盘上生成目标球，每个球带有独立物理体和标签
+/// Spawn target balls on the tray, each with its own physics body and tag
 void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count, int &targetIndex,
                   Vector<Node *> &outTargets)
 {
@@ -120,7 +120,7 @@ void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count
     }
 }
 
-/// 创建单个托盘（可视化 + 物理体 + 目标球）的完整流程
+/// Complete process for creating a single tray (visual + physics body + target balls)
 void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, int &targetIndex,
                    Vector<Node *> &outTargets)
 {
@@ -135,7 +135,7 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
 
 }  // namespace
 
-/// 遍历关卡中的所有托盘配置，逐一创建
+/// Iterate through all tray configurations in the level, creating each one
 int TrayView::createFromLevel(Node *parent, const Size &visibleSize, const LevelData &level,
                               Vector<Node *> &outTargets)
 {

@@ -4,7 +4,7 @@
 
 USING_NS_CC;
 
-// ── 创建默认场景（使用关卡索引0） ──
+// -- Create default scene (using level index 0) --
 
 Scene *GameScene::createScene()
 {
@@ -18,7 +18,7 @@ Scene *GameScene::createSceneWithLevel(int levelIndex)
     return scene;
 }
 
-// ── 场景初始化（开启物理世界） ──
+// -- Scene initialization (enable physics world) --
 
 bool GameScene::init()
 {
@@ -34,7 +34,7 @@ bool GameScene::init()
     return true;
 }
 
-// ── 进入场景时初始化控制器 ──
+// -- Initialize controller when entering the scene --
 
 void GameScene::onEnter()
 {
@@ -44,7 +44,7 @@ void GameScene::onEnter()
     _controller.init(this, visibleSize, _startLevel);
 }
 
-// ── 每帧将更新委托给控制器 ──
+// -- Delegate per-frame updates to the controller --
 
 void GameScene::update(float dt)
 {

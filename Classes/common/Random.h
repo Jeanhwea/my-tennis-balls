@@ -4,7 +4,7 @@
 #include <random>
 
 /// @file Random.h
-/// 基于 mt19937 的随机数工具。
+/// Random number utilities based on mt19937.
 namespace common
 {
 

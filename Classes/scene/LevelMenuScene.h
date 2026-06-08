@@ -1,5 +1,5 @@
 /// @file LevelMenuScene.h
-/// 关卡选择菜单场景，支持分页浏览关卡按钮列表，带入场动画和导航控件。
+/// Level selection menu scene, supports paginated browsing of level buttons with entry animations and navigation controls.
 
 #ifndef __LEVEL_MENU_SCENE_H__
 #define __LEVEL_MENU_SCENE_H__
@@ -7,13 +7,13 @@
 #include "cocos2d.h"
 
 /// @class LevelMenuScene
-/// 关卡选择菜单场景，支持分页浏览。
+/// Level selection menu scene, supports paginated browsing.
 class LevelMenuScene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene *createScene();
 
-    /// 设置下次打开菜单时自动跳转到包含该关卡索引的页面。
+    /// Set the auto-navigate page for the level index when opening the menu next time.
     static void setInitialLevelIndex(int levelIndex);
 
     bool init() override;

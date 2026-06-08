@@ -11,7 +11,7 @@
 
 USING_NS_CC;
 
-// ── 游戏控制器初始化 ──
+// -- Game controller initialization --
 
 void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 {
@@ -45,13 +45,13 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
     loadLevel(startLevel);
 }
 
-// ── 每帧更新 ──
+// -- Per-frame update --
 
 void GameController::update(float dt)
 {
     _model.tick(dt);
     if (!_transitioning) {
-        updateBallEffects();  // 同步球的光照效果
+        updateBallEffects();  // Synchronize ball lighting effects
         collectOutOfBounds();
         processPendingRemovals();
     }
@@ -59,7 +59,7 @@ void GameController::update(float dt)
 
 void GameController::updateBallEffects()
 {
-    // 同步每个球的阴影、光晕位置，并更新运动模糊
+    // Synchronize each ball's shadow, glow position, and update motion blur
     for (auto ball : _activeBalls) {
         auto name = ball->getName();
         if (name.empty()) continue;
@@ -79,15 +79,15 @@ void GameController::updateBallEffects()
             glow->setPosition(ballPos);
         }
 
-        // 更新运动模糊
+        // Update motion blur
         BallView::updateMotionBlur(ball, blur);
 
-        // 更新高光位置（模拟固定光源）
+        // Update highlight position (simulates a fixed light source)
         BallView::updateHighlights(ball);
     }
 }
 
-// ── 关卡管理 ──
+// -- Level management --
 
 void GameController::loadLevel(int index)
 {
@@ -169,7 +169,7 @@ void GameController::checkFailCondition()
     }
 }
 
-// ── 输入与物理 ──
+// -- Input and physics --
 
 void GameController::setupInput()
 {
@@ -207,7 +207,7 @@ void GameController::refreshHUD()
     _hud->updateTargets(_model.targetsRemaining());
 }
 
-// ── 球管理 ──
+// -- Ball management --
 
 void GameController::spawnBall(const Vec2 &position, const Vec2 &velocity)
 {
@@ -278,7 +278,7 @@ void GameController::processPendingRemovals()
     _pendingRemoval.clear();
 }
 
-// ── 物理回调 ──
+// -- Physics callbacks --
 
 namespace
 {
@@ -328,7 +328,7 @@ bool GameController::onContactBegin(PhysicsContact &contact)
     auto nodeB = contact.getShapeB()->getBody()->getNode();
     if (!nodeA || !nodeB) return true;
 
-    // 地板传感器
+    // Floor sensor
     bool aFloor = nodeA->getTag() == TAG_FLOOR;
     bool bFloor = nodeB->getTag() == TAG_FLOOR;
     if (aFloor || bFloor) {
@@ -337,13 +337,13 @@ bool GameController::onContactBegin(PhysicsContact &contact)
         return handleFloorContact(floor, other, contact);
     }
 
-    // 弹球 ↔ 目标球
+    // Ball vs target
     if ((nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_TARGET) ||
         (nodeA->getTag() == TAG_TARGET && nodeB->getTag() == TAG_BALL)) {
         return handleBallTargetContact(nodeA, nodeB, contact);
     }
 
-    // 弹球 ↔ 弹球
+    // Ball vs ball
     if (nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_BALL) {
         return handleBallBallContact(nodeA, nodeB, contact);
     }

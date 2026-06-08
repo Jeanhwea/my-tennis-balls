@@ -1,5 +1,5 @@
 /// @file TrayView.h
-/// 托盘架和目标球渲染。根据 LevelData 在对应位置创建托盘物理体、视觉效果和可碰撞的目标球。
+/// Tray rack and target ball rendering. Create tray physics bodies, visual effects, and collidable target balls at the corresponding positions based on LevelData.
 
 #ifndef __TRAY_VIEW_H__
 #define __TRAY_VIEW_H__
@@ -8,13 +8,13 @@
 #include "model/LevelData.h"
 
 /// @namespace TrayView
-/// 绘制托盘架并根据关卡数据生成目标球。
+/// Draw tray racks and generate target balls based on level data.
 namespace TrayView
 {
 
-/// 创建关卡中的所有托盘和目标球。
-/// @param outTargets 输出参数，用于存储创建的目标球节点指针
-/// @return 目标球总数
+/// Create all trays and target balls in the level.
+/// @param outTargets Output parameter for storing created target ball node pointers
+/// @return Total number of target balls
 int createFromLevel(cocos2d::Node *parent, const cocos2d::Size &visibleSize, const LevelData &level,
                     cocos2d::Vector<cocos2d::Node *> &outTargets);
 

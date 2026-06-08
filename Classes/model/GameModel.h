@@ -1,5 +1,5 @@
 /// @file GameModel.h
-/// 核心游戏状态模型，纯数据无渲染。维护关卡索引、计分、球数、目标剩余等运行时状态。
+/// Core game state model, pure data without rendering. Manages runtime state such as level index, score, ball count, and remaining targets.
 
 #ifndef __GAME_MODEL_H__
 #define __GAME_MODEL_H__
@@ -8,7 +8,7 @@
 #include "ScoreManager.h"
 
 /// @class GameModel
-/// 核心游戏状态，纯数据无渲染。
+/// Core game state, pure data without rendering.
 class GameModel
 {
 public:

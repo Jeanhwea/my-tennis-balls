@@ -3,7 +3,7 @@
 
 #include "cocos2d.h"
 
-/// 障碍物渲染和物理体创建。
+/// Obstacle rendering and physics body creation.
 namespace ObstacleView
 {
 

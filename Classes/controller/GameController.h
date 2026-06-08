@@ -1,5 +1,5 @@
 /// @file GameController.h
-/// 游戏核心控制器，协调 Model↔View 通信、关卡生命周期、输入事件和物理碰撞回调。
+/// Core game controller, coordinating Model<->View communication, level lifecycle, input events, and physics collision callbacks.
 
 #ifndef __GAME_CONTROLLER_H__
 #define __GAME_CONTROLLER_H__
@@ -11,7 +11,7 @@
 #include "view/HUD.h"
 
 /// @class GameController
-/// 协调 Model ↔ View 通信、关卡推进和物理系统。
+/// Coordinates Model<->View communication, level progression, and physics system.
 class GameController
 {
 public:
@@ -37,27 +37,27 @@ private:
     // Batched removal to avoid scene graph modifications during iteration
     std::vector<cocos2d::Node *> _pendingRemoval;
 
-    // ── 关卡 ──
+    // -- Level --
     void loadLevel(int index);
     void clearLevelNodes();
     void onLevelCleared();
     void onLevelFailed();
     void checkFailCondition();
 
-    // ── 输入与物理 ──
+    // -- Input and physics --
     void setupInput();
     void setupPhysics();
     void refreshHUD();
 
-    // ── 球管理 ──
+    // -- Ball management --
     void spawnBall(const cocos2d::Vec2 &position, const cocos2d::Vec2 &velocity);
     void removeBall(cocos2d::Node *ball);
     void removeTarget(cocos2d::Node *target);
     void collectOutOfBounds();
     void processPendingRemovals();
-    void updateBallEffects();  // 同步球的光照效果
+    void updateBallEffects();  // Synchronize ball lighting effects
 
-    // ── 碰撞 ──
+    // -- Collision --
     bool onContactBegin(cocos2d::PhysicsContact &contact);
     bool handleFloorContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);
     bool handleBallTargetContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);

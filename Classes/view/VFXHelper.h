@@ -1,5 +1,5 @@
 /// @file VFXHelper.h
-/// 无状态视觉特效工具集。提供粒子池、浮动分数、命中特效和节点闪烁等通用效果。
+/// Stateless visual effects utility set. Provides common effects such as particle pool, floating score, hit effects, and node flash.
 
 #ifndef __VFX_HELPER_H__
 #define __VFX_HELPER_H__
@@ -7,13 +7,13 @@
 #include "cocos2d.h"
 
 /// @namespace VFXHelper
-/// 无状态视觉特效工具集。
+/// Stateless visual effects utility set.
 namespace VFXHelper
 {
 
-/// 初始化粒子池，预分配 DrawNode 对象以避免运行时分配开销。
-/// @param parent 粒子池节点的父节点
-/// @param poolSize 池大小，默认 50
+/// Initialize the particle pool, pre-allocate DrawNode objects to avoid runtime allocation overhead.
+/// @param parent Parent node for the particle pool node
+/// @param poolSize Pool size, defaults to 50
 void initParticlePool(cocos2d::Node *parent, int poolSize = 50);
 
 void spawnHitParticle(cocos2d::Node *parent, const cocos2d::Vec2 &position);

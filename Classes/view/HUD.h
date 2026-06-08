@@ -1,5 +1,5 @@
 /// @file HUD.h
-/// 平视显示界面。管理分数、连击、球数、关卡提示、过关/失败动画及返回按钮。
+/// Head-up display interface. Manages score, combo, ball count, level hints, clear/fail animations and back button.
 
 #ifndef __HUD_H__
 #define __HUD_H__
@@ -7,13 +7,13 @@
 #include "cocos2d.h"
 
 /// @class HUD
-/// 平视显示界面：分数、连击、球数、关卡提示。
+/// Head-up display: score, combo, ball count, level hint.
 class HUD : public cocos2d::Node
 {
 public:
     static HUD *create(const cocos2d::Size &visibleSize);
 
-    /// 返回按钮回调。
+    /// Back button callback.
     void setOnBack(std::function<void()> cb) { _onBack = std::move(cb); }
 
     void updateScore(int score);

@@ -6,7 +6,7 @@
 
 USING_NS_CC;
 
-// ── 初始化瞄准线节点 ──
+// -- Initialize aim line node --
 
 void AimLineView::init(Node *parent)
 {
@@ -14,7 +14,7 @@ void AimLineView::init(Node *parent)
     parent->addChild(_drawNode, 10);
 }
 
-// ── 清除瞄准线 ──
+// -- Clear aim line --
 
 void AimLineView::clear()
 {
@@ -23,7 +23,7 @@ void AimLineView::clear()
     }
 }
 
-// ── 绘制瞄准引导线（虚线轨迹 + 力度指示器） ──
+// -- Draw aim guide line (dashed trajectory + power indicator) --
 
 void AimLineView::draw(const Vec2 &dragStart, const Vec2 &delta)
 {
@@ -35,7 +35,7 @@ void AimLineView::draw(const Vec2 &dragStart, const Vec2 &delta)
     float speed = std::min(distance * LAUNCH_FORCE_SCALE, MAX_LAUNCH_SPEED);
     float powerRatio = speed / MAX_LAUNCH_SPEED;
 
-    // 虚线轨迹
+    // Dashed trajectory dots
     int dots = static_cast<int>(distance / 10);
     dots = std::min(dots, 40);
     for (int i = 0; i < dots; ++i) {

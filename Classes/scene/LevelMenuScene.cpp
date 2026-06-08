@@ -9,7 +9,7 @@ USING_NS_CC;
 
 int LevelMenuScene::s_initialPage = 0;
 
-// ── 设置初始页面（根据上次选中的关卡索引） ──
+// -- Set initial page based on last selected level index --
 
 void LevelMenuScene::setInitialLevelIndex(int levelIndex)
 {
@@ -21,7 +21,7 @@ Scene *LevelMenuScene::createScene()
     return LevelMenuScene::create();
 }
 
-// ── 场景初始化 ──
+// -- Scene initialization --
 
 bool LevelMenuScene::init()
 {
@@ -32,7 +32,7 @@ bool LevelMenuScene::init()
     return true;
 }
 
-// ── 进入场景时构建所有 UI 元素 ──
+// -- Build all UI elements on scene entry --
 
 void LevelMenuScene::onEnter()
 {
@@ -163,7 +163,7 @@ void LevelMenuScene::showPage(int page)
         createOneButton(_pageContainer, idx, levels[idx].id, levels[idx].name, x, y, btnW, btnH);
     }
 
-    // 入场动画
+    // Entry animation
     int animIdx = 0;
     for (auto child : _pageContainer->getChildren()) {
         if (child->getTag() == 999) {
@@ -246,7 +246,7 @@ void LevelMenuScene::createNavButtons(const Size &size)
     constexpr float margin = 50.0f;
     float cy = 80.0f;
 
-    // 上一页
+    // Previous page
     _prevBtn = Node::create();
     _prevBtn->setPosition(Vec2(margin, cy));
     addChild(_prevBtn, 2);
@@ -278,7 +278,7 @@ void LevelMenuScene::createNavButtons(const Size &size)
     prevListener->onTouchCancelled = [this](Touch *, Event *) { _prevBtn->setScale(1.0f); };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(prevListener, _prevBtn);
 
-    // 下一页
+    // Next page
     _nextBtn = Node::create();
     _nextBtn->setPosition(Vec2(size.width - margin, cy));
     addChild(_nextBtn, 2);
@@ -310,7 +310,7 @@ void LevelMenuScene::createNavButtons(const Size &size)
     nextListener->onTouchCancelled = [this](Touch *, Event *) { _nextBtn->setScale(1.0f); };
     getEventDispatcher()->addEventListenerWithSceneGraphPriority(nextListener, _nextBtn);
 
-    // 页码
+    // Page number
     _pageLabel = Label::createWithTTF("1 / 1", FONT_UI, 20);
     _pageLabel->setPosition(Vec2(size.width / 2, cy));
     _pageLabel->setTextColor(Color4B(150, 180, 220, 200));

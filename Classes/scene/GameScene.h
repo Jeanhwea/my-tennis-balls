@@ -1,5 +1,5 @@
 /// @file GameScene.h
-/// 游戏主场景。初始化物理世界并创建 GameController 协调游戏逻辑。
+/// Main game scene. Initializes the physics world and creates GameController to coordinate game logic.
 
 #ifndef __GAME_SCENE_H__
 #define __GAME_SCENE_H__
@@ -8,7 +8,7 @@
 #include "controller/GameController.h"
 
 /// @class GameScene
-/// 游戏场景，支持指定起始关卡。
+/// Game scene, supports specifying a starting level.
 class GameScene : public cocos2d::Scene
 {
 public:

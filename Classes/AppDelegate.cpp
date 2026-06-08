@@ -18,7 +18,7 @@ namespace
 
 static constexpr const char *APP_TITLE = "my-tennis-balls (" VERSION_STRING ")";
 
-/// 分辨率阶梯：设计基准 → 低端 → 全高清 → 2K
+/// Resolution tiers: design reference -> low-end -> full HD -> 2K
 const cocos2d::Size designResolutionSize(960, 540);
 const cocos2d::Size smallResolutionSize(480, 320);
 const cocos2d::Size mediumResolutionSize(1920, 1080);
@@ -30,7 +30,7 @@ AppDelegate::AppDelegate() {}
 
 AppDelegate::~AppDelegate()
 {
-    // ── 清理音频引擎 ──
+    // -- Cleanup audio engine --
 #if USE_AUDIO_ENGINE
     AudioEngine::end();
 #elif USE_SIMPLE_AUDIO_ENGINE
@@ -38,7 +38,7 @@ AppDelegate::~AppDelegate()
 #endif
 }
 
-// ── GL 上下文属性设置 ──
+// -- GL context attribute setup --
 
 void AppDelegate::initGLContextAttrs()
 {
@@ -78,7 +78,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     director->setAnimationInterval(1.0f / 60);
 
-    // 纵向完整显示，横向自适应各种宽高比
+    // Vertical full display, horizontal auto-adapt to various aspect ratios
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
                                     ResolutionPolicy::FIXED_HEIGHT);
     auto frameSize = glview->getFrameSize();
@@ -93,20 +93,20 @@ bool AppDelegate::applicationDidFinishLaunching()
                                             smallResolutionSize.width / designResolutionSize.width));
     }
 
-    // ── 随机数种子初始化 ──
+    // -- Random seed initialization --
     register_all_packages();
 
     CCLOG("Application version: %s", VERSION_STRING);
     CCLOG("Version components: %d.%d.%d", VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH);
 
-    // ── 切换至关卡选择场景 ──
+    // -- Switch to level selection scene --
     auto scene = LevelMenuScene::createScene();
     director->runWithScene(scene);
 
     return true;
 }
 
-// ── 前后台切换 ──
+// -- Foreground/background switching --
 
 void AppDelegate::applicationDidEnterBackground()
 {

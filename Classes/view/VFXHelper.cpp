@@ -207,7 +207,7 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
         return;  // At capacity, reject spawn request
     }
 
-    // 粒子
+    // Particles
     for (int i = 0; i < PARTICLE_COUNT; ++i) {
         auto dot = acquireParticleNode(parent);
         float size = randomFloat(PARTICLE_SIZE * 0.5f, PARTICLE_SIZE * 1.2f);
@@ -226,7 +226,7 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
             CallFunc::create([dot]() { releaseParticleNode(dot); }), nullptr));
     }
 
-    // 冲击环
+    // Shock rings
     auto ring1 = acquireParticleNode(parent);
     ring1->drawCircle(Vec2::ZERO, 8.0f, 0, 24, false, Color4F(1.0f, 0.9f, 0.4f, 0.7f));
     ring1->setPosition(position);
@@ -242,7 +242,7 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
                          Spawn::create(ScaleTo::create(0.2f, 2.5f), FadeOut::create(0.2f), nullptr),
                          CallFunc::create([ring2]() { releaseParticleNode(ring2); }), nullptr));
 
-    // 闪光
+    // Flash
     auto flash = acquireParticleNode(parent);
     flash->drawSolidCircle(Vec2::ZERO, 12.0f, 0, 12, Color4F(1.0f, 0.95f, 0.7f, 0.5f));
     flash->setPosition(position);
@@ -250,7 +250,7 @@ void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
         Sequence::create(Spawn::create(ScaleTo::create(0.12f, 0.1f), FadeOut::create(0.12f), nullptr),
                          CallFunc::create([flash]() { releaseParticleNode(flash); }), nullptr));
 
-    // 微震
+    // Micro-shake
     if (parent->getNumberOfRunningActions() < 3) {
         parent->runAction(
             Sequence::create(MoveBy::create(0.02f, Vec2(randomFloat(-2, 2), randomFloat(-2, 2))),
