@@ -1,5 +1,6 @@
 /// @file AmbientParticles.h
-/// Background floating light dot particle system, creating a deep space atmosphere. Supports dynamic quality adjustment to control particle count.
+/// Background floating light dot particle system, creating a deep space atmosphere. Supports dynamic
+/// quality adjustment to control particle count.
 
 #ifndef __AMBIENT_PARTICLES_H__
 #define __AMBIENT_PARTICLES_H__

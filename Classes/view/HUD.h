@@ -1,5 +1,6 @@
 /// @file HUD.h
-/// Head-up display interface. Manages score, combo, ball count, level hints, clear/fail animations and back button.
+/// Head-up display interface. Manages score, combo, ball count, level hints, clear/fail animations and back
+/// button.
 
 #ifndef __HUD_H__
 #define __HUD_H__

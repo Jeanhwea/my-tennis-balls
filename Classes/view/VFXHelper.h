@@ -1,5 +1,6 @@
 /// @file VFXHelper.h
-/// Stateless visual effects utility set. Provides common effects such as particle pool, floating score, hit effects, and node flash.
+/// Stateless visual effects utility set. Provides common effects such as particle pool, floating score, hit
+/// effects, and node flash.
 
 #ifndef __VFX_HELPER_H__
 #define __VFX_HELPER_H__

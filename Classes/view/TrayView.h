@@ -1,5 +1,6 @@
 /// @file TrayView.h
-/// Tray rack and target ball rendering. Create tray physics bodies, visual effects, and collidable target balls at the corresponding positions based on LevelData.
+/// Tray rack and target ball rendering. Create tray physics bodies, visual effects, and collidable target
+/// balls at the corresponding positions based on LevelData.
 
 #ifndef __TRAY_VIEW_H__
 #define __TRAY_VIEW_H__

@@ -16,7 +16,6 @@ void InputController::init(Node *target)
     target->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, target);
 }
 
-
 bool InputController::onTouchBegan(Touch *touch, Event * /*event*/)
 {
     auto pos = touch->getLocation();
@@ -29,7 +28,6 @@ bool InputController::onTouchBegan(Touch *touch, Event * /*event*/)
     return true;
 }
 
-
 void InputController::onTouchMoved(Touch *touch, Event * /*event*/)
 {
     if (!_isDragging) return;
@@ -38,7 +36,6 @@ void InputController::onTouchMoved(Touch *touch, Event * /*event*/)
         _onDrag(_dragStart, delta);
     }
 }
-
 
 void InputController::onTouchEnded(Touch *touch, Event * /*event*/)
 {

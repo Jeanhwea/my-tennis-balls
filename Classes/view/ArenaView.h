@@ -1,5 +1,6 @@
 /// @file ArenaView.h
-/// Arena view. Creates physical boundary walls, floor sensor, background gradient, grid lines, launch zone, and decorative effects.
+/// Arena view. Creates physical boundary walls, floor sensor, background gradient, grid lines, launch zone,
+/// and decorative effects.
 
 #ifndef __ARENA_VIEW_H__
 #define __ARENA_VIEW_H__

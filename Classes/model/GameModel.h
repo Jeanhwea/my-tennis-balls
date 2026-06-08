@@ -30,7 +30,9 @@ public:
     void tick(float dt) { _scoreMgr.tick(dt); }
 
     void loadLevel(int index);
+
     void setTargetsRemaining(int count) { _targetsRemaining = count; }
+
     bool canLaunchBall() const;
     void useBall();
     void removeTarget();
