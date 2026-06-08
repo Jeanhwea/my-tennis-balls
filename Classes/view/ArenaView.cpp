@@ -1,7 +1,8 @@
 #include "ArenaView.h"
 
 #include "common/GameConstants.h"
-#include "view/AmbientParticles.h"
+#include "AmbientParticles.h"
+#include "VisualUtil.h"
 
 USING_NS_CC;
 
