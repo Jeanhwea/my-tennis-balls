@@ -73,4 +73,4 @@ constexpr float OOB_BOTTOM = -50.0f;
 constexpr float OOB_TOP_MARGIN = 200.0f;
 constexpr float OOB_SIDE_MARGIN = 200.0f;
 
-#endif
+#endif  // __GAME_CONSTANTS_H__

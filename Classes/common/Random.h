@@ -28,4 +28,4 @@ inline int randomInt(int min, int max)
 
 }  // namespace common
 
-#endif
+#endif  // __COMMON_RANDOM_H__

@@ -20,4 +20,4 @@ public:
     void applicationWillEnterForeground() override;
 };
 
-#endif
+#endif  // _APP_DELEGATE_H_
