@@ -4,7 +4,7 @@
 #include <random>
 
 /// @file Random.h
-/// Random number utilities based on mt19937.
+/// 基于 mt19937 的随机数工具。
 namespace common
 {
 
@@ -28,4 +28,4 @@ inline int randomInt(int min, int max)
 
 }  // namespace common
 
-#endif  // __COMMON_RANDOM_H__
+#endif

@@ -4,8 +4,6 @@
 
 USING_NS_CC;
 
-// -- Create default scene (using level index 0) --
-
 Scene *GameScene::createScene()
 {
     return GameScene::create();
@@ -17,8 +15,6 @@ Scene *GameScene::createSceneWithLevel(int levelIndex)
     scene->setStartLevel(levelIndex);
     return scene;
 }
-
-// -- Scene initialization (enable physics world) --
 
 bool GameScene::init()
 {
@@ -34,8 +30,6 @@ bool GameScene::init()
     return true;
 }
 
-// -- Initialize controller when entering the scene --
-
 void GameScene::onEnter()
 {
     Scene::onEnter();
@@ -43,8 +37,6 @@ void GameScene::onEnter()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     _controller.init(this, visibleSize, _startLevel);
 }
-
-// -- Delegate per-frame updates to the controller --
 
 void GameScene::update(float dt)
 {

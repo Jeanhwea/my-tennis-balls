@@ -11,14 +11,11 @@
 
 USING_NS_CC;
 
-// -- Game controller initialization --
-
 void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 {
     _scene = scene;
     _visibleSize = visibleSize;
 
-    // Initialize cached vectors
     _activeBalls.clear();
     _activeTargets.clear();
 
@@ -45,13 +42,11 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
     loadLevel(startLevel);
 }
 
-// -- Per-frame update --
-
 void GameController::update(float dt)
 {
     _model.tick(dt);
     if (!_transitioning) {
-        updateBallEffects();  // Synchronize ball lighting effects
+        updateBallEffects();
         collectOutOfBounds();
         processPendingRemovals();
     }
@@ -59,7 +54,6 @@ void GameController::update(float dt)
 
 void GameController::updateBallEffects()
 {
-    // Synchronize each ball's shadow, glow position, and update motion blur
     for (auto ball : _activeBalls) {
         auto name = ball->getName();
         if (name.empty()) continue;
@@ -79,15 +73,10 @@ void GameController::updateBallEffects()
             glow->setPosition(ballPos);
         }
 
-        // Update motion blur
         BallView::updateMotionBlur(ball, blur);
-
-        // Update highlight position (simulates a fixed light source)
         BallView::updateHighlights(ball);
     }
 }
-
-// -- Level management --
 
 void GameController::loadLevel(int index)
 {
@@ -169,8 +158,6 @@ void GameController::checkFailCondition()
     }
 }
 
-// -- Input and physics --
-
 void GameController::setupInput()
 {
     _input.setLaunchZoneMinX(_visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO));
@@ -207,8 +194,6 @@ void GameController::refreshHUD()
     _hud->updateTargets(_model.targetsRemaining());
 }
 
-// -- Ball management --
-
 void GameController::spawnBall(const Vec2 &position, const Vec2 &velocity)
 {
     auto ball = BallView::spawn(_scene, position, velocity, ++_ballCounter);
@@ -241,13 +226,10 @@ void GameController::removeTarget(Node *target)
 
 void GameController::collectOutOfBounds()
 {
-    // Early-exit: skip iteration if no active objects
     if (_activeTargets.empty() && _activeBalls.empty()) {
         return;
     }
 
-    // Collect out-of-bounds nodes into pending removal vector
-    // instead of removing immediately to avoid scene graph modifications during iteration
     for (auto target : _activeTargets) {
         if (target->getPositionY() < OOB_BOTTOM) {
             _pendingRemoval.push_back(target);
@@ -266,7 +248,6 @@ void GameController::collectOutOfBounds()
 
 void GameController::processPendingRemovals()
 {
-    // Process all pending removals in batch
     for (auto node : _pendingRemoval) {
         int tag = node->getTag();
         if (tag == TAG_TARGET) {
@@ -277,8 +258,6 @@ void GameController::processPendingRemovals()
     }
     _pendingRemoval.clear();
 }
-
-// -- Physics callbacks --
 
 namespace
 {
@@ -328,22 +307,17 @@ bool GameController::onContactBegin(PhysicsContact &contact)
     auto nodeB = contact.getShapeB()->getBody()->getNode();
     if (!nodeA || !nodeB) return true;
 
-    // Floor sensor
-    bool aFloor = nodeA->getTag() == TAG_FLOOR;
-    bool bFloor = nodeB->getTag() == TAG_FLOOR;
-    if (aFloor || bFloor) {
-        auto floor = aFloor ? nodeA : nodeB;
-        auto other = aFloor ? nodeB : nodeA;
+    if (nodeA->getTag() == TAG_FLOOR || nodeB->getTag() == TAG_FLOOR) {
+        auto floor = (nodeA->getTag() == TAG_FLOOR) ? nodeA : nodeB;
+        auto other = (nodeA->getTag() == TAG_FLOOR) ? nodeB : nodeA;
         return handleFloorContact(floor, other, contact);
     }
 
-    // Ball vs target
     if ((nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_TARGET) ||
         (nodeA->getTag() == TAG_TARGET && nodeB->getTag() == TAG_BALL)) {
         return handleBallTargetContact(nodeA, nodeB, contact);
     }
 
-    // Ball vs ball
     if (nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_BALL) {
         return handleBallBallContact(nodeA, nodeB, contact);
     }

@@ -9,8 +9,6 @@ USING_NS_CC;
 
 int LevelMenuScene::s_initialPage = 0;
 
-// -- Set initial page based on last selected level index --
-
 void LevelMenuScene::setInitialLevelIndex(int levelIndex)
 {
     s_initialPage = levelIndex / PER_PAGE;
@@ -21,8 +19,6 @@ Scene *LevelMenuScene::createScene()
     return LevelMenuScene::create();
 }
 
-// -- Scene initialization --
-
 bool LevelMenuScene::init()
 {
     if (!Scene::init()) {
@@ -31,8 +27,6 @@ bool LevelMenuScene::init()
     setName("LevelMenuScene");
     return true;
 }
-
-// -- Build all UI elements on scene entry --
 
 void LevelMenuScene::onEnter()
 {
