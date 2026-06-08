@@ -36,19 +36,6 @@ AppDelegate → LevelMenuScene → GameScene(GameController)
 - **Scene layer**: `Classes/scene/` — GameScene, LevelMenuScene.
 - **Common**: `Classes/common/` — GameConstants.h, Random.h.
 
-## Communication Pattern
-
-- `std::function` callbacks (InputController launch/drag, ScoreManager onChange, HUD back button).
-- Deferred removal via `_pendingRemoval` vector to avoid mutating scene graph during collision callbacks.
-- Level coordinates use relative ratios (0~1), resolution-independent.
-
-## Key Constants (GameConstants.h)
-
-- Fonts: `FONT_UI = "fonts/arial.ttf"`, `FONT_TITLE = "fonts/Marker Felt.ttf"`
-- Tags: TAG_BALL(100), TAG_TARGET(200), TAG_FLOOR(300), TAG_TRAY(400), TAG_OBSTACLE(500)
-- Physics categories: CATEGORY_BALL(0x01), EDGE(0x02), TARGET(0x04), FLOOR(0x08), TRAY(0x10), OBSTACLE(0x20)
-- Gravity: -980.0
-- Launch zone: rightmost 20% of screen width
 
 ## Code Style
 
