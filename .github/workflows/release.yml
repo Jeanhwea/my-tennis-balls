@@ -74,7 +74,7 @@ jobs:
           submodules: recursive
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Install NDK 21
         run: sdkmanager --install "ndk;21.4.7075529"
