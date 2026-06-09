@@ -95,12 +95,3 @@ void LevelManager::onLevelFailed()
                                        CallFunc::create([this, curIdx]() { loadLevel(curIdx); }), nullptr));
 }
 
-void LevelManager::checkFailCondition()
-{
-    if (_transitioning) return;
-    if (_model->isCleared()) return;
-    const auto &level = _model->currentLevel();
-    if (_ballCounter >= level.maxBalls && _ballManager->ballCount() == 0) {
-        onLevelFailed();
-    }
-}

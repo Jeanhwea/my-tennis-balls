@@ -16,7 +16,6 @@ public:
     void clearLevelNodes();
     void onLevelCleared();
     void onLevelFailed();
-    void checkFailCondition();
 
     bool isTransitioning() const { return _transitioning; }
     int ballCounter() const { return _ballCounter; }

@@ -28,7 +28,6 @@ Node *createHUD(Scene *scene, const Size &visibleSize,
                 const std::function<void()> &onBack)
 {
     auto hud = HUD::create(visibleSize);
-    hud->setOverlayParent(scene);
     scene->addChild(hud, 20);
     hud->setOnBack(onBack);
     return hud;
