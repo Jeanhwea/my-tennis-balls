@@ -1,6 +1,6 @@
 #include "VisualUtil.h"
 
-#include "AmbientParticles.h"
+#include "view/AmbientParticles.h"
 
 USING_NS_CC;
 

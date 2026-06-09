@@ -1,8 +1,10 @@
 #include "ArenaView.h"
 
 #include "common/GameConstants.h"
-#include "AmbientParticles.h"
+#include "view/AmbientParticles.h"
 #include "util/VisualUtil.h"
+
+USING_NS_CC;
 
 namespace
 {
@@ -24,8 +26,6 @@ void drawCorners(Node *parent, const Size &size, float launchLeft)
 }
 
 }  // namespace
-
-USING_NS_CC;
 
 // -- Create physical boundary walls and wall glow --
 

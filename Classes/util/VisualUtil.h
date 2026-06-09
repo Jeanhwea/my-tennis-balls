@@ -24,7 +24,7 @@ struct GridConfig
 {
     float spacing;
     cocos2d::Color4F color;
-    float maxWidth = 0.0f;  ///< 0 means full width (same as visibleSize.width)
+    float maxWidth;  ///< 0 means full width (same as visibleSize.width)
 };
 
 struct CornerConfig

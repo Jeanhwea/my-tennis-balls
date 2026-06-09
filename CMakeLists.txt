@@ -63,6 +63,8 @@ list(APPEND GAME_SOURCE
   Classes/view/ObstacleView.cpp
   Classes/controller/InputController.cpp
   Classes/controller/GameController.cpp
+  Classes/controller/BallManager.cpp
+  Classes/controller/CollisionSystem.cpp
 )
 list(APPEND GAME_HEADER
   Classes/AppDelegate.h
@@ -82,6 +84,8 @@ list(APPEND GAME_HEADER
   Classes/view/ObstacleView.h
   Classes/controller/InputController.h
   Classes/controller/GameController.h
+  Classes/controller/BallManager.h
+  Classes/controller/CollisionSystem.h
   Classes/common/Random.h
   Classes/util/VisualUtil.h
 )

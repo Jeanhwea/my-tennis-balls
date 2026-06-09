@@ -1,13 +1,9 @@
 #include "GameController.h"
 
-#include <algorithm>
-
 #include "common/GameConstants.h"
 #include "scene/LevelMenuScene.h"
 #include "view/ArenaView.h"
-#include "view/BallView.h"
 #include "view/TrayView.h"
-#include "view/VFXHelper.h"
 
 USING_NS_CC;
 
@@ -16,8 +12,21 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
     _scene = scene;
     _visibleSize = visibleSize;
 
-    _activeBalls.clear();
-    _activeTargets.clear();
+    _ballMgr.clear();
+
+    _collision.setModel(&_model);
+    _collision.setSceneNode(_scene);
+
+    _ballMgr.setDespawnCallback([this]() {
+        refreshHUD();
+        if (_model.isCleared()) {
+            onLevelCleared();
+        }
+    });
+
+    _collision.setScheduledRemovalCallback([this](Node *node) {
+        _ballMgr.scheduleRemoval(node);
+    });
 
     ArenaView::addEdgeWalls(_scene, _visibleSize);
     ArenaView::addFloorSensor(_scene, _visibleSize);
@@ -47,35 +56,9 @@ void GameController::update(float dt)
 {
     _model.tick(dt);
     if (!_transitioning) {
-        updateBallEffects();
-        collectOutOfBounds();
-        processPendingRemovals();
-    }
-}
-
-void GameController::updateBallEffects()
-{
-    for (auto ball : _activeBalls) {
-        auto name = ball->getName();
-        if (name.empty()) continue;
-
-        auto parent = ball->getParent();
-        if (!parent) continue;
-
-        auto shadow = parent->getChildByName(name + "_shadow");
-        auto glow = parent->getChildByName(name + "_glow");
-        auto blur = parent->getChildByName(name + "_blur");
-
-        Vec2 ballPos = ball->getPosition();
-        if (shadow) {
-            shadow->setPosition(ballPos.x, ballPos.y + BALL_SHADOW_OFFSET_Y);
-        }
-        if (glow) {
-            glow->setPosition(ballPos);
-        }
-
-        BallView::updateMotionBlur(ball, blur);
-        BallView::updateHighlights(ball);
+        _ballMgr.updateEffects();
+        _ballMgr.collectOutOfBounds(_scene, _visibleSize);
+        _ballMgr.processPendingRemovals();
     }
 }
 
@@ -88,12 +71,16 @@ void GameController::loadLevel(int index)
     _transitioning = false;
     _ballCounter = 0;
 
+    _scene->stopAllActions();
     clearLevelNodes();
 
     _model.loadLevel(index);
     const auto &level = _model.currentLevel();
-    int totalTargets = TrayView::createFromLevel(_scene, _visibleSize, level, _activeTargets);
+
+    cocos2d::Vector<Node *> targets;
+    int totalTargets = TrayView::createFromLevel(_scene, _visibleSize, level, targets);
     _model.setTargetsRemaining(totalTargets);
+    _ballMgr.initFromLevel();
 
     _hud->updateLevel(level.id, level.name);
     _hud->showLevelIntro(level.id, level.name);
@@ -102,8 +89,7 @@ void GameController::loadLevel(int index)
 
 void GameController::clearLevelNodes()
 {
-    _activeBalls.clear();
-    _activeTargets.clear();
+    _ballMgr.clear();
 
     std::vector<Node *> toRemove;
     for (auto child : _scene->getChildren()) {
@@ -154,7 +140,7 @@ void GameController::checkFailCondition()
     if (_transitioning) return;
     if (_model.isCleared()) return;
     const auto &level = _model.currentLevel();
-    if (_ballCounter >= level.maxBalls && _activeBalls.empty()) {
+    if (_ballCounter >= level.maxBalls && _ballMgr.ballCount() == 0) {
         onLevelFailed();
     }
 }
@@ -171,8 +157,11 @@ void GameController::setupInput()
         if (_transitioning) return;
         const auto &level = _model.currentLevel();
         if (_ballCounter >= level.maxBalls) return;
-        spawnBall(cmd.position, cmd.velocity);
+        _ballCounter++;
+        _ballMgr.spawnBall(_scene, cmd.position, cmd.velocity, _ballCounter);
+        _model.useBall();
         _hud->hideHint();
+        refreshHUD();
     });
 
     _input.init(_scene);
@@ -181,7 +170,7 @@ void GameController::setupInput()
 void GameController::setupPhysics()
 {
     auto listener = EventListenerPhysicsContact::create();
-    listener->onContactBegin = [this](PhysicsContact &c) { return onContactBegin(c); };
+    listener->onContactBegin = [this](PhysicsContact &c) { return _collision.onContactBegin(c); };
     _scene->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, _scene);
 }
 
@@ -193,134 +182,4 @@ void GameController::refreshHUD()
     _hud->updateCombo(_model.scoreManager().combo());
     _hud->updateBallCount(_ballCounter, level.maxBalls);
     _hud->updateTargets(_model.targetsRemaining());
-}
-
-void GameController::spawnBall(const Vec2 &position, const Vec2 &velocity)
-{
-    _ballCounter++;
-    auto ball = BallView::spawn(_scene, position, velocity, _ballCounter);
-    _activeBalls.pushBack(ball);
-    _model.useBall();
-    refreshHUD();
-}
-
-void GameController::removeBall(Node *ball)
-{
-    _activeBalls.eraseObject(ball);
-    _model.resetCombo();
-    BallView::despawn(ball, [this]() {
-        refreshHUD();
-        checkFailCondition();
-    });
-}
-
-void GameController::removeTarget(Node *target)
-{
-    _activeTargets.eraseObject(target);
-    _model.removeTarget();
-    BallView::despawn(target, [this]() {
-        refreshHUD();
-        if (_model.isCleared()) {
-            onLevelCleared();
-        }
-    });
-}
-
-void GameController::collectOutOfBounds()
-{
-    if (_activeTargets.empty() && _activeBalls.empty()) {
-        return;
-    }
-
-    for (auto target : _activeTargets) {
-        if (target->getPositionY() < OOB_BOTTOM) {
-            _pendingRemoval.push_back(target);
-        }
-    }
-
-    for (auto ball : _activeBalls) {
-        float x = ball->getPositionX();
-        float y = ball->getPositionY();
-        if (y < OOB_BOTTOM || y > _visibleSize.height + OOB_TOP_MARGIN || x < -OOB_SIDE_MARGIN ||
-            x > _visibleSize.width + OOB_SIDE_MARGIN) {
-            _pendingRemoval.push_back(ball);
-        }
-    }
-}
-
-void GameController::processPendingRemovals()
-{
-    for (auto node : _pendingRemoval) {
-        int tag = node->getTag();
-        if (tag == TAG_TARGET) {
-            removeTarget(node);
-        } else if (tag == TAG_BALL) {
-            removeBall(node);
-        }
-    }
-    _pendingRemoval.clear();
-}
-
-namespace
-{
-
-void applyScoreVFX(Node *parent, ScoreManager &score, int basePoints, const Vec2 &pos)
-{
-    int points = score.addScore(basePoints);
-    VFXHelper::showFloatingScore(parent, pos, points);
-}
-
-}  // namespace
-
-bool GameController::handleFloorContact(Node * /*floor*/, Node *other, PhysicsContact &contact)
-{
-    auto cp = Vec2(contact.getContactData()->points[0].x, contact.getContactData()->points[0].y);
-
-    if (other->getTag() == TAG_TARGET) {
-        applyScoreVFX(_scene, _model.scoreManager(), SCORE_TARGET_FALL, cp);
-        VFXHelper::spawnHitParticle(_scene, cp);
-        removeTarget(other);
-    } else if (other->getTag() == TAG_BALL) {
-        removeBall(other);
-    }
-    return false;
-}
-
-bool GameController::handleBallTargetContact(Node * /*ball*/, Node * /*target*/, PhysicsContact &contact)
-{
-    auto cp = Vec2(contact.getContactData()->points[0].x, contact.getContactData()->points[0].y);
-    applyScoreVFX(_scene, _model.scoreManager(), SCORE_PER_HIT, cp);
-    VFXHelper::spawnHitParticle(_scene, cp);
-    return true;
-}
-
-bool GameController::handleBallBallContact(Node * /*a*/, Node * /*b*/, PhysicsContact &contact)
-{
-    auto cp = Vec2(contact.getContactData()->points[0].x, contact.getContactData()->points[0].y);
-    applyScoreVFX(_scene, _model.scoreManager(), SCORE_PER_HIT / 2, cp);
-    return true;
-}
-
-bool GameController::onContactBegin(PhysicsContact &contact)
-{
-    auto nodeA = contact.getShapeA()->getBody()->getNode();
-    auto nodeB = contact.getShapeB()->getBody()->getNode();
-    if (!nodeA || !nodeB) return true;
-
-    if (nodeA->getTag() == TAG_FLOOR || nodeB->getTag() == TAG_FLOOR) {
-        auto floor = (nodeA->getTag() == TAG_FLOOR) ? nodeA : nodeB;
-        auto other = (nodeA->getTag() == TAG_FLOOR) ? nodeB : nodeA;
-        return handleFloorContact(floor, other, contact);
-    }
-
-    if ((nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_TARGET) ||
-        (nodeA->getTag() == TAG_TARGET && nodeB->getTag() == TAG_BALL)) {
-        return handleBallTargetContact(nodeA, nodeB, contact);
-    }
-
-    if (nodeA->getTag() == TAG_BALL && nodeB->getTag() == TAG_BALL) {
-        return handleBallBallContact(nodeA, nodeB, contact);
-    }
-
-    return true;
 }
