@@ -39,8 +39,7 @@ AppDelegate → LevelMenuScene → GameScene(GameController)
 
 ## Code Style
 
-- Files use `///` Doxygen-style comments on headers
-- Source files use `//` section comments
+- **No comments.** Code should be self-documenting with clear, descriptive names. Do not write Doxygen (`///`), section (`//`), or inline comments. Let identifiers speak for themselves.
 - Namespace-scoped free functions for view factories, classes for stateful objects
 - `USING_NS_CC;` in .cpp files
 - All C++14/17 features available
