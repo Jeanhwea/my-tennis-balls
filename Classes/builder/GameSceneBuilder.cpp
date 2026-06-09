@@ -49,4 +49,4 @@ void setupPhysics(Scene *scene,
     scene->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, scene);
 }
 
-}  // namespace GameSceneBuilder
+}

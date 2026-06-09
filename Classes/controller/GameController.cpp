@@ -45,7 +45,6 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
     _ballManager.clear();
     setupCallbacks();
 
-    // Scene setup delegated to GameSceneBuilder
     GameSceneBuilder::setupArena(_scene, _visibleSize);
 
     _hud = static_cast<HUD *>(GameSceneBuilder::createHUD(_scene, _visibleSize, [this]() {
