@@ -4,7 +4,7 @@
 #include "common/GameConstants.h"
 #include "model/LevelData.h"
 #include "view/AmbientParticles.h"
-#include "util/VisualUtil.h"
+#include "view/VisualUtil.h"
 
 USING_NS_CC;
 
