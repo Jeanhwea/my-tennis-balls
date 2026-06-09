@@ -32,7 +32,6 @@ bool LevelManager::loadLevel(int index)
         return false;
     }
     _transitioning = false;
-    _ballCounter = 0;
 
     _scene->stopAllActions();
     clearLevelNodes();
@@ -45,9 +44,6 @@ bool LevelManager::loadLevel(int index)
     _model->setTargetsRemaining(totalTargets);
     _ballManager->initFromLevel();
 
-    if (_onLevelChanged) {
-        _onLevelChanged(index);
-    }
     return true;
 }
 
@@ -93,14 +89,4 @@ void LevelManager::onLevelFailed()
     int curIdx = _model->levelIndex();
     _scene->runAction(Sequence::create(DelayTime::create(2.5f),
                                        CallFunc::create([this, curIdx]() { loadLevel(curIdx); }), nullptr));
-}
-
-void LevelManager::checkFailCondition()
-{
-    if (_transitioning) return;
-    if (_model->isCleared()) return;
-    const auto &level = _model->currentLevel();
-    if (_ballCounter >= level.maxBalls && _ballManager->ballCount() == 0) {
-        onLevelFailed();
-    }
 }

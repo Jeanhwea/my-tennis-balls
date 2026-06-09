@@ -64,7 +64,7 @@ void spawnOne(Node *parent, const Vec2 &position, bool isCircle)
     parent->addChild(obstacle, 1);
 }
 
-}  // namespace
+}
 
 void ObstacleView::spawnObstacles(Node *parent, const Size &visibleSize, int count)
 {

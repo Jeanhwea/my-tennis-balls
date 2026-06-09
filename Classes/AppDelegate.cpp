@@ -23,7 +23,7 @@ const cocos2d::Size smallResolutionSize(480, 320);
 const cocos2d::Size mediumResolutionSize(1920, 1080);
 const cocos2d::Size largeResolutionSize(2560, 1440);
 
-}  // namespace
+}
 
 AppDelegate::AppDelegate() {}
 
@@ -49,7 +49,7 @@ int register_all_packages()
 {
     return 0;
 }
-}  // namespace
+}
 
 bool AppDelegate::applicationDidFinishLaunching()
 {

@@ -61,6 +61,7 @@ list(APPEND GAME_SOURCE
   Classes/model/BallManager.cpp
   Classes/model/CollisionSystem.cpp
   Classes/view/LevelButtonGrid.cpp
+  Classes/builder/GameSceneBuilder.cpp
 )
 list(APPEND GAME_HEADER
   Classes/AppDelegate.h
@@ -86,6 +87,7 @@ list(APPEND GAME_HEADER
   Classes/common/Random.h
   Classes/view/VisualUtil.h
   Classes/view/LevelButtonGrid.h
+  Classes/builder/GameSceneBuilder.h
 )
 
 if(ANDROID)

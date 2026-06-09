@@ -16,13 +16,8 @@ public:
     void clearLevelNodes();
     void onLevelCleared();
     void onLevelFailed();
-    void checkFailCondition();
 
     bool isTransitioning() const { return _transitioning; }
-    int ballCounter() const { return _ballCounter; }
-    void incrementBallCounter() { _ballCounter++; }
-
-    void setOnLevelChanged(std::function<void(int levelIndex)> cb) { _onLevelChanged = std::move(cb); }
 
 private:
     cocos2d::Scene *_scene = nullptr;
@@ -30,9 +25,7 @@ private:
     GameModel *_model = nullptr;
     BallManager *_ballManager = nullptr;
 
-    int _ballCounter = 0;
     bool _transitioning = false;
-    std::function<void(int levelIndex)> _onLevelChanged;
 };
 
-#endif
+#endif  // LEVEL_MANAGER_H
