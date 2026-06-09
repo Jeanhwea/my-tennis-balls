@@ -13,6 +13,8 @@ public:
 
     int ballCount() const { return _ballCount; }
 
+    int maxBalls() const { return _maxBalls; }
+
     int targetsRemaining() const { return _targetsRemaining; }
 
     bool isCleared() const { return _targetsRemaining <= 0; }

@@ -5,7 +5,9 @@
 #include "model/BallManager.h"
 #include "model/CollisionSystem.h"
 #include "controller/LevelManager.h"
+#include "controller/InputController.h"
 #include "model/GameModel.h"
+#include "view/AimLineView.h"
 #include "view/HUD.h"
 
 class GameController
@@ -22,9 +24,10 @@ private:
     BallManager _ballManager;
     CollisionSystem _collisionSystem;
     LevelManager _levelManager;
+    InputController _input;
+    AimLineView _aimLine;
     HUD *_hud = nullptr;
 
-    void setupCallbacks();
     void refreshHUD();
 };
 

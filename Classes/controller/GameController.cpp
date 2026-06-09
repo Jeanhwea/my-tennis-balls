@@ -2,7 +2,6 @@
 
 #include "builder/GameSceneBuilder.h"
 #include "common/GameConstants.h"
-#include "controller/InputController.h"
 #include "scene/LevelMenuScene.h"
 #include "view/TrayView.h"
 #include "view/VFXHelper.h"
@@ -10,8 +9,13 @@
 
 USING_NS_CC;
 
-void GameController::setupCallbacks()
+void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 {
+    _scene = scene;
+    _visibleSize = visibleSize;
+
+    _ballManager.clear();
+
     _ballManager.setDespawnCallback([this]() {
         refreshHUD();
         if (_model.isCleared()) {
@@ -35,39 +39,36 @@ void GameController::setupCallbacks()
     _collisionSystem.setOnTargetRemoved([this]() {
         _model.removeTarget();
     });
-}
-
-void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
-{
-    _scene = scene;
-    _visibleSize = visibleSize;
-
-    _ballManager.clear();
-    setupCallbacks();
 
     GameSceneBuilder::setupArena(_scene, _visibleSize);
 
-    _hud = static_cast<HUD *>(GameSceneBuilder::createHUD(_scene, _visibleSize, [this]() {
-        LevelMenuScene::setInitialLevelIndex(_model.levelIndex());
-        auto menuScene = LevelMenuScene::createScene();
-        Director::getInstance()->replaceScene(TransitionFade::create(0.4f, menuScene, Color3B(10, 10, 30)));
-    }));
+    _hud = HUD::create(_visibleSize);
+    _scene->addChild(_hud, 20);
 
     _model.scoreManager().setOnChange([this]() { refreshHUD(); });
 
-    auto input = GameSceneBuilder::createInputController(_scene, _visibleSize);
-    input->setOnLaunch([this](const InputController::LaunchCommand &cmd) {
+    _hud->setOnBack([this]() {
+        LevelMenuScene::setInitialLevelIndex(_model.levelIndex());
+        auto menuScene = LevelMenuScene::createScene();
+        Director::getInstance()->replaceScene(TransitionFade::create(0.4f, menuScene, Color3B(10, 10, 30)));
+    });
+
+    _input.setLaunchZoneMinX(_visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO));
+
+    _input.setOnDrag([this](const Vec2 &start, const Vec2 &delta) { _aimLine.draw(start, delta); });
+
+    _input.setOnDragEnd([this]() { _aimLine.clear(); });
+
+    _input.setOnLaunch([this](const InputController::LaunchCommand &cmd) {
         if (_levelManager.isTransitioning()) return;
-        const auto &level = _model.currentLevel();
-        if (_levelManager.ballCounter() >= level.maxBalls) return;
-        _ballManager.spawnBall(_scene, cmd.position, cmd.velocity, _levelManager.ballCounter());
-        _levelManager.incrementBallCounter();
+        if (!_model.canLaunchBall()) return;
+        _ballManager.spawnBall(_scene, cmd.position, cmd.velocity, _model.ballCount());
         _model.useBall();
         _hud->hideHint();
         refreshHUD();
     });
-    input->setOnDrag([this](const Vec2 &start, const Vec2 &delta) { /* aim line handled via callback */ });
-    input->setOnDragEnd([this]() { /* aim line handled via callback */ });
+
+    _input.init(_scene);
 
     GameSceneBuilder::setupPhysics(_scene,
         [this](PhysicsContact &c) { return _collisionSystem.onContactBegin(c); });
@@ -89,9 +90,8 @@ void GameController::update(float dt)
 void GameController::refreshHUD()
 {
     if (!_hud) return;
-    const auto &level = _model.currentLevel();
     _hud->updateScore(_model.scoreManager().score());
     _hud->updateCombo(_model.scoreManager().combo());
-    _hud->updateBallCount(_levelManager.ballCounter(), level.maxBalls);
+    _hud->updateBallCount(_model.ballCount(), _model.maxBalls());
     _hud->updateTargets(_model.targetsRemaining());
 }
