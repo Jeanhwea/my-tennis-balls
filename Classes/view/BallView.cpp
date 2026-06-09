@@ -6,17 +6,17 @@ USING_NS_CC;
 
 namespace
 {
-constexpr float HIGHLIGHT_SCALE = 0.35f;         // Highlight scale
-constexpr float SHADOW_OFFSET_Y = -8.0f;         // Shadow Y offset
-constexpr float SHADOW_SCALE = 1.1f;             // Shadow scale
-constexpr float SHADOW_OPACITY = 0.25f;          // Shadow opacity
-constexpr float GLOW_OPACITY = 0.15f;            // Glow opacity
-constexpr float MOTION_BLUR_OPACITY = 0.3f;      // Motion blur opacity
-constexpr float MOTION_BLUR_THRESHOLD = 200.0f;  // Motion blur trigger speed
+constexpr float HIGHLIGHT_SCALE = 0.35f;
+constexpr float SHADOW_OFFSET_Y = -8.0f;
+constexpr float SHADOW_SCALE = 1.1f;
+constexpr float SHADOW_OPACITY = 0.25f;
+constexpr float GLOW_OPACITY = 0.15f;
+constexpr float MOTION_BLUR_OPACITY = 0.3f;
+constexpr float MOTION_BLUR_THRESHOLD = 200.0f;
 
 constexpr float LIGHT_DIR_X = -0.5f;
 constexpr float LIGHT_DIR_Y = 0.5f;
-}  // namespace
+}
 
 Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity, int ballIndex)
 {

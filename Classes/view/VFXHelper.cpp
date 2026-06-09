@@ -41,12 +41,12 @@ struct LabelPool {
 ParticlePool g_particlePool;
 LabelPool g_labelPool;
 
-}  // namespace
+}
 
 void VFXHelper::initParticlePool(Node *parent, int poolSize)
 {
     if (g_particlePool.initialized) {
-        return;  // Already initialized
+        return;
     }
 
     g_particlePool.maxSize = poolSize;
@@ -202,13 +202,13 @@ void releaseLabelNode(Label *label)
     }
 }
 
-}  // namespace
+}
 
 void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
 {
     if (g_particlePool.initialized &&
         static_cast<int>(g_particlePool.inUse.size()) + PARTICLES_PER_HIT > MAX_ACTIVE_PARTICLES) {
-        return;  // At capacity, reject spawn request
+        return;
     }
 
     for (int i = 0; i < PARTICLE_COUNT; ++i) {
