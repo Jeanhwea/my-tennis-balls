@@ -15,6 +15,8 @@ public:
     static cocos2d::Scene *createScene();
     static cocos2d::Scene *createSceneWithLevel(int levelIndex);
 
+    ~GameScene() override;
+
     bool init() override;
     void onEnter() override;
     void update(float dt) override;

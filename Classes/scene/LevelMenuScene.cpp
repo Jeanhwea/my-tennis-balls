@@ -4,6 +4,7 @@
 #include "common/GameConstants.h"
 #include "model/LevelData.h"
 #include "view/AmbientParticles.h"
+#include "util/VisualUtil.h"
 
 USING_NS_CC;
 
@@ -41,49 +42,14 @@ void LevelMenuScene::onEnter()
 
 void LevelMenuScene::drawBackground(const Size &size)
 {
-    auto bg = DrawNode::create();
-    constexpr int strips = 24;
-    Color4F bot(0.02f, 0.02f, 0.08f, 1.0f);
-    Color4F top(0.06f, 0.04f, 0.14f, 1.0f);
-    for (int i = 0; i < strips; ++i) {
-        float t0 = static_cast<float>(i) / strips;
-        float t1 = static_cast<float>(i + 1) / strips;
-        Color4F c((bot.r + (top.r - bot.r) * (t0 + t1) / 2), (bot.g + (top.g - bot.g) * (t0 + t1) / 2),
-                  (bot.b + (top.b - bot.b) * (t0 + t1) / 2), 1.0f);
-        bg->drawSolidRect(Vec2(0, size.height * t0), Vec2(size.width, size.height * t1), c);
-    }
-    addChild(bg, -2);
+    VisualUtil::drawGradientBackground(this, size,
+        {Color4F(0.02f, 0.02f, 0.08f, 1.0f), Color4F(0.06f, 0.04f, 0.14f, 1.0f), 24}, -2);
 
-    auto grid = DrawNode::create();
-    Color4F gridColor(0.12f, 0.15f, 0.25f, 0.08f);
-    constexpr float spacing = 80.0f;
-    for (float x = 0; x <= size.width; x += spacing)
-        grid->drawLine(Vec2(x, 0), Vec2(x, size.height), gridColor);
-    for (float y = 0; y <= size.height; y += spacing)
-        grid->drawLine(Vec2(0, y), Vec2(size.width, y), gridColor);
-    addChild(grid, -1);
+    VisualUtil::drawGrid(this, size, {80.0f, Color4F(0.12f, 0.15f, 0.25f, 0.08f), size.width}, -1);
 
-    auto corners = DrawNode::create();
-    Color4F cColor(0.25f, 0.45f, 0.85f, 0.25f);
-    constexpr float cLen = 40.0f;
-    constexpr float cThick = 2.0f;
-    constexpr float pad = 8.0f;
-    float w = size.width;
-    float h = size.height;
+    VisualUtil::drawCorners(this, size, {40.0f, 2.0f, 8.0f, Color4F(0.25f, 0.45f, 0.85f, 0.25f), size.width}, 0);
 
-    corners->drawSolidRect(Vec2(pad, h - pad - cThick), Vec2(pad + cLen, h - pad), cColor);
-    corners->drawSolidRect(Vec2(pad, h - pad - cLen), Vec2(pad + cThick, h - pad), cColor);
-    corners->drawSolidRect(Vec2(w - pad - cLen, h - pad - cThick), Vec2(w - pad, h - pad), cColor);
-    corners->drawSolidRect(Vec2(w - pad - cThick, h - pad - cLen), Vec2(w - pad, h - pad), cColor);
-    corners->drawSolidRect(Vec2(pad, pad), Vec2(pad + cLen, pad + cThick), cColor);
-    corners->drawSolidRect(Vec2(pad, pad), Vec2(pad + cThick, pad + cLen), cColor);
-    corners->drawSolidRect(Vec2(w - pad - cLen, pad), Vec2(w - pad, pad + cThick), cColor);
-    corners->drawSolidRect(Vec2(w - pad - cThick, pad), Vec2(w - pad, pad + cLen), cColor);
-    addChild(corners, 0);
-
-    auto ambient = AmbientParticles::create(size);
-    addChild(ambient, 0);
-    ambient->start();
+    VisualUtil::addAmbientParticles(this, size, 0);
 }
 
 void LevelMenuScene::drawTitle(const Size &size)

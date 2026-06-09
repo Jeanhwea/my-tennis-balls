@@ -86,6 +86,34 @@ void VFXHelper::initParticlePool(Node *parent, int poolSize)
     }
 }
 
+void VFXHelper::resetParticlePool()
+{
+    if (!g_particlePool.initialized) return;
+    for (auto node : g_particlePool.inUse) {
+        node->removeFromParent();
+    }
+    for (auto node : g_particlePool.available) {
+        node->removeFromParent();
+    }
+    g_particlePool.available.clear();
+    g_particlePool.inUse.clear();
+    g_particlePool.initialized = false;
+}
+
+void VFXHelper::resetLabelPool()
+{
+    if (!g_labelPool.initialized) return;
+    for (auto label : g_labelPool.inUse) {
+        label->removeFromParent();
+    }
+    for (auto label : g_labelPool.available) {
+        label->removeFromParent();
+    }
+    g_labelPool.available.clear();
+    g_labelPool.inUse.clear();
+    g_labelPool.initialized = false;
+}
+
 namespace
 {
 

@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [master]
+
+jobs:
+  build-macos:
+    runs-on: macos-15-intel
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure CMake
+        run: cmake -B build -GXcode --log-level=STATUS -DCMAKE_OSX_DEPLOYMENT_TARGET=10.15
+
+      - name: Build
+        run: cmake --build build --config Release
+
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+
+      - name: Install NDK 21
+        run: sdkmanager --install "ndk;21.4.7075529"
+
+      - name: Install SDKMAN
+        run: |
+          curl -s "https://get.sdkman.io?rcupdate=false" | bash
+
+      - name: Install and activate JDK via SDKMAN
+        run: |
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk env install
+          echo "JAVA_HOME=$(sdk home java $(grep java .sdkmanrc | cut -d= -f2))" >> "$GITHUB_ENV"
+
+      - name: Make gradlew executable
+        run: chmod +x proj.android/gradlew
+
+      - name: Build Android APK
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/21.4.7075529
+        run: |
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk env
+          ./bld-android.sh release
+
+  build-windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Configure CMake
+        run: cmake -B build -G "Visual Studio 17 2022" -A Win32
+
+      - name: Build
+        run: cmake --build build --config Release

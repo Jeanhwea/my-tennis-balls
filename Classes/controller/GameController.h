@@ -6,6 +6,8 @@
 
 #include "cocos2d.h"
 #include "controller/InputController.h"
+#include "controller/BallManager.h"
+#include "controller/CollisionSystem.h"
 #include "model/GameModel.h"
 #include "view/AimLineView.h"
 #include "view/HUD.h"
@@ -23,19 +25,14 @@ private:
     cocos2d::Size _visibleSize;
 
     GameModel _model;
+    BallManager _ballMgr;
+    CollisionSystem _collision;
     InputController _input;
     AimLineView _aimLine;
     HUD *_hud = nullptr;
 
     int _ballCounter = 0;
     bool _transitioning = false;
-
-    // O(1) 访问的缓存节点引用
-    cocos2d::Vector<cocos2d::Node *> _activeBalls;
-    cocos2d::Vector<cocos2d::Node *> _activeTargets;
-
-    // 延迟移除，避免遍历时修改场景图
-    std::vector<cocos2d::Node *> _pendingRemoval;
 
     void loadLevel(int index);
     void clearLevelNodes();
@@ -46,18 +43,6 @@ private:
     void setupInput();
     void setupPhysics();
     void refreshHUD();
-
-    void spawnBall(const cocos2d::Vec2 &position, const cocos2d::Vec2 &velocity);
-    void removeBall(cocos2d::Node *ball);
-    void removeTarget(cocos2d::Node *target);
-    void collectOutOfBounds();
-    void processPendingRemovals();
-    void updateBallEffects();
-
-    bool onContactBegin(cocos2d::PhysicsContact &contact);
-    bool handleFloorContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);
-    bool handleBallTargetContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);
-    bool handleBallBallContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);
 };
 
 #endif  // __GAME_CONTROLLER_H__

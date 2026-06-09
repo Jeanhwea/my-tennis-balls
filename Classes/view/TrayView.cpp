@@ -7,7 +7,8 @@ USING_NS_CC;
 namespace
 {
 
-/// Draw the visual appearance of a tray (including shadow, body, highlight, dark line, end caps, brackets, soft glow)
+/// Draw the visual appearance of a tray (including shadow, body, highlight, dark line, end caps, brackets,
+/// soft glow)
 void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
 {
     auto draw = DrawNode::create();

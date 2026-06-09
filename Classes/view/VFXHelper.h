@@ -1,5 +1,6 @@
 /// @file VFXHelper.h
-/// Stateless visual effects utility set. Provides common effects such as particle pool, floating score, hit effects, and node flash.
+/// Stateless visual effects utility set. Provides common effects such as particle pool, floating score, hit
+/// effects, and node flash.
 
 #ifndef __VFX_HELPER_H__
 #define __VFX_HELPER_H__
@@ -15,6 +16,10 @@ namespace VFXHelper
 /// @param parent Parent node for the particle pool node
 /// @param poolSize Pool size, defaults to 50
 void initParticlePool(cocos2d::Node *parent, int poolSize = 50);
+
+/// Release all pooled nodes and reset initialization state.
+void resetParticlePool();
+void resetLabelPool();
 
 void spawnHitParticle(cocos2d::Node *parent, const cocos2d::Vec2 &position);
 void showFloatingScore(cocos2d::Node *parent, const cocos2d::Vec2 &position, int points);

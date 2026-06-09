@@ -2,8 +2,30 @@
 
 #include "common/GameConstants.h"
 #include "view/AmbientParticles.h"
+#include "util/VisualUtil.h"
 
 USING_NS_CC;
+
+namespace
+{
+
+void drawBackground(Node *parent, const Size &size)
+{
+    VisualUtil::drawGradientBackground(parent, size,
+        {Color4F(0.04f, 0.04f, 0.10f, 1.0f), Color4F(0.08f, 0.06f, 0.16f, 1.0f), 20}, -10);
+}
+
+void drawGrid(Node *parent, const Size &size, float launchLeft)
+{
+    VisualUtil::drawGrid(parent, size, {60.0f, Color4F(0.15f, 0.18f, 0.28f, 0.15f), launchLeft}, -9);
+}
+
+void drawCorners(Node *parent, const Size &size, float launchLeft)
+{
+    VisualUtil::drawCorners(parent, size, {30.0f, 2.0f, 4.0f, Color4F(0.3f, 0.5f, 0.9f, 0.35f), launchLeft}, -7);
+}
+
+}  // namespace
 
 // -- Create physical boundary walls and wall glow --
 
@@ -71,35 +93,10 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     float launchLeft = w * (1.0f - LAUNCH_ZONE_RATIO);
 
     // Background
-    auto bg = DrawNode::create();
-    Color4F bgBot(0.04f, 0.04f, 0.10f, 1.0f);
-    Color4F bgTop(0.08f, 0.06f, 0.16f, 1.0f);
-    static constexpr int BG_STRIPS = 20;
-    for (int i = 0; i < BG_STRIPS; ++i) {
-        float t0 = static_cast<float>(i) / BG_STRIPS;
-        float t1 = static_cast<float>(i + 1) / BG_STRIPS;
-        float y0 = h * t0;
-        float y1 = h * t1;
-        Color4F c0(bgBot.r + (bgTop.r - bgBot.r) * t0, bgBot.g + (bgTop.g - bgBot.g) * t0,
-                   bgBot.b + (bgTop.b - bgBot.b) * t0, 1.0f);
-        Color4F c1(bgBot.r + (bgTop.r - bgBot.r) * t1, bgBot.g + (bgTop.g - bgBot.g) * t1,
-                   bgBot.b + (bgTop.b - bgBot.b) * t1, 1.0f);
-        Color4F avg((c0.r + c1.r) / 2, (c0.g + c1.g) / 2, (c0.b + c1.b) / 2, 1.0f);
-        bg->drawSolidRect(Vec2(0, y0), Vec2(w, y1), avg);
-    }
-    parent->addChild(bg, -10);
+    drawBackground(parent, visibleSize);
 
     // Grid
-    auto grid = DrawNode::create();
-    Color4F gridColor(0.15f, 0.18f, 0.28f, 0.15f);
-    static constexpr float GRID_SPACING = 60.0f;
-    for (float x = 0; x < launchLeft; x += GRID_SPACING) {
-        grid->drawLine(Vec2(x, 0), Vec2(x, h), gridColor);
-    }
-    for (float y = 0; y < h; y += GRID_SPACING) {
-        grid->drawLine(Vec2(0, y), Vec2(launchLeft, y), gridColor);
-    }
-    parent->addChild(grid, -9);
+    drawGrid(parent, visibleSize, launchLeft);
 
     // Launch zone + divider line
     auto zone = DrawNode::create();
@@ -126,25 +123,7 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     parent->addChild(zone, -8);
 
     // Corners
-    auto corners = DrawNode::create();
-    Color4F cornerColor(0.3f, 0.5f, 0.9f, 0.35f);
-    float cLen = 30.0f;
-    float cThick = 2.0f;
-    float pad = 4.0f;
-
-    corners->drawSolidRect(Vec2(pad, h - pad - cThick), Vec2(pad + cLen, h - pad), cornerColor);
-    corners->drawSolidRect(Vec2(pad, h - pad - cLen), Vec2(pad + cThick, h - pad), cornerColor);
-    corners->drawSolidRect(Vec2(launchLeft - pad - cLen, h - pad - cThick), Vec2(launchLeft - pad, h - pad),
-                           cornerColor);
-    corners->drawSolidRect(Vec2(launchLeft - pad - cThick, h - pad - cLen), Vec2(launchLeft - pad, h - pad),
-                           cornerColor);
-    corners->drawSolidRect(Vec2(pad, pad), Vec2(pad + cLen, pad + cThick), cornerColor);
-    corners->drawSolidRect(Vec2(pad, pad), Vec2(pad + cThick, pad + cLen), cornerColor);
-    corners->drawSolidRect(Vec2(launchLeft - pad - cLen, pad), Vec2(launchLeft - pad, pad + cThick),
-                           cornerColor);
-    corners->drawSolidRect(Vec2(launchLeft - pad - cThick, pad), Vec2(launchLeft - pad, pad + cLen),
-                           cornerColor);
-    parent->addChild(corners, -7);
+    drawCorners(parent, visibleSize, launchLeft);
 
     // Vignette (dark corners)
     auto vignette = DrawNode::create();
@@ -183,7 +162,5 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     parent->addChild(reticle, 0);
 
     // Floating ambient particles
-    auto ambient = AmbientParticles::create(Size(launchLeft, h));
-    parent->addChild(ambient, -5);
-    ambient->start();
+    VisualUtil::addAmbientParticles(parent, Size(launchLeft, h), -5);
 }

@@ -203,7 +203,8 @@ void HUD::hideHint()
 
 void HUD::showCleared()
 {
-    auto parentSize = getParent()->getContentSize();
+    if (!_overlayParent) return;
+    auto parentSize = _overlayParent->getContentSize();
     float cx = parentSize.width * 0.35f;
     float cy = parentSize.height / 2;
 
@@ -211,7 +212,7 @@ void HUD::showCleared()
     auto flash = DrawNode::create();
     flash->drawSolidCircle(Vec2(cx, cy), 120.0f, 0, 24, Color4F(0.4f, 0.6f, 1.0f, 0.15f));
     flash->setScale(0);
-    getParent()->addChild(flash, 29);
+    _overlayParent->addChild(flash, 29);
     flash->runAction(Sequence::create(
         Spawn::create(EaseOut::create(ScaleTo::create(0.5f, 3.0f), 2), FadeOut::create(0.6f), nullptr),
         RemoveSelf::create(), nullptr));
@@ -221,7 +222,7 @@ void HUD::showCleared()
     cleared->setTextColor(Color4B(255, 230, 50, 255));
     cleared->enableShadow(Color4B(200, 150, 0, 150), Size(2, -2));
     cleared->setScale(0);
-    getParent()->addChild(cleared, 30);
+    _overlayParent->addChild(cleared, 30);
 
     cleared->runAction(Sequence::create(
         EaseBackOut::create(ScaleTo::create(0.4f, 1.2f)), EaseInOut::create(ScaleTo::create(0.3f, 1.0f), 2),
@@ -230,14 +231,15 @@ void HUD::showCleared()
 
 void HUD::showFailed()
 {
-    auto parentSize = getParent()->getContentSize();
+    if (!_overlayParent) return;
+    auto parentSize = _overlayParent->getContentSize();
     float cx = parentSize.width * 0.35f;
     float cy = parentSize.height / 2;
 
     auto flash = DrawNode::create();
     flash->drawSolidCircle(Vec2(cx, cy), 120.0f, 0, 24, Color4F(1.0f, 0.2f, 0.2f, 0.15f));
     flash->setScale(0);
-    getParent()->addChild(flash, 29);
+    _overlayParent->addChild(flash, 29);
     flash->runAction(Sequence::create(
         Spawn::create(EaseOut::create(ScaleTo::create(0.5f, 3.0f), 2), FadeOut::create(0.6f), nullptr),
         RemoveSelf::create(), nullptr));
@@ -247,7 +249,7 @@ void HUD::showFailed()
     failed->setTextColor(Color4B(255, 80, 60, 255));
     failed->enableShadow(Color4B(150, 30, 0, 150), Size(2, -2));
     failed->setScale(0);
-    getParent()->addChild(failed, 30);
+    _overlayParent->addChild(failed, 30);
 
     failed->runAction(Sequence::create(
         EaseBackOut::create(ScaleTo::create(0.4f, 1.2f)), EaseInOut::create(ScaleTo::create(0.3f, 1.0f), 2),
@@ -261,8 +263,9 @@ void HUD::updateLevel(int levelId, const std::string &name)
 
 void HUD::showLevelIntro(int levelId, const std::string &name)
 {
-    float cx = getParent()->getContentSize().width * 0.35f;
-    float cy = getParent()->getContentSize().height / 2;
+    if (!_overlayParent) return;
+    float cx = _overlayParent->getContentSize().width * 0.35f;
+    float cy = _overlayParent->getContentSize().height / 2;
 
     auto intro =
         Label::createWithTTF(StringUtils::format("Level %d\n%s", levelId, name.c_str()), FONT_TITLE, 44);
@@ -271,7 +274,7 @@ void HUD::showLevelIntro(int levelId, const std::string &name)
     intro->enableShadow(Color4B(0, 40, 100, 150), Size(2, -2));
     intro->setAlignment(TextHAlignment::CENTER);
     intro->setScale(0);
-    getParent()->addChild(intro, 30);
+    _overlayParent->addChild(intro, 30);
 
     intro->runAction(
         Sequence::create(EaseBackOut::create(ScaleTo::create(0.35f, 1.1f)),
