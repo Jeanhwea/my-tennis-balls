@@ -1,21 +1,17 @@
 #include "GameController.h"
 
+#include "builder/GameSceneBuilder.h"
 #include "common/GameConstants.h"
+#include "controller/InputController.h"
 #include "scene/LevelMenuScene.h"
-#include "view/ArenaView.h"
 #include "view/TrayView.h"
 #include "view/VFXHelper.h"
 #include "view/BallView.h"
 
 USING_NS_CC;
 
-void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
+void GameController::setupCallbacks()
 {
-    _scene = scene;
-    _visibleSize = visibleSize;
-
-    _ballManager.clear();
-
     _ballManager.setDespawnCallback([this]() {
         refreshHUD();
         if (_model.isCleared()) {
@@ -39,27 +35,43 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
     _collisionSystem.setOnTargetRemoved([this]() {
         _model.removeTarget();
     });
+}
 
-    ArenaView::addEdgeWalls(_scene, _visibleSize);
-    ArenaView::addFloorSensor(_scene, _visibleSize);
-    ArenaView::drawZones(_scene, _visibleSize);
+void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
+{
+    _scene = scene;
+    _visibleSize = visibleSize;
 
-    _aimLine.init(_scene);
+    _ballManager.clear();
+    setupCallbacks();
 
-    _hud = HUD::create(_visibleSize);
-    _hud->setOverlayParent(_scene);
-    _scene->addChild(_hud, 20);
+    // Scene setup delegated to GameSceneBuilder
+    GameSceneBuilder::setupArena(_scene, _visibleSize);
 
-    _model.scoreManager().setOnChange([this]() { refreshHUD(); });
-
-    _hud->setOnBack([this]() {
+    _hud = static_cast<HUD *>(GameSceneBuilder::createHUD(_scene, _visibleSize, [this]() {
         LevelMenuScene::setInitialLevelIndex(_model.levelIndex());
         auto menuScene = LevelMenuScene::createScene();
         Director::getInstance()->replaceScene(TransitionFade::create(0.4f, menuScene, Color3B(10, 10, 30)));
-    });
+    }));
 
-    setupInput();
-    setupPhysics();
+    _model.scoreManager().setOnChange([this]() { refreshHUD(); });
+
+    auto input = GameSceneBuilder::createInputController(_scene, _visibleSize);
+    input->setOnLaunch([this](const InputController::LaunchCommand &cmd) {
+        if (_levelManager.isTransitioning()) return;
+        const auto &level = _model.currentLevel();
+        if (_levelManager.ballCounter() >= level.maxBalls) return;
+        _ballManager.spawnBall(_scene, cmd.position, cmd.velocity, _levelManager.ballCounter());
+        _levelManager.incrementBallCounter();
+        _model.useBall();
+        _hud->hideHint();
+        refreshHUD();
+    });
+    input->setOnDrag([this](const Vec2 &start, const Vec2 &delta) { /* aim line handled via callback */ });
+    input->setOnDragEnd([this]() { /* aim line handled via callback */ });
+
+    GameSceneBuilder::setupPhysics(_scene,
+        [this](PhysicsContact &c) { return _collisionSystem.onContactBegin(c); });
 
     _levelManager.init(_scene, _visibleSize, _model, _ballManager, startLevel);
 }
@@ -73,35 +85,6 @@ void GameController::update(float dt)
             BallView::updateEffects(ball);
         }
     }
-}
-
-void GameController::setupInput()
-{
-    _input.setLaunchZoneMinX(_visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO));
-
-    _input.setOnDrag([this](const Vec2 &start, const Vec2 &delta) { _aimLine.draw(start, delta); });
-
-    _input.setOnDragEnd([this]() { _aimLine.clear(); });
-
-    _input.setOnLaunch([this](const InputController::LaunchCommand &cmd) {
-        if (_levelManager.isTransitioning()) return;
-        const auto &level = _model.currentLevel();
-        if (_levelManager.ballCounter() >= level.maxBalls) return;
-        _ballManager.spawnBall(_scene, cmd.position, cmd.velocity, _levelManager.ballCounter());
-        _levelManager.incrementBallCounter();
-        _model.useBall();
-        _hud->hideHint();
-        refreshHUD();
-    });
-
-    _input.init(_scene);
-}
-
-void GameController::setupPhysics()
-{
-    auto listener = EventListenerPhysicsContact::create();
-    listener->onContactBegin = [this](PhysicsContact &c) { return _collisionSystem.onContactBegin(c); };
-    _scene->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, _scene);
 }
 
 void GameController::refreshHUD()

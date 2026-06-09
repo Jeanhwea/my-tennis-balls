@@ -2,12 +2,10 @@
 #define GAME_CONTROLLER_H
 
 #include "cocos2d.h"
-#include "controller/InputController.h"
 #include "model/BallManager.h"
 #include "model/CollisionSystem.h"
 #include "controller/LevelManager.h"
 #include "model/GameModel.h"
-#include "view/AimLineView.h"
 #include "view/HUD.h"
 
 class GameController
@@ -24,12 +22,9 @@ private:
     BallManager _ballManager;
     CollisionSystem _collisionSystem;
     LevelManager _levelManager;
-    InputController _input;
-    AimLineView _aimLine;
     HUD *_hud = nullptr;
 
-    void setupInput();
-    void setupPhysics();
+    void setupCallbacks();
     void refreshHUD();
 };
 
