@@ -7,8 +7,6 @@ project(${APP_NAME}
   LANGUAGES C CXX
 )
 
-# set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   add_compile_options(-w)
 elseif(MSVC)
@@ -21,18 +19,15 @@ set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
 include(CocosBuildSet)
 add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 
-# Record sources, headers, resources...
 set(GAME_SOURCE)
 set(GAME_HEADER)
 
-# Generate version header file from CMake project version
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/Classes/Version.h.in
   ${CMAKE_CURRENT_SOURCE_DIR}/Classes/Version.h
   @ONLY
 )
 
-# Add generated Version.h to headers list
 list(APPEND GAME_HEADER
   ${CMAKE_CURRENT_SOURCE_DIR}/Classes/Version.h
 )
@@ -44,7 +39,6 @@ if(APPLE OR WINDOWS)
   cocos_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
-# Add cross-platforms source files and header files
 list(APPEND GAME_SOURCE
   Classes/AppDelegate.cpp
   Classes/view/VisualUtil.cpp
@@ -95,7 +89,6 @@ list(APPEND GAME_HEADER
 )
 
 if(ANDROID)
-  # Change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
   set(APP_NAME MyGame)
   list(APPEND GAME_SOURCE
     proj.android/app/jni/hellocpp/main.cpp
@@ -146,7 +139,6 @@ elseif(APPLE)
   list(APPEND GAME_SOURCE ${common_res_files})
 endif()
 
-# Mark app complie info and libs info
 set(all_code_files
   ${GAME_HEADER}
   ${GAME_SOURCE}
@@ -161,7 +153,6 @@ endif()
 
 target_link_libraries(${APP_NAME} cocos2d)
 
-# Link against iconv library on macOS
 if(APPLE)
   target_link_libraries(${APP_NAME} iconv)
 endif()
@@ -170,7 +161,6 @@ target_include_directories(${APP_NAME}
   PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
 )
 
-# Mark app resources
 setup_cocos_app_config(${APP_NAME})
 if(APPLE)
   set_target_properties(${APP_NAME} PROPERTIES RESOURCE "${APP_UI_RES}")

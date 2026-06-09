@@ -1,4 +1,3 @@
-
 #ifndef TRAY_VIEW_H
 #define TRAY_VIEW_H
 

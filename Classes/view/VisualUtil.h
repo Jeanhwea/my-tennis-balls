@@ -1,4 +1,3 @@
-
 #ifndef VISUAL_UTIL_H
 #define VISUAL_UTIL_H
 

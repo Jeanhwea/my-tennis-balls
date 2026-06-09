@@ -1,4 +1,3 @@
-
 #ifndef LEVEL_MENU_SCENE_H
 #define LEVEL_MENU_SCENE_H
 

@@ -1,4 +1,3 @@
-
 #ifndef AIM_LINE_VIEW_H
 #define AIM_LINE_VIEW_H
 

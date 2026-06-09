@@ -1,4 +1,3 @@
-
 #ifndef ARENA_VIEW_H
 #define ARENA_VIEW_H
 

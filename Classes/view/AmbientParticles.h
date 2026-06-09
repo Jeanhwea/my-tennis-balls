@@ -1,4 +1,3 @@
-
 #ifndef AMBIENT_PARTICLES_H
 #define AMBIENT_PARTICLES_H
 

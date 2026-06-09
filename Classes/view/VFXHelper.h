@@ -1,4 +1,3 @@
-
 #ifndef VFX_HELPER_H
 #define VFX_HELPER_H
 
