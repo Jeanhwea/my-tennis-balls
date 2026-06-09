@@ -8,7 +8,6 @@ USING_NS_CC;
 namespace
 {
 
-/// 解析单个关卡的 JSON 字符串，成功返回 true，失败返回 false。
 bool parseLevel(const std::string &json, LevelData &outLevel)
 {
     rapidjson::Document doc;

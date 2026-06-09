@@ -1,5 +1,5 @@
 /// @file InputController.h
-/// 触摸输入控制器，将拖拽手势转换为弹球发射命令。支持拖拽回调、发射回调和发射区域限制。
+/// Touch input controller: converts drag gestures into ball launch commands.
 
 #ifndef __INPUT_CONTROLLER_H__
 #define __INPUT_CONTROLLER_H__
@@ -9,7 +9,6 @@
 #include "cocos2d.h"
 
 /// @class InputController
-/// 处理触摸输入，将拖拽手势转换为发射命令。
 class InputController
 {
 public:
@@ -28,10 +27,8 @@ public:
 
     void setOnDragEnd(OnDragEndCallback cb) { _onDragEnd = std::move(cb); }
 
-    /// 设置有效发射起始位置的最小 X 坐标（右侧区域）。
     void setLaunchZoneMinX(float minX) { _launchZoneMinX = minX; }
 
-    /// 在指定节点上注册触摸监听器。
     void init(cocos2d::Node *target);
 
 private:

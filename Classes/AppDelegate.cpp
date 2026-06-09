@@ -18,7 +18,7 @@ namespace
 
 static constexpr const char *APP_TITLE = "my-tennis-balls (" VERSION_STRING ")";
 
-/// 分辨率阶梯：设计基准 -> 低端 -> 全高清 -> 2K
+/// Resolution ladder: design base -> low -> full HD -> 2K
 const cocos2d::Size designResolutionSize(960, 540);
 const cocos2d::Size smallResolutionSize(480, 320);
 const cocos2d::Size mediumResolutionSize(1920, 1080);
@@ -75,7 +75,6 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     director->setAnimationInterval(1.0f / 60);
 
-    // 纵向完整显示，横向自适应各种宽高比
     glview->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height,
                                     ResolutionPolicy::FIXED_HEIGHT);
     auto frameSize = glview->getFrameSize();

@@ -1,5 +1,5 @@
 /// @file GameController.h
-/// 游戏核心控制器，协调 Model ↔ View 通信、关卡生命周期、输入事件和物理碰撞回调。
+/// Game controller: coordinates Model-View communication, level lifecycle, input, and physics.
 
 #ifndef __GAME_CONTROLLER_H__
 #define __GAME_CONTROLLER_H__
@@ -13,7 +13,6 @@
 #include "view/HUD.h"
 
 /// @class GameController
-/// 协调 Model ↔ View 通信、关卡推进和物理系统。
 class GameController
 {
 public:

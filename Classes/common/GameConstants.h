@@ -2,7 +2,6 @@
 #define __GAME_CONSTANTS_H__
 
 /// @file GameConstants.h
-/// 全局常量：标签、掩码、物理参数、布局比例、计分规则。
 
 constexpr const char *FONT_UI = "fonts/arial.ttf";
 constexpr const char *FONT_TITLE = "fonts/Marker Felt.ttf";
