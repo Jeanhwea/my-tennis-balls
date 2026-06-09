@@ -1,20 +1,13 @@
-/// @file HUD.h
-/// Head-up display interface. Manages score, combo, ball count, level hints, clear/fail animations and back
-/// button.
-
-#ifndef __HUD_H__
-#define __HUD_H__
+#ifndef HUD_H
+#define HUD_H
 
 #include "cocos2d.h"
 
-/// @class HUD
-/// Head-up display: score, combo, ball count, level hint.
 class HUD : public cocos2d::Node
 {
 public:
     static HUD *create(const cocos2d::Size &visibleSize);
 
-    /// Back button callback.
     void setOnBack(std::function<void()> cb) { _onBack = std::move(cb); }
 
     void updateScore(int score);
@@ -58,4 +51,4 @@ private:
     static constexpr float TOP_BAR_HEIGHT = 50.0f;
 };
 
-#endif  // __HUD_H__
+#endif

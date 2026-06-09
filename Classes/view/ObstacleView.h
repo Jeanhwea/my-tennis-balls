@@ -1,9 +1,8 @@
-#ifndef __OBSTACLE_VIEW_H__
-#define __OBSTACLE_VIEW_H__
+#ifndef OBSTACLE_VIEW_H
+#define OBSTACLE_VIEW_H
 
 #include "cocos2d.h"
 
-/// Obstacle rendering and physics body creation.
 namespace ObstacleView
 {
 
@@ -11,4 +10,4 @@ void spawnObstacles(cocos2d::Node *parent, const cocos2d::Size &visibleSize, int
 
 }  // namespace ObstacleView
 
-#endif  // __OBSTACLE_VIEW_H__
+#endif

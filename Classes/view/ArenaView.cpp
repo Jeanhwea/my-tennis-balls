@@ -2,7 +2,7 @@
 
 #include "common/GameConstants.h"
 #include "view/AmbientParticles.h"
-#include "util/VisualUtil.h"
+#include "view/VisualUtil.h"
 
 USING_NS_CC;
 
@@ -26,8 +26,6 @@ void drawCorners(Node *parent, const Size &size, float launchLeft)
 }
 
 }  // namespace
-
-// -- Create physical boundary walls and wall glow --
 
 void ArenaView::addEdgeWalls(Node *parent, const Size &visibleSize)
 {
@@ -56,7 +54,6 @@ void ArenaView::addEdgeWalls(Node *parent, const Size &visibleSize)
     edgeNode->setPhysicsBody(body);
     parent->addChild(edgeNode);
 
-    // Wall glow
     auto wallDraw = DrawNode::create();
     Color4F wallColor(0.2f, 0.4f, 0.7f, 0.4f);
     wallDraw->drawLine(Vec2(0, 0), Vec2(0, h), wallColor);
@@ -65,8 +62,6 @@ void ArenaView::addEdgeWalls(Node *parent, const Size &visibleSize)
     wallDraw->drawLine(Vec2(0, 0), Vec2(w, 0), wallColor);
     parent->addChild(wallDraw, 1);
 }
-
-// -- Create bottom floor sensor (detect out of bounds) --
 
 void ArenaView::addFloorSensor(Node *parent, const Size &visibleSize)
 {
@@ -84,21 +79,16 @@ void ArenaView::addFloorSensor(Node *parent, const Size &visibleSize)
     parent->addChild(floor);
 }
 
-// -- Draw arena visual elements (background gradient, grid, launch zone, decorations) --
-
 void ArenaView::drawZones(Node *parent, const Size &visibleSize)
 {
     float w = visibleSize.width;
     float h = visibleSize.height;
     float launchLeft = w * (1.0f - LAUNCH_ZONE_RATIO);
 
-    // Background
     drawBackground(parent, visibleSize);
 
-    // Grid
     drawGrid(parent, visibleSize, launchLeft);
 
-    // Launch zone + divider line
     auto zone = DrawNode::create();
 
     static constexpr int ZONE_STRIPS = 8;
@@ -111,7 +101,6 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
         zone->drawSolidRect(Vec2(x0, 0), Vec2(x1, h), Color4F(0.15f, 0.25f, 0.5f, alpha));
     }
 
-    // Divider line
     for (int i = 3; i >= 0; --i) {
         float offset = static_cast<float>(i) * 2.0f;
         float alpha = 0.1f + 0.15f * (3 - i);
@@ -122,10 +111,8 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
 
     parent->addChild(zone, -8);
 
-    // Corners
     drawCorners(parent, visibleSize, launchLeft);
 
-    // Vignette (dark corners)
     auto vignette = DrawNode::create();
     float vSize = 80.0f;
     for (int i = 0; i < 8; ++i) {
@@ -143,14 +130,12 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     }
     parent->addChild(vignette, -6);
 
-    // Launch zone label
     auto label = Label::createWithTTF("LAUNCH", FONT_UI, 14);
     label->setRotation(-90);
     label->setPosition(Vec2(launchLeft + (w - launchLeft) / 2, h / 2));
     label->setTextColor(Color4B(100, 160, 255, 60));
     parent->addChild(label, 0);
 
-    // Reticle
     auto reticle = DrawNode::create();
     float rcx = launchLeft + (w - launchLeft) / 2;
     float rcy = h * 0.3f;
@@ -161,6 +146,5 @@ void ArenaView::drawZones(Node *parent, const Size &visibleSize)
     reticle->drawCircle(Vec2(rcx, rcy), rSize * 0.8f, 0, 24, false, retColor);
     parent->addChild(reticle, 0);
 
-    // Floating ambient particles
     VisualUtil::addAmbientParticles(parent, Size(launchLeft, h), -5);
 }

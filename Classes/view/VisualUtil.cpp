@@ -42,22 +42,18 @@ void VisualUtil::drawCorners(Node *parent, const Size &size,
     float h = size.height;
     float rEdge = (config.rightEdge > 0.0f) ? config.rightEdge : w;
 
-    // Top-left
     corners->drawSolidRect(Vec2(config.pad, h - config.pad - config.thick),
                            Vec2(config.pad + config.len, h - config.pad), config.color);
     corners->drawSolidRect(Vec2(config.pad, h - config.pad - config.len),
                            Vec2(config.pad + config.thick, h - config.pad), config.color);
-    // Top-right
     corners->drawSolidRect(Vec2(rEdge - config.pad - config.len, h - config.pad - config.thick),
                            Vec2(rEdge - config.pad, h - config.pad), config.color);
     corners->drawSolidRect(Vec2(rEdge - config.pad - config.thick, h - config.pad - config.len),
                            Vec2(rEdge - config.pad, h - config.pad), config.color);
-    // Bottom-left
     corners->drawSolidRect(Vec2(config.pad, config.pad),
                            Vec2(config.pad + config.len, config.pad + config.thick), config.color);
     corners->drawSolidRect(Vec2(config.pad, config.pad),
                            Vec2(config.pad + config.thick, config.pad + config.len), config.color);
-    // Bottom-right
     corners->drawSolidRect(Vec2(rEdge - config.pad - config.len, config.pad),
                            Vec2(rEdge - config.pad, config.pad + config.thick), config.color);
     corners->drawSolidRect(Vec2(rEdge - config.pad - config.thick, config.pad),

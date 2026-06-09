@@ -9,10 +9,8 @@ using common::randomFloat;
 namespace
 {
 
-/// Randomly pick a color from a cool color palette.
 Color4F pickObstacleColor()
 {
-    // Blue-purple tones
     static const Color4F palette[] = {
         Color4F(0.25f, 0.45f, 0.75f, 0.85f), Color4F(0.35f, 0.30f, 0.70f, 0.85f),
         Color4F(0.20f, 0.55f, 0.65f, 0.85f), Color4F(0.40f, 0.35f, 0.60f, 0.85f),

@@ -1,12 +1,8 @@
-/// @file AppDelegate.h
-/// Application entry point, lifecycle management, and scene initialization.
-
-#ifndef _APP_DELEGATE_H_
-#define _APP_DELEGATE_H_
+#ifndef APP_DELEGATE_H
+#define APP_DELEGATE_H
 
 #include "cocos2d.h"
 
-/// @class AppDelegate
 class AppDelegate : private cocos2d::Application
 {
 public:
@@ -19,4 +15,4 @@ public:
     void applicationWillEnterForeground() override;
 };
 
-#endif  // _APP_DELEGATE_H_
+#endif

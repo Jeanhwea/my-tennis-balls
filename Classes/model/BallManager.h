@@ -1,16 +1,9 @@
-/// @file BallManager.h
-/// Ball and target lifecycle manager: creation, tracking, removal, visual effects, out-of-bounds collection.
-
-#ifndef __BALL_MANAGER_H__
-#define __BALL_MANAGER_H__
+#ifndef BALL_MANAGER_H
+#define BALL_MANAGER_H
 
 #include <functional>
-
 #include "cocos2d.h"
 
-/// @class BallManager
-/// Manages ball and target lifecycle: creation, tracking, visual effects, out-of-bounds collection, and removal.
-/// Callbacks: _despawnCb fires after each despawn to let GameController refresh HUD/check state.
 class BallManager
 {
 public:
@@ -20,8 +13,6 @@ public:
 
     void spawnBall(cocos2d::Node *parent, const cocos2d::Vec2 &position,
                    const cocos2d::Vec2 &velocity, int ballIndex);
-
-    void updateEffects();
 
     void scheduleRemoval(cocos2d::Node *node) { _pendingRemoval.push_back(node); }
 
@@ -42,4 +33,4 @@ private:
     std::function<void()> _despawnCb;
 };
 
-#endif  // __BALL_MANAGER_H__
+#endif  // BALL_MANAGER_H

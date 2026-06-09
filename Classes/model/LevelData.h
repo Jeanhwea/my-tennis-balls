@@ -1,13 +1,9 @@
-/// @file LevelData.h
-/// Level data structures: TrayData and LevelData.
-
-#ifndef __LEVEL_DATA_H__
-#define __LEVEL_DATA_H__
+#ifndef LEVEL_DATA_H
+#define LEVEL_DATA_H
 
 #include <string>
 #include <vector>
 
-/// @struct TrayData
 struct TrayData {
     float x;
     float y;
@@ -24,4 +20,4 @@ struct LevelData {
 
 const std::vector<LevelData> &getAllLevels();
 
-#endif  // __LEVEL_DATA_H__
+#endif

@@ -1,7 +1,5 @@
-#ifndef __GAME_CONSTANTS_H__
-#define __GAME_CONSTANTS_H__
-
-/// @file GameConstants.h
+#ifndef GAME_CONSTANTS_H
+#define GAME_CONSTANTS_H
 
 constexpr const char *FONT_UI = "fonts/arial.ttf";
 constexpr const char *FONT_TITLE = "fonts/Marker Felt.ttf";
@@ -72,4 +70,4 @@ constexpr float OOB_BOTTOM = -50.0f;
 constexpr float OOB_TOP_MARGIN = 200.0f;
 constexpr float OOB_SIDE_MARGIN = 200.0f;
 
-#endif  // __GAME_CONSTANTS_H__
+#endif  // GAME_CONSTANTS_H

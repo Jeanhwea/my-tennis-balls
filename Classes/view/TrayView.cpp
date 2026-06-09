@@ -7,19 +7,15 @@ USING_NS_CC;
 namespace
 {
 
-/// Draw the visual appearance of a tray (including shadow, body, highlight, dark line, end caps, brackets,
-/// soft glow)
 void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
 {
     auto draw = DrawNode::create();
     float halfW = trayW / 2;
     float halfH = TRAY_THICKNESS / 2;
 
-    // Shadow
     draw->drawSolidRect(Vec2(trayX - halfW + 3, trayY - halfH - 3),
                         Vec2(trayX + halfW + 3, trayY + halfH - 3), Color4F(0.0f, 0.0f, 0.0f, 0.25f));
 
-    // Body
     static constexpr int T_STRIPS = 3;
     for (int i = 0; i < T_STRIPS; ++i) {
         float t0 = static_cast<float>(i) / T_STRIPS;
@@ -30,19 +26,15 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
                             Color4F(bright - 0.05f, bright, bright + 0.08f, 0.95f));
     }
 
-    // Highlight
     draw->drawSolidRect(Vec2(trayX - halfW + 1, trayY + halfH - 2), Vec2(trayX + halfW - 1, trayY + halfH),
                         Color4F(0.75f, 0.80f, 0.92f, 0.85f));
 
-    // Dark line
     draw->drawLine(Vec2(trayX - halfW, trayY - halfH), Vec2(trayX + halfW, trayY - halfH),
                    Color4F(0.22f, 0.24f, 0.30f, 0.9f));
 
-    // End caps
     draw->drawSolidCircle(Vec2(trayX - halfW, trayY), halfH, 0, 8, Color4F(0.50f, 0.54f, 0.62f, 0.7f));
     draw->drawSolidCircle(Vec2(trayX + halfW, trayY), halfH, 0, 8, Color4F(0.38f, 0.40f, 0.48f, 0.7f));
 
-    // Brackets
     static constexpr float BRACKET_H = 12.0f;
     static constexpr float BRACKET_W = 6.0f;
     Color4F bracketColor(0.30f, 0.35f, 0.50f, 0.6f);
@@ -58,7 +50,6 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
     draw->setTag(TAG_TRAY);
     parent->addChild(draw, 2);
 
-    // Bottom soft glow
     auto glow = DrawNode::create();
     for (int g = 5; g >= 0; --g) {
         float gy = static_cast<float>(g) * 2.5f;
@@ -71,7 +62,6 @@ void drawTrayVisual(Node *parent, float trayX, float trayY, float trayW)
     parent->addChild(glow, 1);
 }
 
-/// Create the tray physics collision body (static box)
 void createTrayPhysics(Node *parent, float trayX, float trayY, float trayW)
 {
     auto trayNode = Node::create();
@@ -89,7 +79,6 @@ void createTrayPhysics(Node *parent, float trayX, float trayY, float trayW)
     parent->addChild(trayNode, 2);
 }
 
-/// Spawn target balls on the tray, each with its own physics body and tag
 void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count, int &targetIndex,
                   Vector<Node *> &outTargets)
 {
@@ -121,7 +110,6 @@ void spawnTargets(Node *parent, float trayX, float trayY, float trayW, int count
     }
 }
 
-/// Complete process for creating a single tray (visual + physics body + target balls)
 void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, int &targetIndex,
                    Vector<Node *> &outTargets)
 {
@@ -136,7 +124,6 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
 
 }  // namespace
 
-/// Iterate through all tray configurations in the level, creating each one
 int TrayView::createFromLevel(Node *parent, const Size &visibleSize, const LevelData &level,
                               Vector<Node *> &outTargets)
 {

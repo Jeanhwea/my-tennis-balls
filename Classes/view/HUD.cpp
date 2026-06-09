@@ -38,7 +38,6 @@ void HUD::createTopBar(const Size &visibleSize)
     float barBot = visibleSize.height - TOP_BAR_HEIGHT;
     float barRight = visibleSize.width * (1.0f - LAUNCH_ZONE_RATIO);
 
-    // Gradient
     static constexpr int STRIPS = 5;
     for (int i = 0; i < STRIPS; ++i) {
         float t0 = static_cast<float>(i) / STRIPS;
@@ -49,7 +48,6 @@ void HUD::createTopBar(const Size &visibleSize)
                               Color4F(0.02f, 0.03f, 0.08f, alpha));
     }
 
-    // Bottom highlight line
     topBar->drawSolidRect(Vec2(0, barBot), Vec2(barRight, barBot + 1), Color4F(0.3f, 0.5f, 0.9f, 0.35f));
     topBar->drawSolidRect(Vec2(0, barBot + 1), Vec2(barRight, barBot + 2),
                           Color4F(0.2f, 0.35f, 0.7f, 0.15f));
@@ -126,7 +124,6 @@ void HUD::createBackButton(const Size &visibleSize)
     float y = visibleSize.height - MARGIN - BTN_H / 2;
 
     auto bg = DrawNode::create();
-    // Gradient fill
     static constexpr int BTN_STRIPS = 3;
     for (int i = 0; i < BTN_STRIPS; ++i) {
         float t0 = static_cast<float>(i) / BTN_STRIPS;
@@ -208,7 +205,6 @@ void HUD::showCleared()
     float cx = parentSize.width * 0.35f;
     float cy = parentSize.height / 2;
 
-    // Flash effect
     auto flash = DrawNode::create();
     flash->drawSolidCircle(Vec2(cx, cy), 120.0f, 0, 24, Color4F(0.4f, 0.6f, 1.0f, 0.15f));
     flash->setScale(0);

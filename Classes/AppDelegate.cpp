@@ -18,7 +18,6 @@ namespace
 
 static constexpr const char *APP_TITLE = "my-tennis-balls (" VERSION_STRING ")";
 
-/// Resolution ladder: design base -> low -> full HD -> 2K
 const cocos2d::Size designResolutionSize(960, 540);
 const cocos2d::Size smallResolutionSize(480, 320);
 const cocos2d::Size mediumResolutionSize(1920, 1080);
