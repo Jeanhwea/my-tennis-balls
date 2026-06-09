@@ -1,12 +1,9 @@
-/// @file LevelMenuScene.h
-/// Level selection menu with paginated buttons, entrance animation, and navigation.
 
-#ifndef __LEVEL_MENU_SCENE_H__
-#define __LEVEL_MENU_SCENE_H__
+#ifndef LEVEL_MENU_SCENE_H
+#define LEVEL_MENU_SCENE_H
 
 #include "cocos2d.h"
 
-/// @class LevelMenuScene
 class LevelMenuScene : public cocos2d::Scene
 {
 public:
@@ -46,4 +43,4 @@ private:
     int _totalPages = 1;
 };
 
-#endif  // __LEVEL_MENU_SCENE_H__
+#endif

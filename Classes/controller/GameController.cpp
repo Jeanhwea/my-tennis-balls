@@ -4,6 +4,8 @@
 #include "scene/LevelMenuScene.h"
 #include "view/ArenaView.h"
 #include "view/TrayView.h"
+#include "view/VFXHelper.h"
+#include "view/BallView.h"
 
 USING_NS_CC;
 
@@ -14,9 +16,6 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 
     _ballManager.clear();
 
-    _collisionSystem.setModel(&_model);
-    _collisionSystem.setSceneNode(_scene);
-
     _ballManager.setDespawnCallback([this]() {
         refreshHUD();
         if (_model.isCleared()) {
@@ -24,8 +23,21 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
         }
     });
 
-    _collisionSystem.setScheduledRemovalCallback([this](Node *node) {
+    _collisionSystem.setOnScheduledRemoval([this](Node *node) {
         _ballManager.scheduleRemoval(node);
+    });
+    _collisionSystem.setOnScore([this](Node *scene, const Vec2 &pos, int basePoints) {
+        int points = _model.scoreManager().addScore(basePoints);
+        VFXHelper::showFloatingScore(scene ? scene : _scene, pos, points);
+    });
+    _collisionSystem.setOnHitParticle([this](Node *scene, const Vec2 &pos) {
+        VFXHelper::spawnHitParticle(scene ? scene : _scene, pos);
+    });
+    _collisionSystem.setOnComboReset([this]() {
+        _model.resetCombo();
+    });
+    _collisionSystem.setOnTargetRemoved([this]() {
+        _model.removeTarget();
     });
 
     ArenaView::addEdgeWalls(_scene, _visibleSize);
@@ -56,6 +68,11 @@ void GameController::update(float dt)
 {
     _model.tick(dt);
     _levelManager.update(dt);
+    if (!_levelManager.isTransitioning()) {
+        for (auto ball : _ballManager.activeBalls()) {
+            BallView::updateEffects(ball);
+        }
+    }
 }
 
 void GameController::setupInput()

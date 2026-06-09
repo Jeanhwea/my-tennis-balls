@@ -1,13 +1,10 @@
-/// @file GameScene.h
-/// Main game scene: initializes physics world and creates GameController.
 
-#ifndef __GAME_SCENE_H__
-#define __GAME_SCENE_H__
+#ifndef GAME_SCENE_H
+#define GAME_SCENE_H
 
 #include "cocos2d.h"
 #include "controller/GameController.h"
 
-/// @class GameScene
 class GameScene : public cocos2d::Scene
 {
 public:
@@ -29,4 +26,4 @@ private:
     int _startLevel = 0;
 };
 
-#endif  // __GAME_SCENE_H__
+#endif

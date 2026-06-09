@@ -1,14 +1,11 @@
-/// @file InputController.h
-/// Touch input controller: converts drag gestures into ball launch commands.
 
-#ifndef __INPUT_CONTROLLER_H__
-#define __INPUT_CONTROLLER_H__
+#ifndef INPUT_CONTROLLER_H
+#define INPUT_CONTROLLER_H
 
 #include <functional>
 
 #include "cocos2d.h"
 
-/// @class InputController
 class InputController
 {
 public:
@@ -45,4 +42,4 @@ private:
     void onTouchEnded(cocos2d::Touch *touch, cocos2d::Event *event);
 };
 
-#endif  // __INPUT_CONTROLLER_H__
+#endif

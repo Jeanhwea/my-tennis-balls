@@ -21,23 +21,19 @@ bool HUDTopBar::init(Node *parent, const Size &visibleSize)
 
     auto draw = DrawNode::create();
 
-    // Score background
     draw->drawSolidRect(Vec2(10, visibleSize.height - 50), Vec2(200, visibleSize.height - 10),
                         Color4F(0, 0, 0, 0.5f));
-    // Paddle count background
     draw->drawSolidRect(Vec2(visibleSize.width - 160, visibleSize.height - 50),
                         Vec2(visibleSize.width - 10, visibleSize.height - 10),
                         Color4F(0, 0, 0, 0.5f));
     parent->addChild(draw, 200);
 
-    // Score label
     auto scoreLabel = Label::createWithSystemFont("Score: 0", "Arial", 24);
     scoreLabel->setAnchorPoint(Vec2(0, 0.5f));
     scoreLabel->setPosition(Vec2(15, visibleSize.height - 30));
     scoreLabel->setName("scoreLabel");
     parent->addChild(scoreLabel, 201);
 
-    // Ball count label (will show total balls, remaining, and penalty)
     auto ballCountLabel = Label::createWithSystemFont("Balls: 0/0 (-0)", "Arial", 20);
     ballCountLabel->setAnchorPoint(Vec2(1, 0.5f));
     ballCountLabel->setPosition(Vec2(visibleSize.width - 20, visibleSize.height - 30));

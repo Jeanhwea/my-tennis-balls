@@ -1,13 +1,10 @@
-/// @file GameModel.h
-/// Core game state model: level index, scoring, ball count, targets remaining.
 
-#ifndef __GAME_MODEL_H__
-#define __GAME_MODEL_H__
+#ifndef GAME_MODEL_H
+#define GAME_MODEL_H
 
 #include "LevelData.h"
 #include "ScoreManager.h"
 
-/// @class GameModel
 class GameModel
 {
 public:
@@ -47,4 +44,4 @@ private:
     int _maxBalls = 0;
 };
 
-#endif  // __GAME_MODEL_H__
+#endif

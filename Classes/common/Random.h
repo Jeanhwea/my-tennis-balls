@@ -1,9 +1,8 @@
-#ifndef __COMMON_RANDOM_H__
-#define __COMMON_RANDOM_H__
+#ifndef COMMON_RANDOM_H
+#define COMMON_RANDOM_H
 
 #include <random>
 
-/// @file Random.h
 namespace common
 {
 
@@ -27,4 +26,4 @@ inline int randomInt(int min, int max)
 
 }  // namespace common
 
-#endif  // __COMMON_RANDOM_H__
+#endif  // COMMON_RANDOM_H

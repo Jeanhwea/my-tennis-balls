@@ -1,36 +1,35 @@
-/// @file CollisionSystem.h
-/// Physics collision event dispatcher.
-
-#ifndef __COLLISION_SYSTEM_H__
-#define __COLLISION_SYSTEM_H__
+#ifndef COLLISION_SYSTEM_H
+#define COLLISION_SYSTEM_H
 
 #include <functional>
-
 #include "cocos2d.h"
-#include "model/GameModel.h"
 
-/// @class CollisionSystem
 class CollisionSystem
 {
 public:
-    void setModel(GameModel *model) { _model = model; }
-    void setSceneNode(cocos2d::Node *scene) { _scene = scene; }
+    using NodeCallback = std::function<void(cocos2d::Node *)>;
+    using ScoreCallback = std::function<void(cocos2d::Node *scene, const cocos2d::Vec2 &pos, int basePoints)>;
+    using HitCallback = std::function<void(cocos2d::Node *scene, const cocos2d::Vec2 &pos)>;
+    using VoidCallback = std::function<void()>;
 
-    void setScheduledRemovalCallback(std::function<void(cocos2d::Node *)> cb)
-    {
-        _scheduledRemovalCb = std::move(cb);
-    }
+    void setOnScheduledRemoval(NodeCallback cb) { _scheduledRemovalCb = std::move(cb); }
+    void setOnScore(ScoreCallback cb) { _scoreCb = std::move(cb); }
+    void setOnHitParticle(HitCallback cb) { _hitParticleCb = std::move(cb); }
+    void setOnComboReset(VoidCallback cb) { _comboResetCb = std::move(cb); }
+    void setOnTargetRemoved(VoidCallback cb) { _targetRemovedCb = std::move(cb); }
 
     bool onContactBegin(cocos2d::PhysicsContact &contact);
 
 private:
-    GameModel *_model = nullptr;
-    cocos2d::Node *_scene = nullptr;
     std::function<void(cocos2d::Node *)> _scheduledRemovalCb;
+    ScoreCallback _scoreCb;
+    HitCallback _hitParticleCb;
+    VoidCallback _comboResetCb;
+    VoidCallback _targetRemovedCb;
 
     bool handleFloorContact(cocos2d::Node *floor, cocos2d::Node *other, cocos2d::PhysicsContact &contact);
     bool handleBallTargetContact(cocos2d::Node *ball, cocos2d::Node *target, cocos2d::PhysicsContact &contact);
     bool handleBallBallContact(cocos2d::Node *a, cocos2d::Node *b, cocos2d::PhysicsContact &contact);
 };
 
-#endif  // __COLLISION_SYSTEM_H__
+#endif  // COLLISION_SYSTEM_H

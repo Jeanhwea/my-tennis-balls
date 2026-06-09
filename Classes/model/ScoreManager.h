@@ -1,15 +1,12 @@
-/// @file ScoreManager.h
-/// Pure score logic: score accumulation, combo counting, combo timeout reset.
 
-#ifndef __SCORE_MANAGER_H__
-#define __SCORE_MANAGER_H__
+#ifndef SCORE_MANAGER_H
+#define SCORE_MANAGER_H
 
 #include <algorithm>
 #include <functional>
 
 #include "common/GameConstants.h"
 
-/// @class ScoreManager
 class ScoreManager
 {
 public:
@@ -34,4 +31,4 @@ private:
     void notifyChange();
 };
 
-#endif  // __SCORE_MANAGER_H__
+#endif

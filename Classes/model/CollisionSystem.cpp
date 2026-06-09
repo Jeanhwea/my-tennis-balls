@@ -1,21 +1,8 @@
 #include "CollisionSystem.h"
 
 #include "common/GameConstants.h"
-#include "model/ScoreManager.h"
-#include "view/VFXHelper.h"
 
 USING_NS_CC;
-
-namespace
-{
-
-void applyScoreVFX(Node *parent, ScoreManager &score, int basePoints, const Vec2 &pos)
-{
-    int points = score.addScore(basePoints);
-    VFXHelper::showFloatingScore(parent, pos, points);
-}
-
-}  // namespace
 
 bool CollisionSystem::onContactBegin(PhysicsContact &contact)
 {
@@ -46,12 +33,12 @@ bool CollisionSystem::handleFloorContact(Node * /*floor*/, Node *other, PhysicsC
     auto cp = Vec2(contact.getContactData()->points[0].x, contact.getContactData()->points[0].y);
 
     if (other->getTag() == TAG_TARGET) {
-        applyScoreVFX(_scene, _model->scoreManager(), SCORE_TARGET_FALL, cp);
-        VFXHelper::spawnHitParticle(_scene, cp);
-        _model->removeTarget();
+        if (_scoreCb) _scoreCb(nullptr, cp, SCORE_TARGET_FALL);
+        if (_hitParticleCb) _hitParticleCb(nullptr, cp);
+        if (_targetRemovedCb) _targetRemovedCb();
         if (_scheduledRemovalCb) _scheduledRemovalCb(other);
     } else if (other->getTag() == TAG_BALL) {
-        _model->resetCombo();
+        if (_comboResetCb) _comboResetCb();
         if (_scheduledRemovalCb) _scheduledRemovalCb(other);
     }
     return false;
@@ -60,14 +47,14 @@ bool CollisionSystem::handleFloorContact(Node * /*floor*/, Node *other, PhysicsC
 bool CollisionSystem::handleBallTargetContact(Node * /*ball*/, Node * /*target*/, PhysicsContact &contact)
 {
     auto cp = Vec2(contact.getContactData()->points[0].x, contact.getContactData()->points[0].y);
-    applyScoreVFX(_scene, _model->scoreManager(), SCORE_PER_HIT, cp);
-    VFXHelper::spawnHitParticle(_scene, cp);
+    if (_scoreCb) _scoreCb(nullptr, cp, SCORE_PER_HIT);
+    if (_hitParticleCb) _hitParticleCb(nullptr, cp);
     return true;
 }
 
 bool CollisionSystem::handleBallBallContact(Node * /*a*/, Node * /*b*/, PhysicsContact &contact)
 {
     auto cp = Vec2(contact.getContactData()->points[0].x, contact.getContactData()->points[0].y);
-    applyScoreVFX(_scene, _model->scoreManager(), SCORE_PER_HIT / 2, cp);
+    if (_scoreCb) _scoreCb(nullptr, cp, SCORE_PER_HIT / 2);
     return true;
 }
