@@ -11,7 +11,7 @@ constexpr float SHADOW_SCALE = 1.1f;
 constexpr float SHADOW_OPACITY = 0.25f;
 constexpr float MOTION_BLUR_OPACITY = 0.3f;
 constexpr float MOTION_BLUR_THRESHOLD = 200.0f;
-}
+}  // namespace
 
 Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity, int ballIndex)
 {

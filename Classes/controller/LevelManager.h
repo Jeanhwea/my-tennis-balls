@@ -2,14 +2,16 @@
 #define LEVEL_MANAGER_H
 
 #include <functional>
+
 #include "cocos2d.h"
-#include "model/GameModel.h"
 #include "model/BallManager.h"
+#include "model/GameModel.h"
 
 class LevelManager
 {
 public:
-    void init(cocos2d::Scene *scene, const cocos2d::Size &visibleSize, GameModel &model, BallManager &ballManager, int startLevel = 0);
+    void init(cocos2d::Scene *scene, const cocos2d::Size &visibleSize, GameModel &model,
+              BallManager &ballManager, int startLevel = 0);
 
     void update(float dt);
     bool loadLevel(int index);

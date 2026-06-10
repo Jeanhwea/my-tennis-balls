@@ -8,7 +8,10 @@ class LevelButtonGrid : public cocos2d::Node
 public:
     static LevelButtonGrid *create(cocos2d::Node *parent, const cocos2d::Size &visibleSize, int startPage);
 
-    void setOnPageChanged(std::function<void(int current, int total)> cb) { _onPageChanged = std::move(cb); }
+    void setOnPageChanged(std::function<void(int current, int total)> cb)
+    {
+        _onPageChanged = std::move(cb);
+    }
 
 private:
     bool init(cocos2d::Node *parent, const cocos2d::Size &visibleSize, int startPage);
@@ -16,7 +19,7 @@ private:
     void showPage(cocos2d::Node *parent, const cocos2d::Size &size, int page);
 
     void createOneButton(cocos2d::Node *scene, cocos2d::Node *container, int levelIndex, int levelId,
-                        const std::string &name, float x, float y);
+                         const std::string &name, float x, float y);
 
     cocos2d::Node *_pageContainer = nullptr;
     int _currentPage = 0;

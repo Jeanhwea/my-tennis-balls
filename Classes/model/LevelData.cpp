@@ -108,7 +108,7 @@ std::vector<LevelData> loadAllLevels()
     return levels;
 }
 
-}
+}  // namespace
 
 const std::vector<LevelData> &getAllLevels()
 {

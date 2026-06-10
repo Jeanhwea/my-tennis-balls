@@ -3,9 +3,9 @@
 #include "builder/GameSceneBuilder.h"
 #include "common/GameConstants.h"
 #include "scene/LevelMenuScene.h"
+#include "view/BallView.h"
 #include "view/TrayView.h"
 #include "view/VFXHelper.h"
-#include "view/BallView.h"
 
 USING_NS_CC;
 
@@ -23,22 +23,15 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
         }
     });
 
-    _collisionSystem.setOnScheduledRemoval([this](Node *node) {
-        _ballManager.scheduleRemoval(node);
-    });
+    _collisionSystem.setOnScheduledRemoval([this](Node *node) { _ballManager.scheduleRemoval(node); });
     _collisionSystem.setOnScore([this](Node *scene, const Vec2 &pos, int basePoints) {
         int points = _model.scoreManager().addScore(basePoints);
         VFXHelper::showFloatingScore(scene ? scene : _scene, pos, points);
     });
-    _collisionSystem.setOnHitParticle([this](Node *scene, const Vec2 &pos) {
-        VFXHelper::spawnHitParticle(scene ? scene : _scene, pos);
-    });
-    _collisionSystem.setOnComboReset([this]() {
-        _model.resetCombo();
-    });
-    _collisionSystem.setOnTargetRemoved([this]() {
-        _model.removeTarget();
-    });
+    _collisionSystem.setOnHitParticle(
+        [this](Node *scene, const Vec2 &pos) { VFXHelper::spawnHitParticle(scene ? scene : _scene, pos); });
+    _collisionSystem.setOnComboReset([this]() { _model.resetCombo(); });
+    _collisionSystem.setOnTargetRemoved([this]() { _model.removeTarget(); });
 
     GameSceneBuilder::setupArena(_scene, _visibleSize);
 
@@ -72,8 +65,8 @@ void GameController::init(Scene *scene, const Size &visibleSize, int startLevel)
 
     _input.init(_scene);
 
-    GameSceneBuilder::setupPhysics(_scene,
-        [this](PhysicsContact &c) { return _collisionSystem.onContactBegin(c); });
+    GameSceneBuilder::setupPhysics(
+        _scene, [this](PhysicsContact &c) { return _collisionSystem.onContactBegin(c); });
 
     _levelManager.init(_scene, _visibleSize, _model, _ballManager, startLevel);
 }

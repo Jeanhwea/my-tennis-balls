@@ -41,7 +41,7 @@ struct LabelPool {
 ParticlePool g_particlePool;
 LabelPool g_labelPool;
 
-}
+}  // namespace
 
 void VFXHelper::initParticlePool(Node *parent, int poolSize)
 {
@@ -202,7 +202,7 @@ void releaseLabelNode(Label *label)
     }
 }
 
-}
+}  // namespace
 
 void VFXHelper::spawnHitParticle(Node *parent, const Vec2 &position)
 {

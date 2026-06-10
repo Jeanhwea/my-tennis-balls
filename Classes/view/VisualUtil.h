@@ -6,22 +6,19 @@
 namespace VisualUtil
 {
 
-struct GradientConfig
-{
+struct GradientConfig {
     cocos2d::Color4F botColor;
     cocos2d::Color4F topColor;
     int strips;
 };
 
-struct GridConfig
-{
+struct GridConfig {
     float spacing;
     cocos2d::Color4F color;
     float maxWidth;
 };
 
-struct CornerConfig
-{
+struct CornerConfig {
     float len;
     float thick;
     float pad;
@@ -29,14 +26,13 @@ struct CornerConfig
     float rightEdge;
 };
 
-void drawGradientBackground(cocos2d::Node *parent, const cocos2d::Size &size,
-                            const GradientConfig &config, int zOrder = -10);
+void drawGradientBackground(cocos2d::Node *parent, const cocos2d::Size &size, const GradientConfig &config,
+                            int zOrder = -10);
 
-void drawGrid(cocos2d::Node *parent, const cocos2d::Size &size,
-              const GridConfig &config, int zOrder = -9);
+void drawGrid(cocos2d::Node *parent, const cocos2d::Size &size, const GridConfig &config, int zOrder = -9);
 
-void drawCorners(cocos2d::Node *parent, const cocos2d::Size &size,
-                 const CornerConfig &config, int zOrder = -7);
+void drawCorners(cocos2d::Node *parent, const cocos2d::Size &size, const CornerConfig &config,
+                 int zOrder = -7);
 
 void addAmbientParticles(cocos2d::Node *parent, const cocos2d::Size &area, int zOrder = -5);
 

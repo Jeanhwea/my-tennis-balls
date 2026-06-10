@@ -15,7 +15,7 @@ static constexpr float DOT_MIN_SIZE = 1.0f;
 static constexpr float DOT_MAX_SIZE = 3.0f;
 static constexpr float DRIFT_SPEED = 15.0f;
 
-}
+}  // namespace
 
 AmbientParticles *AmbientParticles::create(const Size &area)
 {

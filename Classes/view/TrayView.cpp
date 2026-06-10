@@ -122,7 +122,7 @@ void createOneTray(Node *parent, const Size &visibleSize, const TrayData &tray, 
     spawnTargets(parent, trayX, trayY, trayW, tray.targets, targetIndex, outTargets);
 }
 
-}
+}  // namespace
 
 int TrayView::createFromLevel(Node *parent, const Size &visibleSize, const LevelData &level,
                               Vector<Node *> &outTargets)

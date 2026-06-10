@@ -2,10 +2,10 @@
 #define GAME_CONTROLLER_H
 
 #include "cocos2d.h"
+#include "controller/InputController.h"
+#include "controller/LevelManager.h"
 #include "model/BallManager.h"
 #include "model/CollisionSystem.h"
-#include "controller/LevelManager.h"
-#include "controller/InputController.h"
 #include "model/GameModel.h"
 #include "view/AimLineView.h"
 #include "view/HUD.h"

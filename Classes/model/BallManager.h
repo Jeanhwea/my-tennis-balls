@@ -2,6 +2,7 @@
 #define BALL_MANAGER_H
 
 #include <functional>
+
 #include "cocos2d.h"
 
 class BallManager
@@ -11,8 +12,8 @@ public:
 
     void initFromLevel();
 
-    void spawnBall(cocos2d::Node *parent, const cocos2d::Vec2 &position,
-                   const cocos2d::Vec2 &velocity, int ballIndex);
+    void spawnBall(cocos2d::Node *parent, const cocos2d::Vec2 &position, const cocos2d::Vec2 &velocity,
+                   int ballIndex);
 
     void scheduleRemoval(cocos2d::Node *node) { _pendingRemoval.push_back(node); }
 

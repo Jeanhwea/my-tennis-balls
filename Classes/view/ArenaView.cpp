@@ -11,8 +11,8 @@ namespace
 
 void drawBackground(Node *parent, const Size &size)
 {
-    VisualUtil::drawGradientBackground(parent, size,
-        {Color4F(0.04f, 0.04f, 0.10f, 1.0f), Color4F(0.08f, 0.06f, 0.16f, 1.0f), 20}, -10);
+    VisualUtil::drawGradientBackground(
+        parent, size, {Color4F(0.04f, 0.04f, 0.10f, 1.0f), Color4F(0.08f, 0.06f, 0.16f, 1.0f), 20}, -10);
 }
 
 void drawGrid(Node *parent, const Size &size, float launchLeft)
@@ -22,10 +22,11 @@ void drawGrid(Node *parent, const Size &size, float launchLeft)
 
 void drawCorners(Node *parent, const Size &size, float launchLeft)
 {
-    VisualUtil::drawCorners(parent, size, {30.0f, 2.0f, 4.0f, Color4F(0.3f, 0.5f, 0.9f, 0.35f), launchLeft}, -7);
+    VisualUtil::drawCorners(parent, size, {30.0f, 2.0f, 4.0f, Color4F(0.3f, 0.5f, 0.9f, 0.35f), launchLeft},
+                            -7);
 }
 
-}
+}  // namespace
 
 void ArenaView::addEdgeWalls(Node *parent, const Size &visibleSize)
 {

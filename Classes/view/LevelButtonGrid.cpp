@@ -91,12 +91,14 @@ void LevelButtonGrid::createOneButton(Node *scene, Node *container, int levelInd
         float t0 = static_cast<float>(i) / 4;
         float t1 = static_cast<float>(i + 1) / 4;
         float bright = 0.10f + 0.06f * (t0 + t1) / 2;
-        bg->drawSolidRect(Vec2(-BTN_W / 2, -BTN_H / 2 + BTN_H * t0), Vec2(BTN_W / 2, -BTN_H / 2 + BTN_H * t1),
+        bg->drawSolidRect(Vec2(-BTN_W / 2, -BTN_H / 2 + BTN_H * t0),
+                          Vec2(BTN_W / 2, -BTN_H / 2 + BTN_H * t1),
                           Color4F(bright, bright + 0.03f, bright + 0.12f, 0.92f));
     }
     bg->drawSolidRect(Vec2(-BTN_W / 2, BTN_H / 2 - 2), Vec2(BTN_W / 2, BTN_H / 2),
                       Color4F(0.35f, 0.55f, 0.95f, 0.4f));
-    bg->drawRect(Vec2(-BTN_W / 2, -BTN_H / 2), Vec2(BTN_W / 2, BTN_H / 2), Color4F(0.25f, 0.45f, 0.85f, 0.55f));
+    bg->drawRect(Vec2(-BTN_W / 2, -BTN_H / 2), Vec2(BTN_W / 2, BTN_H / 2),
+                 Color4F(0.25f, 0.45f, 0.85f, 0.55f));
     btn->addChild(bg, 0);
 
     auto numLabel = Label::createWithTTF(StringUtils::format("%d", levelId), FONT_TITLE, 28);

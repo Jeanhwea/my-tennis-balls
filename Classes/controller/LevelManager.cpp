@@ -7,7 +7,8 @@
 
 USING_NS_CC;
 
-void LevelManager::init(Scene *scene, const Size &visibleSize, GameModel &model, BallManager &ballManager, int startLevel)
+void LevelManager::init(Scene *scene, const Size &visibleSize, GameModel &model, BallManager &ballManager,
+                        int startLevel)
 {
     _scene = scene;
     _visibleSize = visibleSize;

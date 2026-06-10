@@ -42,12 +42,13 @@ void LevelMenuScene::onEnter()
 
 void LevelMenuScene::drawBackground(const Size &size)
 {
-    VisualUtil::drawGradientBackground(this, size,
-        {Color4F(0.02f, 0.02f, 0.08f, 1.0f), Color4F(0.06f, 0.04f, 0.14f, 1.0f), 24}, -2);
+    VisualUtil::drawGradientBackground(
+        this, size, {Color4F(0.02f, 0.02f, 0.08f, 1.0f), Color4F(0.06f, 0.04f, 0.14f, 1.0f), 24}, -2);
 
     VisualUtil::drawGrid(this, size, {80.0f, Color4F(0.12f, 0.15f, 0.25f, 0.08f), size.width}, -1);
 
-    VisualUtil::drawCorners(this, size, {40.0f, 2.0f, 8.0f, Color4F(0.25f, 0.45f, 0.85f, 0.25f), size.width}, 0);
+    VisualUtil::drawCorners(this, size,
+                            {40.0f, 2.0f, 8.0f, Color4F(0.25f, 0.45f, 0.85f, 0.25f), size.width}, 0);
 
     VisualUtil::addAmbientParticles(this, size, 0);
 }

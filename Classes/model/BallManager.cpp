@@ -27,8 +27,8 @@ void BallManager::collectOutOfBounds(Node *scene, const Size &visibleSize)
     for (auto ball : _activeBalls) {
         float x = ball->getPositionX();
         float y = ball->getPositionY();
-        if (y < OOB_BOTTOM || y > visibleSize.height + OOB_TOP_MARGIN ||
-            x < -OOB_SIDE_MARGIN || x > visibleSize.width + OOB_SIDE_MARGIN) {
+        if (y < OOB_BOTTOM || y > visibleSize.height + OOB_TOP_MARGIN || x < -OOB_SIDE_MARGIN ||
+            x > visibleSize.width + OOB_SIDE_MARGIN) {
             _pendingRemoval.push_back(ball);
         }
     }
