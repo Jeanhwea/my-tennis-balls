@@ -10,7 +10,6 @@ constexpr float HIGHLIGHT_SCALE = 0.35f;
 constexpr float SHADOW_OFFSET_Y = -8.0f;
 constexpr float SHADOW_SCALE = 1.1f;
 constexpr float SHADOW_OPACITY = 0.25f;
-constexpr float GLOW_OPACITY = 0.15f;
 constexpr float MOTION_BLUR_OPACITY = 0.3f;
 constexpr float MOTION_BLUR_THRESHOLD = 200.0f;
 
@@ -27,14 +26,6 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     shadow->setPosition(position.x, position.y + SHADOW_OFFSET_Y);
     shadow->setName(StringUtils::format("ball%02d_shadow", ballIndex));
     parent->addChild(shadow, 3);
-
-    auto glow = Sprite::create("ball.png");
-    glow->setColor(Color3B(150, 200, 255));
-    glow->setOpacity(static_cast<uint8_t>(255 * GLOW_OPACITY));
-    glow->setScale(BALL_SCALE * 1.3f);
-    glow->setPosition(position);
-    glow->setName(StringUtils::format("ball%02d_glow", ballIndex));
-    parent->addChild(glow, 4);
 
     auto motionBlur = Sprite::create("ball.png");
     motionBlur->setColor(Color3B(200, 220, 255));
@@ -82,9 +73,6 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
 
     shadow->setScale(0);
     shadow->runAction(EaseBackOut::create(ScaleTo::create(0.25f, BALL_SCALE * SHADOW_SCALE)));
-
-    glow->setScale(0);
-    glow->runAction(EaseBackOut::create(ScaleTo::create(0.25f, BALL_SCALE * 1.3f)));
 
     highlight->setScale(0);
     highlight->runAction(EaseBackOut::create(ScaleTo::create(0.25f, HIGHLIGHT_SCALE)));
@@ -164,12 +152,10 @@ void BallView::updateEffects(Node *ball)
     if (!parent) return;
 
     auto shadow = parent->getChildByName(name + "_shadow");
-    auto glow = parent->getChildByName(name + "_glow");
     auto blur = parent->getChildByName(name + "_blur");
 
     Vec2 ballPos = ball->getPosition();
     if (shadow) shadow->setPosition(ballPos.x, ballPos.y + SHADOW_OFFSET_Y);
-    if (glow) glow->setPosition(ballPos);
 
     updateMotionBlur(ball, blur);
     updateHighlights(ball);
@@ -185,15 +171,11 @@ void BallView::despawn(Node *ball, const std::function<void()> &onComplete)
         auto parent = ball->getParent();
         if (parent) {
             auto shadow = parent->getChildByName(name + "_shadow");
-            auto glow = parent->getChildByName(name + "_glow");
             auto blur = parent->getChildByName(name + "_blur");
             auto highlight = parent->getChildByName(name + "_highlight");
             auto subHighlight = parent->getChildByName(name + "_subhl");
             if (shadow) {
                 shadow->runAction(Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
-            }
-            if (glow) {
-                glow->runAction(Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
             }
             if (blur) {
                 blur->runAction(Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
