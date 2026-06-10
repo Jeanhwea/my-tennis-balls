@@ -13,8 +13,6 @@ void despawn(cocos2d::Node *ball, const std::function<void()> &onComplete = null
 
 void updateEffects(cocos2d::Node *ball);
 
-void updateHighlights(cocos2d::Node *ball);
-
 void updateMotionBlur(cocos2d::Node *ball, cocos2d::Node *blurNode);
 
 }  // namespace BallView

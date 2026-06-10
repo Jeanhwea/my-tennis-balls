@@ -6,15 +6,11 @@ USING_NS_CC;
 
 namespace
 {
-constexpr float HIGHLIGHT_SCALE = 0.35f;
 constexpr float SHADOW_OFFSET_Y = -8.0f;
 constexpr float SHADOW_SCALE = 1.1f;
 constexpr float SHADOW_OPACITY = 0.25f;
 constexpr float MOTION_BLUR_OPACITY = 0.3f;
 constexpr float MOTION_BLUR_THRESHOLD = 200.0f;
-
-constexpr float LIGHT_DIR_X = -0.5f;
-constexpr float LIGHT_DIR_Y = 0.5f;
 }
 
 Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity, int ballIndex)
@@ -50,35 +46,11 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     ball->setPhysicsBody(body);
     parent->addChild(ball, 5);
 
-    auto highlight = Sprite::create("ball.png");
-    highlight->setColor(Color3B(255, 255, 255));
-    highlight->setOpacity(180);
-    highlight->setScale(HIGHLIGHT_SCALE);
-    highlight->setBlendFunc(BlendFunc::ADDITIVE);
-    highlight->setPosition(position.x + radius * LIGHT_DIR_X, position.y + radius * LIGHT_DIR_Y);
-    highlight->setName(StringUtils::format("ball%02d_highlight", ballIndex));
-    parent->addChild(highlight, 6);
-
-    auto subHighlight = Sprite::create("ball.png");
-    subHighlight->setColor(Color3B(200, 230, 255));
-    subHighlight->setOpacity(60);
-    subHighlight->setScale(0.2f);
-    subHighlight->setBlendFunc(BlendFunc::ADDITIVE);
-    subHighlight->setPosition(position.x - radius * LIGHT_DIR_X, position.y - radius * LIGHT_DIR_Y);
-    subHighlight->setName(StringUtils::format("ball%02d_subhl", ballIndex));
-    parent->addChild(subHighlight, 6);
-
     ball->setScale(0);
     ball->runAction(EaseBackOut::create(ScaleTo::create(0.25f, BALL_SCALE)));
 
     shadow->setScale(0);
     shadow->runAction(EaseBackOut::create(ScaleTo::create(0.25f, BALL_SCALE * SHADOW_SCALE)));
-
-    highlight->setScale(0);
-    highlight->runAction(EaseBackOut::create(ScaleTo::create(0.25f, HIGHLIGHT_SCALE)));
-
-    subHighlight->setScale(0);
-    subHighlight->runAction(EaseBackOut::create(ScaleTo::create(0.25f, 0.2f)));
 
     auto ring = DrawNode::create();
     ring->drawCircle(Vec2::ZERO, radius * 2.5f, 0, 24, false, Color4F(0.5f, 0.8f, 1.0f, 0.6f));
@@ -88,38 +60,6 @@ Sprite *BallView::spawn(Node *parent, const Vec2 &position, const Vec2 &velocity
     ring->runAction(Sequence::create(ScaleTo::create(0.35f, 2.5f), RemoveSelf::create(), nullptr));
 
     return ball;
-}
-
-void BallView::updateHighlights(Node *ball)
-{
-    if (!ball) return;
-
-    auto parent = ball->getParent();
-    if (!parent) return;
-
-    std::string name = ball->getName();
-    if (name.empty()) return;
-
-    auto highlight = parent->getChildByName(name + "_highlight");
-    auto subHighlight = parent->getChildByName(name + "_subhl");
-    if (!highlight || !subHighlight) return;
-
-    auto body = ball->getPhysicsBody();
-    float rotation = body ? -body->getRotation() : 0.0f;
-
-    float radius = ball->getContentSize().width * BALL_SCALE / 2 - BALL_SPRITE_PADDING;
-    float rad = CC_DEGREES_TO_RADIANS(rotation);
-
-    Vec2 lightDir(LIGHT_DIR_X, LIGHT_DIR_Y);
-
-    float cosR = cosf(rad);
-    float sinR = sinf(rad);
-    Vec2 rotatedLightDir(lightDir.x * cosR - lightDir.y * sinR, lightDir.x * sinR + lightDir.y * cosR);
-
-    Vec2 ballPos = ball->getPosition();
-    highlight->setPosition(ballPos.x + rotatedLightDir.x * radius, ballPos.y + rotatedLightDir.y * radius);
-    subHighlight->setPosition(ballPos.x - rotatedLightDir.x * radius,
-                              ballPos.y - rotatedLightDir.y * radius);
 }
 
 void BallView::updateMotionBlur(Node *ball, Node *blurNode)
@@ -158,7 +98,6 @@ void BallView::updateEffects(Node *ball)
     if (shadow) shadow->setPosition(ballPos.x, ballPos.y + SHADOW_OFFSET_Y);
 
     updateMotionBlur(ball, blur);
-    updateHighlights(ball);
 }
 
 void BallView::despawn(Node *ball, const std::function<void()> &onComplete)
@@ -172,21 +111,11 @@ void BallView::despawn(Node *ball, const std::function<void()> &onComplete)
         if (parent) {
             auto shadow = parent->getChildByName(name + "_shadow");
             auto blur = parent->getChildByName(name + "_blur");
-            auto highlight = parent->getChildByName(name + "_highlight");
-            auto subHighlight = parent->getChildByName(name + "_subhl");
             if (shadow) {
                 shadow->runAction(Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
             }
             if (blur) {
                 blur->runAction(Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
-            }
-            if (highlight) {
-                highlight->runAction(
-                    Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
-            }
-            if (subHighlight) {
-                subHighlight->runAction(
-                    Sequence::create(FadeOut::create(0.15f), RemoveSelf::create(), nullptr));
             }
         }
     }
